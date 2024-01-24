@@ -1,12 +1,13 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function AddBlog() {
 
@@ -15,16 +16,18 @@ export default function AddBlog() {
     const [cat, setCat] = useState([]);  
     const [image, setImage] = useState('');
     const [imageData, setImageData] = useState(null);
+    const {loggedInUser} = useContext(UserContext);
     const [errorMessage, setErrorMessage] = useState(''); 
     const [data, setData] = useState({blgName:'', blgTags:'', shortIntro:'', blgDesc:'', blgCat:'', blgAuth:'', blgImage:'' })    
     
     useEffect(() =>{
       async function fetchData() {
-        let catdata = await fetch('http://localhost:3000/api/categories');
+        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
         catdata = await catdata.json();
         setCat(catdata);
       }
       fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     const showChooseFileBox = () =>{
@@ -97,7 +100,7 @@ export default function AddBlog() {
       const result = await fetch ('http://localhost:3000/api/blogs', 
       {
         method:'POST',
-        body:JSON.stringify({blgName:data.blgName, shortIntro:data.shortIntro, blgDesc:data.blgDesc, blgCat:data.blgCat, blgAuth:data.blgAuth, blgImage:data.blgImage}),
+        body:JSON.stringify({blgName:data.blgName, shortIntro:data.shortIntro, blgDesc:data.blgDesc, blgCat:data.blgCat, blgAuth:data.blgAuth, blgImage:data.blgImage, userId: loggedInUser.result._id}),
       });
 
       const post = await result.json();

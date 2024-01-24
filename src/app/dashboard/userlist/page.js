@@ -32,7 +32,6 @@ export default function UserList() {
         <thead className='font-bold bg-gray-300'>
           <tr>
             <th className='p-4'>USER NAME</th>
-            <th className='p-4'>USER PASSWORD</th>
             <th className='p-4'>USER PHONE</th>
             <th className='p-4'>USER ROLE</th>
             <th className='p-4'>ACTION</th>
@@ -44,7 +43,6 @@ export default function UserList() {
             return(
             <tr className='hover:bg-gray-100' key={item._id}>
               <td className='py-2 px-4'>{item.usrName}</td>
-              <td className='py-2 px-4'>{item.usrPass}</td>
               <td className='py-2 px-4'>{item.usrPhone}</td>
               <td className='py-2 px-4'>{item.usrRole}</td>
               <td className='flex py-2 text-lg gap-6  px-4'>

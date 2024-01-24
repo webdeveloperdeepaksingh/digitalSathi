@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IoIosArrowDown } from "react-icons/io";
@@ -15,73 +15,152 @@ import {AiOutlineHome} from 'react-icons/ai';
 import { GiSettingsKnobs } from "react-icons/gi";
 import {FaChalkboardTeacher, FaBlog, FaUserAlt, FaUserCircle} from 'react-icons/fa';
 import Image from 'next/image';
+import { useContext } from 'react';
+import { UserContext } from '@/context/UserContext';
 import SideMenu from '@/components/SideMenu/page';
  
 export default function DashBoard({children}) {
 
+ const {loggedInUser} = useContext(UserContext);
  const [showMenu, setShowMenu] = useState(false);
+ const [profile, setProfile] = useState('');
+
+ useEffect(()=>{
+    async function fetchProfile(){
+        const res = await fetch('http://localhost:3000/api/profile');
+        const profiles = await res.json();
+        const profileById = profiles.filter(profile => profile.userId === loggedInUser.result?._id);
+        setProfile(profileById[0]);
+    }
+    fetchProfile();
+// eslint-disable-next-line react-hooks/exhaustive-deps
+},[]) 
+
  const handleShowMenu = () => {
     setShowMenu(!showMenu);
  }
 
-  const sideMenu = [
-    {
-        name: showMenu == false ? 'HOME' : '',
-        url:'/dashboard/home',
-        icon:<AiOutlineHome/>
-    },
-    {
-        name: showMenu == false ? 'CATEGORY' : '',
-        url:'/dashboard/categorylist',
-        icon:<BiCategory/>
-    },
-    {
-        name: showMenu == false ? 'COURSES' : '',
-        url:'/dashboard/courselist',
-        icon:<FaChalkboardTeacher/>
-    },
-    {
-        name: showMenu == false ? 'EBOOKS' : '',
-        url:'/dashboard/ebooklist',
-        icon:<BsBook/>
-    },
-    {
-        name: showMenu == false ? 'EVENTS' : '',
-        url:'/dashboard/eventlist',
-        icon:<BsCalendarEvent/>
-    },
-    {
-        name: showMenu == false ? 'AUDIENCE' : '',
-        url:'/dashboard/audiencelist',
-        icon:<IoIosPeople/>
-    },
-    {
-        name: showMenu == false ? 'BLOGS' : '',
-        url:'/dashboard/bloglist',
-        icon:<FaBlog/>
-    },
-    {
-        name: showMenu == false ? 'REVENUE' : '',
-        url:'/dashboard/saleslist',
-        icon:<RiMoneyDollarBoxFill className='text-2xl' />
-
-    },
-    {
-        name: showMenu == false ? 'ENQUIRY' : '',
-        url:'/dashboard/enquirylist',
-        icon:<BsQuestionSquare/>
-    },
-    {
-        name: showMenu == false ? 'USERS' : '',
-        url:'/dashboard/userlist',
-        icon:<FaUserAlt/>
-    },
-    {
-        name: showMenu == false ? 'SETTINGS' : '',
-        url:'/dashboard/settings/6596d89b5bfe828446ea0fb6',
-        icon:<GiSettingsKnobs className='rotate-180'/>
-    }
+  let sideMenu = [
+    
   ]
+
+  if(loggedInUser.result?.usrRole == "ADMIN"){
+    sideMenu.push(
+        {
+            name: showMenu == false ? 'HOME' : '',
+            url:'/dashboard/home',
+            icon:<AiOutlineHome/>
+        },
+        {
+            name: showMenu == false ? 'CATEGORY' : '',
+            url:'/dashboard/categorylist',
+            icon:<BiCategory/>
+        },
+        {
+            name: showMenu == false ? 'COURSES' : '',
+            url:'/dashboard/courselist',
+            icon:<FaChalkboardTeacher/>
+        },
+        {
+            name: showMenu == false ? 'EBOOKS' : '',
+            url:'/dashboard/ebooklist',
+            icon:<BsBook/>
+        },
+        {
+            name: showMenu == false ? 'EVENTS' : '',
+            url:'/dashboard/eventlist',
+            icon:<BsCalendarEvent/>
+        },
+        {
+            name: showMenu == false ? 'AUDIENCE' : '',
+            url:'/dashboard/audiencelist',
+            icon:<IoIosPeople/>
+        },
+        {
+            name: showMenu == false ? 'REVENUE' : '',
+            url:'/dashboard/saleslist',
+            icon:<RiMoneyDollarBoxFill className='text-2xl' />
+    
+        },
+        {
+            name: showMenu == false ? 'ENQUIRY' : '',
+            url:'/dashboard/enquirylist',
+            icon:<BsQuestionSquare/>
+        },
+        {
+            name: showMenu == false ? 'USERS' : '',
+            url:'/dashboard/userlist',
+            icon:<FaUserAlt/>
+        },
+        {
+            name: showMenu == false ? 'SETTINGS' : '',
+            url:'/dashboard/settings/6596d89b5bfe828446ea0fb6',
+            icon:<GiSettingsKnobs className='rotate-180'/>
+        }
+    );
+  }
+
+  if(loggedInUser.result?.usrRole == "INSTRUCTOR"){
+    sideMenu.push(
+        {
+            name: showMenu == false ? 'HOME' : '',
+            url:'/dashboard/home',
+            icon:<AiOutlineHome/>
+        },
+        {
+            name: showMenu == false ? 'CATEGORY' : '',
+            url:'/dashboard/categorylist',
+            icon:<BiCategory/>
+        },
+        {
+            name: showMenu == false ? 'COURSES' : '',
+            url:'/dashboard/courselist',
+            icon:<FaChalkboardTeacher/>
+        },
+        {
+            name: showMenu == false ? 'EBOOKS' : '',
+            url:'/dashboard/ebooklist',
+            icon:<BsBook/>
+        },
+        {
+            name: showMenu == false ? 'EVENTS' : '',
+            url:'/dashboard/eventlist',
+            icon:<BsCalendarEvent/>
+        },
+        {
+            name: showMenu == false ? 'AUDIENCE' : '',
+            url:'/dashboard/audiencelist',
+            icon:<IoIosPeople/>
+        },
+        {
+            name: showMenu == false ? 'BLOGS' : '',
+            url:'/dashboard/bloglist',
+            icon:<FaBlog/>
+        },
+        {
+            name: showMenu == false ? 'REVENUE' : '',
+            url:'/dashboard/saleslist',
+            icon:<RiMoneyDollarBoxFill className='text-2xl' />
+    
+        }
+    );
+  }
+
+  if(loggedInUser.result?.usrRole == "STUDENT"){
+    sideMenu.push(
+        {
+            name: showMenu == false ? 'HOME' : '',
+            url:'/dashboard/home',
+            icon:<AiOutlineHome/>
+        },
+        {
+            name: showMenu == false ? 'COURSE' : '',
+            url:'/dashboard/saleslist',
+            icon:<FaChalkboardTeacher/>
+    
+        }
+    );
+  }
 
   const [toggle, setToggle] = useState(false);
   const currentRoute = usePathname();
@@ -116,17 +195,17 @@ export default function DashBoard({children}) {
             </div>
             <div className='w-full'>
                 <header className=' flex h-[100px] p-5 items-center w-full justify-end bg-white shadow-lg'>
-                    <div className='relative p-0'>
+                    <div className='relative p-0 w-[auto]'>
                         <div className='flex items-center font-bold pl-3 rounded-sm border border-solid border-amber-600'>
-                            <p>Welcome Deepak !</p>
-                            <div className='border-r-2'>
-                                <Image alt='deepak' className='rounded-full' src={ProfileImage} height={64} width={62} priority />
+                            <p>Welcome {profile?.proName} !</p>
+                            <div className='relative border-r-2 h-[65px] w-[75px] rounded-md'>
+                                <Image alt={profile?.proName} className='p-3'  src={`/images/${profile?.proImage}`} objectFit='cover' fill />
                             </div>
                             <div className='px-1'>
                                 <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={handleToggle}><IoIosArrowDown /></button>
                             </div>
                         </div>
-                        <div className='absolute bottom-[-140px] right-6 z-100'>
+                        <div className='absolute bottom-[-190px] right-6 z-100'>
                             <SideMenu  isShown={toggle}/>
                         </div>    
                     </div>

@@ -21,9 +21,9 @@ export default function Profile({params}) {
     async function fetchData() {
       const proData = await fetch(`http://localhost:3000/api/profile/${params.ProId}`);
       const profileData = await proData.json();
-      setData(profileData.result[0]);
-      setEditorContent(profileData.result[0].proAbout)
-      setImage(`/images/${profileData.result[0].proImage}`)
+      setData(profileData.result);
+      setEditorContent(profileData.result?.proAbout)
+      setImage(`/images/${profileData.result?.proImage}`)
     }
     fetchData();
   },[params.ProId])
@@ -142,29 +142,29 @@ const handleImageUpload = async (e) =>{
                 <div className='flex flex-col gap-3'> 
                   <div className='flex flex-col'>
                       <label>Full Name:*</label>
-                      <input type='text' name='proName' value={data.proName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                      <input type='text' name='proName' value={data?.proName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
                   <div className='flex flex-col'>
                       <label>Father Name:*</label>
-                      <input type='text' name='proFather' value={data.proFather} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                      <input type='text' name='proFather' value={data?.proFather} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
                   <div className='flex flex-col'>
                       <label>Date of Birth:*</label>
-                      <input type='date' name='proDob' value={data.proDob} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                      <input type='date' name='proDob' value={data?.proDob} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
                   <div className='flex flex-col'>
                       <label>Profession:</label>
-                      <input type='text' name='proJob' value={data.proJob} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                      <input type='text' name='proJob' value={data?.proJob} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
                   <div className='flex flex-col'>
                       <label>Qualification:*</label>
-                      <input type='text' name='proQual' value={data.proQual} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                      <input type='text' name='proQual' value={data?.proQual} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
                 </div>
             </div>
             <div className='flex flex-col mb-3'>
                 <label>Short Intro:</label>
-                <textarea type='text' name='shortIntro' value={data.shortIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
+                <textarea type='text' name='shortIntro' value={data?.shortIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>About Me:</label>
@@ -187,11 +187,11 @@ const handleImageUpload = async (e) =>{
             <div className='grid grid-cols-2 gap-3'>
                 <div className='flex flex-col mb-3'>
                     <label>Permanent Address:</label>
-                    <textarea type='text' name='proPloc' value={data.proPloc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
+                    <textarea type='text' name='proPloc' value={data?.proPloc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
                 </div>
                 <div className='flex flex-col mb-3'>
                     <label>Current Address:</label>
-                    <textarea type='text' name='proCloc' value={data.proCloc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
+                    <textarea type='text' name='proCloc' value={data?.proCloc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
                 </div>
             </div>
             <div className='mb-3'>

@@ -1,26 +1,23 @@
 import mongoose from "mongoose";
-const validator = require('validator');
+import validator from "validator";
+
 const bcrypt = require('bcryptjs');
-
-
 const usrSchema = new mongoose.Schema ({   
      
     usrName:{
         type: String,
-        required: [true, 'User name is required!'],
         unique: false,
     },
     usrPass:{
         type: String,
-        required: [true, 'Please create password.'],
         minlength: [8, 'Password must be at least 8 characters long.'],
-        // select: false,
+        runValidators: true,
         unique: false 
     },
-    usrConfPass:{
+    confPass:{
         type: String,
-        required: [true, 'Please confirm password.'],
         minlength: [8, 'Confirm Password must be at least 8 characters long.'],
+        runValidators: true,
         unique: false,
         validate:{
             validator: function(val){
@@ -28,35 +25,29 @@ const usrSchema = new mongoose.Schema ({
             },
             message: 'Password & Confirm Password does not match!'
         }
-        
     },
     usrEmail:{
         type: String,
-        required: [true, 'Email is required!'],
         lowercase: true,
         unique: true, 
         validate: [validator.isEmail, 'Please enter a valid email!']   
     },
     usrPhone:{
         type: String,
-        required: [true, 'Phone is required!'],
         unique: true
     },
     usrRole:{
         type: String,
-        required: [true, 'Please select user role.'],
-        enum:['ADMIN', 'INSTRUCTOR', 'STUDENT'],
-        default: 'STUDENT'
     }
 },{timestamps: true});
 
-usrSchema.pre('save', async function(next){
-    if(!this.isModified('usrPass'))
-    return next();
-//encrypting password before saving to database.
-    this.usrPass = await bcrypt.hash(this.usrPass, 12);
-    this.usrConfPass = undefined; //stopping confPass to be saved in db.
-})
-
+usrSchema.pre('save', async function(next){    
+    if(this.isModified('usrPass')){
+        this.usrPass = await bcrypt.hash(this.usrPass, 12);
+    }
+    this.confPass = undefined; //stopping confPass to be saved in db.
+    next();
+});
+    
 const Users = mongoose.models.Users || mongoose.model("Users", usrSchema);
 export default Users;

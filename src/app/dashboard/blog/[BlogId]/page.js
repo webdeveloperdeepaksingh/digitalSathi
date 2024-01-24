@@ -1,12 +1,13 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function UpdateBlog({params}) {
 
@@ -15,17 +16,19 @@ export default function UpdateBlog({params}) {
     const [cat, setCat] = useState([]);     
     const [image, setImage] = useState(''); 
     const [imageData, setImageData] = useState(null); 
+    const {loggedInUser} = useContext(UserContext);
     const [errorMessage, setErrorMessage] = useState(''); 
     const [editorContent, setEditorContent] = useState('');
     const [data, setData] = useState({blgName:'', blgTags:'', shortIntro:'', blgDesc:'', blgCat:'', blgAuth:'', blgImage:'' })    
     
     useEffect(() =>{
       async function fetchCat() {
-        let catdata = await fetch('http://localhost:3000/api/categories');
+        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
         catdata = await catdata.json();
         setCat(catdata);
       }
       fetchCat();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     useEffect(() =>{

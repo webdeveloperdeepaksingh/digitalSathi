@@ -1,9 +1,11 @@
 'use client';
+import { useContext } from 'react';
+import { UserContext } from '@/context/UserContext';
 import Footer from '@/components/Footer/page';
 import NavBar from '@/components/NavBar/page';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Jwt } from 'jsonwebtoken';
+import { toast } from 'react-toastify';
 import Link from 'next/link';
 import React from 'react';
 
@@ -11,6 +13,7 @@ export default function LoginPage() {
 
   const [data, setData] = useState({usrName:'', usrPass:'', usrEmail:''});
   const [errorMessage, setErrorMessage] = useState('');
+  const {setLoggedInUser} = useContext(UserContext);
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -54,8 +57,8 @@ export default function LoginPage() {
     });
 
       const post = await result.json();
+      setLoggedInUser(post); //set the LoggedInUserData in global state.
       console.log(post);
-
     
     if(post.success==false){    //This line of code needed for server-side validation only, as written in USER Route API.
       if (Array.isArray(post.message)) {
@@ -65,15 +68,13 @@ export default function LoginPage() {
         setErrorMessage(post.message);
         }      
       }else{
-        const token = result.token;
-        console.log(token);
+        toast('Logged in successfully!', {
 
-        if(!token){
-          setErrorMessage('You are not logged in!')
-        }else{
-          router.push('/dashboard/home');
-        }
-      router.push('/login');
+          hideProgressBar: false,
+          autoClose: 2000,
+          type: 'success'
+          });
+        router.push('/dashboard/home');
       }
   }catch(error){
       console.log(error);    

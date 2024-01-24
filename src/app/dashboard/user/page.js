@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function AddUser() {
 
-  const [data, setData] = useState({usrName:'', usrPass:'', usrEmail:'', usrPhone:'', usrRole:''});
+  const [data, setData] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
@@ -31,15 +31,19 @@ export default function AddUser() {
   }
   
   if (!data.usrPass.trim()) {
-    errMsg.push('User password is required');    
+    errMsg.push('Password is required');    
   }
   
   if (!data.usrEmail.trim()) {
-    errMsg.push('User email is required');    
+    errMsg.push('Email is required.');    
   }
   
   if (!data.usrPhone.trim()) {
-    errMsg.push('User phone is required');    
+    errMsg.push('Phone is required.');    
+  }
+
+  if (!data.usrRole.trim()) {
+    errMsg.push('Please select role.');    
   }
 
   if(errMsg.length>0){

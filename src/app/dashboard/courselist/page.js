@@ -3,18 +3,22 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import { useContext } from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function CourseList() {
 
   const [course, setCourse] = useState([]);
+  const {loggedInUser} = useContext(UserContext);
 
   useEffect(() =>{
     async function fetchData() {
-      let coData = await fetch('http://localhost:3000/api/courses');
+      let coData = await fetch('http://localhost:3000/api/courses?userId='+ loggedInUser.result._id);
       coData = await coData.json();
       setCourse(coData);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

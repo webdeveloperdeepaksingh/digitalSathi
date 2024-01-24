@@ -1,19 +1,23 @@
 'use client';
 import Link from 'next/link';
+import { RiVideoFill } from "react-icons/ri";
 import { RiDeleteBin5Fill } from 'react-icons/ri';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function SalesList() {
 
   const [sales, setSales] = useState([]);
+  const {loggedInUser} = useContext(UserContext)
 
   useEffect(() =>{
     async function fetchData(){
-      const res = await fetch('http://localhost:3000/api/sales')
+      const res = await fetch('http://localhost:3000/api/sales/?userId='+ loggedInUser.result._id)
       const salesList = await res.json();
       setSales(salesList);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (
@@ -30,7 +34,7 @@ export default function SalesList() {
       <table className="table-auto w-full text-left">
         <thead className='font-bold bg-gray-300'>
           <tr>
-            <th className='p-4'>USER </th>
+            <th className='p-4'>STUDENT </th>
             <th className='p-4'>PRODUCT</th>
             <th className='p-4'>PRICE</th>
             <th className='p-4'>EMAIL ID</th>
@@ -53,6 +57,7 @@ export default function SalesList() {
               <td className='py-2 px-4'>{item.usrPay}</td>
               <td className='py-2 px-4'>{item.createdAt}</td>
               <td className='flex py-2 text-lg gap-6  px-4'>
+                <Link href={`/dashboard/course/${item._id}/`} ><RiVideoFill/></Link>
                 <Link href={`/dashboard/audiencelist/${item._id}`} ><RiDeleteBin5Fill /></Link>
               </td>
             </tr>

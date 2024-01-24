@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import {toast} from 'react-toastify';
 import NavBar from '@/components/NavBar/page';
 import Footer from '@/components/Footer/page';
 import { useState } from 'react';
@@ -8,7 +9,7 @@ import { useRouter } from 'next/navigation';
 
 export default function SignUp() {
 
-  const [data, setData] = useState({usrName:'', usrPass:'', usrConfPass:'', usrEmail:'', usrPhone:'', usrRole:''});
+  const [data, setData] = useState({usrName:'', usrPass:'', confPass:'', usrEmail:'', usrPhone:'', usrRole:''});
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
@@ -36,7 +37,7 @@ export default function SignUp() {
     errMsg.push('Password is required.');    
   }
 
-  if (!data.usrConfPass?.trim() || '') {
+  if (!data.confPass?.trim() || '') {
     errMsg.push('Confirm password is required.');    
   }
   
@@ -46,6 +47,10 @@ export default function SignUp() {
   
   if (!data.usrPhone?.trim() || '') {
     errMsg.push('Phone is required.');    
+  }
+
+  if (!data.usrRole?.trim() || '') {
+    errMsg.push('Please select role.');    
   }
 
   if(errMsg.length>0){
@@ -58,7 +63,7 @@ export default function SignUp() {
     const result = await fetch ('http://localhost:3000/api/users', 
     {
       method:'POST',
-      body:JSON.stringify({usrName: data.usrName, usrPass:data.usrPass, usrConfPass:data.usrConfPass, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
+      body:JSON.stringify({usrName: data.usrName, usrPass:data.usrPass, confPass:data.confPass, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
     });
 
       const post = await result.json();
@@ -73,11 +78,11 @@ export default function SignUp() {
         }      
       }
     else{
-      //   toast('User added successfully!', {
-      //   hideProgressBar: false,
-      //   autoClose: 2000,
-      //   type: 'success'
-      // });
+        toast('Signed up successfully...!', {
+        hideProgressBar: false,
+        autoClose: 2000,
+        type: 'success'
+      });
       router.push('/login');
       }
   }catch(error){
@@ -121,11 +126,11 @@ export default function SignUp() {
               </div>
               <div className='flex flex-col'>
                 <label className="block font-semibold">Confirm Password:* </label>
-                <input type="password" name='usrConfPass' value={data.usrConfPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+                <input type="password" name='confPass' value={data.confPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
               </div>
               {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
               <div className="flex justify-between items-baseline">
-                <button type="submit" className="mt-2 font-bold bg-gray-500 hover:bg-gray-400 text-white py-2 px-6 w-full rounded-md">SIGN UP</button>
+                <button type="submit" className="mt-2 font-bold bg-amber-600 hover:bg-amber-500 text-white py-2 px-6 w-full rounded-md">SIGN UP</button>
               </div>
               <div className='flex justify-center mt-4'>
                   <p>Already a member...?</p>

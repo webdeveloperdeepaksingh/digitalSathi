@@ -1,12 +1,13 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function AddEvent() {
 
@@ -15,16 +16,18 @@ export default function AddEvent() {
     const [image, setImage] = useState('');
     const [imageData, setImageData] = useState(null); 
     const [cat, setCat] = useState([]);  
+    const {loggedInUser} = useContext(UserContext);
     const [errorMessage, setErrorMessage] = useState(''); 
     const [data, setData] = useState({evtName:'', evtTags:'', shortIntro:'', evtDesc:'', evtCat:'', origPrice:'', discPrice:'', evtPhone:'', evtPer:'', evtLoc:'', evtMod:'', evtTime:'', evtDate:'' })    
     
     useEffect(() =>{
       async function fetchData() {
-        let catdata = await fetch('http://localhost:3000/api/categories');
+        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
         catdata = await catdata.json();
         setCat(catdata);
       }
       fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     const showChooseFileBox = () =>{
@@ -97,7 +100,7 @@ export default function AddEvent() {
       const result = await fetch ('http://localhost:3000/api/events', 
       {
         method:'POST',
-        body:JSON.stringify({evtName:data.evtName, evtTags:data.evtTags, shortIntro:data.shortIntro, evtDesc:data.evtDesc, evtCat:data.evtCat, origPrice:data.origPrice, discPrice:data.discPrice, evtPer:data.evtPer, evtLoc:data.evtLoc, evtMod:data.evtMod, evtPhone:data.evtPhone, evtTime:data.evtTime, evtDate:data.evtDate}),
+        body:JSON.stringify({evtName:data.evtName, evtTags:data.evtTags, shortIntro:data.shortIntro, evtDesc:data.evtDesc, evtCat:data.evtCat, origPrice:data.origPrice, discPrice:data.discPrice, evtPer:data.evtPer, evtLoc:data.evtLoc, evtMod:data.evtMod, evtPhone:data.evtPhone, evtTime:data.evtTime, evtDate:data.evtDate, userId: loggedInUser.result._id}),
       });
 
       const post = await result.json();

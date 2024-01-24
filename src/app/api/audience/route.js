@@ -1,18 +1,24 @@
 import { NextResponse } from "next/server";
 import Audience from "../../../../models/Audience";
+import Users from "../../../../models/Users";
 import connect from "../../../../server";
 
-export const GET = async (request) => {
-  try
-    {
-      await connect ();
-      const audList = await  Audience.find()
-      return new NextResponse (JSON.stringify(audList), {status: 200});
+export const GET = async (request, response, next) => {
+  
+  try{
 
-    }catch(error){
-      return new NextResponse ("Erron while fetching data: " + error, {status: 500});
-    }
-}
+      const url = new URL(request.url);
+      const userId=url.searchParams.get('userId');
+      await connect ();
+      let user=await Users.findOne({_id:userId});
+      let posts = await  Audience.find();
+      posts = posts.filter(a=> user.usrRole == 'ADMIN' || a.userId == userId);
+      return new NextResponse (JSON.stringify(posts), {status: 200});
+
+  }catch(error){
+    return new NextResponse ("Erron while fetching data: " + error, {status: 500});
+  }
+};
 
 export  const  POST = async (request) =>{ 
   try  

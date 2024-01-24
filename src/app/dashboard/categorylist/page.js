@@ -1,22 +1,24 @@
 'use client';
+import { UserContext } from '@/context/UserContext';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-
+  
 
 export default function CategoryList() {
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [cat, setCat] = useState([]);
+   const [cat, setCat] = useState([]);
+   const {loggedInUser} = useContext(UserContext);
 
   useEffect(() =>{
     async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/categories');
+      let data = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
       data = await data.json();
       setCat(data);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 
 export default function RegisterEvent({params}) {
 
-  const [data, setData] = useState({audName:'', evtName:'', audEmail:'', audPhone:'', audPay:''});
+  const [data, setData] = useState({audName:'', evtName:'', audEmail:'', audPhone:'', audPay:'', userId:''});
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
@@ -58,7 +58,7 @@ export default function RegisterEvent({params}) {
       const result = await fetch ('http://localhost:3000/api/audience', 
       {
         method:'POST',
-        body:JSON.stringify({audName:data.audName, evtName:data.evtName, audEmail:data.audEmail, audPhone:data.audPhone, audPay:data.audPay}),
+        body:JSON.stringify({audName:data.audName, evtName:data.evtName, audEmail:data.audEmail, audPhone:data.audPhone, audPay:data.audPay, userId:data.userId}),
       });
 
       const post = await result.json();
@@ -107,6 +107,10 @@ export default function RegisterEvent({params}) {
           <div className='flex flex-col mb-5'>
               <label className='font-bold'>Registering For:*</label>
               <input disabled type='text' name='evtName' value={data.evtName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+          </div>
+          <div className='flex-col mb-5  hidden'>
+              <label className='font-bold'>User Id:*</label>
+              <input type='text' name='evtName' value={data.userId} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex gap-1 mb-3'>
             <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SUBMIT</button>

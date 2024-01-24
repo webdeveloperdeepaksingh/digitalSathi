@@ -1,13 +1,15 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { toast } from "react-toastify";
 import { useRouter } from 'next/navigation';
+import { UserContext } from '@/context/UserContext';
 
 
 export default function AddCategory() {
 
   const router = useRouter();
   const [data, setData] = useState({catName:''})
+  const {loggedInUser} = useContext(UserContext);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) =>{
@@ -40,7 +42,7 @@ export default function AddCategory() {
       const result = await fetch ('http://localhost:3000/api/categories', 
       {
         method:'POST',
-        body:JSON.stringify({catName: data.catName}),
+        body:JSON.stringify({catName: data.catName, userId: loggedInUser.result._id}),
       });
   
         const post = await result.json();

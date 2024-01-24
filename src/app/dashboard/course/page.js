@@ -1,12 +1,13 @@
 'use client';
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Image from 'next/image';
 import { useRef } from "react";
 import React from 'react';
 import TextEditor from '@/components/TinyMce/Editor';
+import { UserContext } from "@/context/UserContext";
 
 export default function AddCourse() {
    
@@ -14,17 +15,19 @@ export default function AddCourse() {
     const router = useRouter();
     const [cat, setCat] = useState([]); 
     const [image, setImage] = useState('');
+    const {loggedInUser} = useContext(UserContext);
     const [imageData, setImageData] = useState(null); 
     const [data, setData] = useState({coName:'', coTags:'', coIntro:'', coDesc:'', coPrice:'', coDisc:'', coVal:'', coCat:'', coImage:''})    
     
 
     useEffect(() =>{
       async function fetchData() {
-        let catdata = await fetch('http://localhost:3000/api/categories');
+        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
         catdata = await catdata.json();
         setCat(catdata);
       }
       fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
     const showChooseFileBox = () =>{
@@ -80,7 +83,7 @@ export default function AddCourse() {
       const result = await fetch ('http://localhost:3000/api/courses', 
       {
         method:'POST',
-        body:JSON.stringify({coName: data.coName, coTags:data.coTags, coIntro:data.coIntro, coDesc:data.coDesc, coPrice:data.coPrice, coDisc:data.coDisc, coVal:data.coVal, coCat:data.coCat, coImage:data.coImage}),
+        body:JSON.stringify({coName: data.coName, coTags:data.coTags, coIntro:data.coIntro, coDesc:data.coDesc, coPrice:data.coPrice, coDisc:data.coDisc, coVal:data.coVal, coCat:data.coCat, coImage:data.coImage, userId: loggedInUser.result._id}),
       });
 
       const post = await result.json();

@@ -1,20 +1,19 @@
-import Profile from "../../../../models/Profiles";
+import Profiles from "../../../../models/Profiles";
 import { NextResponse } from "next/server";
+import Users from "../../../../models/Users";
 import connect from "../../../../server";
 
-// export const GET = async (request, {params}) => {
-//  try 
-//   {
+export const GET = async (request) => {
+  try{
 
-//     await connect ();
-//     const posts = await  Profile.find()
-//     const proById = posts.filter((item)=> item.id == params.ProId)
-//     return NextResponse.json({ result:proById, success:true}, {status: 200});
+      await connect ();
+      const proList = await  Profiles.find()
+      return new NextResponse (JSON.stringify(proList), {status: 200});
 
-//   } catch (error){
-//     return NextResponse.json({result:"No Data Found", success:false})
-//   }
-// }
+  }catch(error){
+    return new NextResponse ("Erron while fetching data: " + error, {status: 500});
+  }
+}
 
 export  const  POST = async (request, {params}) =>{ 
   try  

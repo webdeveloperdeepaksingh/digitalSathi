@@ -25,6 +25,10 @@ const audSchema = new mongoose.Schema ({
     audPay:{
         type: String,
         unique: false
+    },
+    userId:{
+        type: String,
+        unique: false
     }
 },{timestamps: true});
 

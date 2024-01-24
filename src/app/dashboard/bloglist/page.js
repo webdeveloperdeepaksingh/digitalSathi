@@ -3,19 +3,22 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import { useContext } from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function BlogList() {
 
-  const [showAlert, setShowAlert] = useState(false);
+  const {loggedInUser} = useContext(UserContext);
   const [blog, setBlog] = useState([]);
 
   useEffect(() =>{
     async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/blogs');
+      let data = await fetch('http://localhost:3000/api/blogs/?userId='+ loggedInUser.result._id);
       data = await data.json();
       setBlog(data);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

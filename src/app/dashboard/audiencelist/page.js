@@ -1,19 +1,22 @@
 'use client';
 import Link from 'next/link';
 import { RiDeleteBin5Fill } from 'react-icons/ri';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { UserContext } from '@/context/UserContext';
 
 export default function AudienceList() {
 
   const [aud, setAud] = useState([]);
+  const {loggedInUser} = useContext(UserContext);
 
   useEffect(() =>{
     async function fetchData(){
-      const res = await fetch('http://localhost:3000/api/audience')
+      const res = await fetch('http://localhost:3000/api/audience/?userId='+ loggedInUser.result._id)
       const audList = await res.json();
       setAud(audList);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

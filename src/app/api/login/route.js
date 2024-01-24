@@ -1,8 +1,7 @@
-'use client';
 import { NextResponse } from "next/server";
 import connect from "../../../../server";
 import Users from "../../../../models/Users";
-import next from "next";
+
 
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -14,7 +13,7 @@ export  const  POST = async (request, response, next) =>{
         const {usrName, usrPass} = await request.json(); 
         await connect ();
         //Check if the user exists with the given usrName & usrPass. 
-        const userByName = await Users.findOne({ $or: [{ usrName }, { usrEmail: usrName }] });
+        let userByName = await Users.findOne({ $or: [{ usrName }, { usrEmail: usrName }] });
         // const isMatch = await bcrypt.compare(usrPass, userByName.usrPass);
           
         if (!userByName || !(await bcrypt.compare(usrPass, userByName.usrPass))) {
@@ -22,14 +21,24 @@ export  const  POST = async (request, response, next) =>{
         }
         
         const token = jwt.sign({id: userByName._id}, process.env.SECRET_STR, {expiresIn: process.env.LOGIN_EXPIRES});
-        return NextResponse.json({result:userByName, success:true, token:token}, {status: 200});    
+        userByName.usrPass=null; // stopping password to get sent in response.
+
+        const response = NextResponse.json({result:userByName, success:true, token:token}, {status: 200});
+        response.cookies.set({          
+          name: 'token',
+          value: token,
+          maxAge: process.env.LOGIN_EXPIRES,
+          httpOnly: true, // This prevents scripts from accessing
+          sameSite: 'strict', // This does not allow other sites to access
+        }); 
+        return response;
 
       }catch(error){
         if (error.name === 'ValidationError') {
           const messages = Object.values(error.errors).map(val => val.message);
           return NextResponse.json({ success: false, message: messages }, {status:400});
         }else{
-          return new NextResponse ("Error while logging in...:" + error, {status: 400});
+          return new NextResponse ("Error while logging in...: " + error, {status: 400});
         }
       }
   }
@@ -39,6 +48,8 @@ try
   {
     //Check if the token exists.
     const isToken = req.headers.authorization; 
+    console.log(isToken);
+
     let token;
 
     if(isToken && isToken.startsWith('Bearer')){
@@ -87,3 +98,4 @@ export const RESTRICT = (usrRole) =>{
       next();
     }
 }
+

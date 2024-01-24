@@ -1,21 +1,23 @@
 'use client';
+import { UserContext } from '@/context/UserContext';
 import Link from 'next/link';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
 export default function EbookList() {
 
-  const [showAlert, setShowAlert] = useState(false);
-  const [ebook, setEbook] = useState([]);
+   const [ebook, setEbook] = useState([]);
+   const {loggedInUser} = useContext(UserContext)
 
   useEffect(() =>{
     async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/ebooks');
+      let data = await fetch('http://localhost:3000/api/ebooks/?userId='+ loggedInUser.result._id);
       data = await data.json();
       setEbook(data);
     }
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
   return (

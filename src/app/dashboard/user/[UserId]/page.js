@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export default function UpdateUser({params}) {
 
-  const [data, setData] = useState('');
+  const [data, setData] = useState({usrName:'',  usrEmail:'', usrPhone:'', usrRole:''});
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
   const _id = params.UserId;
@@ -15,7 +15,7 @@ export default function UpdateUser({params}) {
     async function fetchData() {
       const userData = await fetch(`http://localhost:3000/api/users/${_id}`);
       const usrById = await userData.json();
-      setData(usrById.result[0]);
+      setData(usrById.result);
     }
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -41,9 +41,9 @@ const handleSubmit = async (e) => {
     errMsg.push('User name is required.');    
   }
   
-  if (!data.usrPass.trim()) {
-    errMsg.push('Password is required.');    
-  }
+  // if (!data.usrPass.trim()) {
+  //   errMsg.push('Password is required.');    
+  // }
   
   if (!data.usrEmail.trim()) {
     errMsg.push('Email is required.');    
@@ -63,7 +63,8 @@ const handleSubmit = async (e) => {
     const result = await fetch (`http://localhost:3000/api/users/${_id}`, 
     {
       method:'PUT',
-      body:JSON.stringify({usrName: data.usrName, usrPass:data.usrPass, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
+      // body:JSON.stringify({usrName: data.usrName, usrPass:data.usrPass, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
+      body:JSON.stringify({usrName: data.usrName, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
     });
 
       const post = await result.json();
@@ -92,18 +93,14 @@ const handleSubmit = async (e) => {
 
   return (
     <div>
-      <div className='relative w-full rounded-lg shadow-lg '>
-        <div className='bg-gray-300 p-5 font-bold text-xl'>
-          <h1>ACCOUNT SETTINGS -</h1>
+      <div className='relative bg-gray-100 w-full rounded-lg shadow-lg '>
+        <div className='bg-amber-600 p-5 font-bold text-xl'>
+          <h1 className='text-white'>ACCOUNT SETTINGS: -</h1>
         </div>
         <form className='p-5' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
             <label>Username:</label>
             <input type='text' name='usrName' value={data.usrName} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
-          </div>
-          <div className='flex flex-col mb-3 gap-2'>
-            <label>Create Password:</label>
-            <input type='password' name='usrPass' value={data.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
             <label>Email Id:</label>
