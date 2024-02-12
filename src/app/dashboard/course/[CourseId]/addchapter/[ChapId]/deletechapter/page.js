@@ -20,7 +20,7 @@ export default function DelChapter({params}) {
       autoClose: 1500,
       type: 'success'
     });
-    router.push(`/dashboard/course/${params.CourseId}/chapter`);
+    router.push(`/dashboard/course/${params.CourseId}/addchapter`);
   }
 
   return (
@@ -35,7 +35,7 @@ export default function DelChapter({params}) {
                     </div>
                     <div className='flex gap-3 justify-center'>
                         <button type='submit' className='py-1 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white text-sm font-bold'>DELETE</button>
-                        <Link href={`/dashboard/course/${params.CourseId}/chapter`} className='py-1 px-2 rounded-sm bg-gray-600 hover:bg-gray-500 text-white text-sm font-bold'>CANCEL</Link>
+                        <Link href={`/dashboard/course/${params.CourseId}/addchapter`} className='py-1 px-2 rounded-sm bg-gray-600 hover:bg-gray-500 text-white text-sm font-bold'>CANCEL</Link>
                     </div>
                 </form>
             </div>

@@ -6,6 +6,7 @@ import {AiOutlineClose, AiOutlineMenu} from 'react-icons/ai';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux';
 
 export default function NavBar() {
 
@@ -46,6 +47,8 @@ export default function NavBar() {
     setMenuIcon(!menuIcon);
   }
 
+  const cartItems = useSelector((store) => store.cart)
+
   return (
     <div className='p-0'>
       <div className='w-full '>
@@ -63,7 +66,10 @@ export default function NavBar() {
                 }
             </ul>
             <div className='flex  items-center'>
-                <Link href='/shoppingcart'><FaCartPlus className='mx-3 text-2xl text-amber-600 cursor-pointer'/></Link>
+                <div className='relative flex flex-col'>
+                    <Link href='/shoppingcart'><span className='cursor-pointer rounded-full absolute right-[14px] bottom-[12px] w-[16px] h-[16px] bg-amber-600 text-white text-center items-center justify-center text-xs font-bold'>{cartItems.totalQuantity}</span></Link>
+                    <Link href='/shoppingcart'><FaCartPlus className='mx-3 text-2xl text-amber-600 cursor-pointer'/></Link>
+                </div>
                 <Link href='/login' className='py-2 px-3 hover:bg-amber-500 bg-amber-600 font-bold text-white'>LOGIN</Link>
             </div>
             <div onClick={handleMenuToggle} className='flex md:hidden'>

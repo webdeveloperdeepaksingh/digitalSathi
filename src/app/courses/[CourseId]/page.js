@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { Metadata, ResolvingMetadata } from "next";
 import { PiVideoBold } from "react-icons/pi";
 import NavBar from '@/components/NavBar/page';
 
@@ -10,21 +10,35 @@ async function getCourseById(id){
     return courseById;
 }
 
-export default async function CourseLandingPage({params}) {
+export async function generateMetadata({ params, searchParams }, parent) {
+  const id = params.CourseId
+  const res = await fetch(`http://localhost:3000/api/courses/${id}`);
+  const meta = await res.json();
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || []
+  return {
+    title: meta.result.prodName,
+    description: meta.result.prodIntro,
+    keywords: [meta.result.prodTags],
+    openGraph: {
+      images: [`/${meta.result.prodImage}`, ...previousImages],
+    },
+  }
+}
 
-  const cors = await getCourseById(params.CourseId);
-  console.log(cors);
+export default async function CourseLandingPage({params, searchParams}) {
+
+  const prod = await getCourseById(params.CourseId);
+  console.log(prod);
 
   return (
     <div>
       <div className='h-[90px]'><NavBar/></div>
       <div className='grid md:grid-cols-2 w-full p-9 gap-2 '>
-        <div className='relative w-full h-[400px]'>
-            <Image alt={cors.result.coName} src={`/images/${cors.result.coImage}`} objectFit='cover' fill/>
-        </div>
+        <Image alt={prod.result.prodName} src={`/images/${prod.result.prodImage}`} width={700} height={400}/>
         <div className='relative'  >
-          <h1 className='uppercase p-2 text-2xl font-bold bg-gray-200'>{cors.result.coName}</h1>
-          <p className='text-justify p-2'>{cors.result.coIntro}</p>
+          <h1 className='uppercase p-2 text-2xl font-bold bg-gray-200'>{prod.result.prodName}</h1>
+          <p className='text-justify p-2'>{prod.result.prodIntro}</p>
           <div className='grid grid-cols-2 w-full gap-2'>
             <div className='font-bold px-2'>
                 <p className='mb-3'>Course Validity:</p>
@@ -34,11 +48,11 @@ export default async function CourseLandingPage({params}) {
                 <p className='mb-3'>Course Category:</p>
             </div>
             <div className=' px-2'>
-                <p className='mb-3'>{cors.result.coVal}</p>
+                <p className='mb-3'>{prod.result.prodVal}</p>
                 <p className='mb-3'>Deepak Singh</p>
-                <p className='mb-3'>{cors.result.coPrice}</p>
-                <p className='mb-3'>{cors.result.coDisc}</p>
-                <p className='mb-3'>{cors.result.coCat}</p>
+                <p className='mb-3'>{prod.result.prodPrice}</p>
+                <p className='mb-3'>{prod.result.prodDisc}</p>
+                <p className='mb-3'>{prod.result.prodCat}</p>
             </div>
           </div>
           <div className=' absolute grid grid-cols-2 w-full gap-1 bottom-0'>
@@ -53,7 +67,7 @@ export default async function CourseLandingPage({params}) {
         </div>
         <div className="w-full  mx-auto">
           {
-            cors.result.chapters.map((chapter, index) => 
+            prod.result.chapters.map((chapter, index) => 
             (
               <details key={index} className="border-b border-gray-200">
                 <summary className="px-4 py-2 hover:bg-gray-100 cursor-pointer uppercase">

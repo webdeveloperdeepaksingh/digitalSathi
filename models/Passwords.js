@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-
 const validator = require('validator');
+
 const passSchema = new mongoose.Schema ({   
      
     accName:{

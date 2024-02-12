@@ -1,22 +1,24 @@
 import { NextResponse } from "next/server";
 import connect from "../../../../server";
 import Categories from "../../../../models/Categories";
-import Users from "../../../../models/Users";
+ 
+export const GET = async (request) => {  
 
-export const GET = async (request, response, next) => {
-  
   try{
-
+    
       const url = new URL(request.url);
-      const userId=url.searchParams.get('userId');
+      const query = url.searchParams.get('query');
       await connect ();
-      let user = await Users.findOne({_id:userId});
-      let posts = await  Categories.find();
-      posts = posts.filter(a=> user.usrRole == 'ADMIN' || a.userId == userId);
-      return new NextResponse (JSON.stringify(posts), {status: 200});
 
+      let posts = await  Categories.find();
+      
+      if (query){
+        posts = posts.filter(a => a.catName.toLowerCase().includes(query.toLowerCase()));
+      }
+      return new NextResponse (JSON.stringify(posts), {status: 200});
+      
   }catch(error){
-    return new NextResponse ("Erron while fetching data: " + error, {status: 500});
+    return new NextResponse ("Error while fetching data: " + error, {status: 500});
   }
 };
 

@@ -2,30 +2,45 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
+import Cookies from 'js-cookie';
 import { RiDeleteBin5Fill } from "react-icons/ri";
-import { useContext } from 'react';
-import { UserContext } from '@/context/UserContext';
 
 export default function BlogList() {
 
-  const {loggedInUser} = useContext(UserContext);
+  const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
   const [blog, setBlog] = useState([]);
+  const [query, setQuery] = useState([]);
 
-  useEffect(() =>{
+  useEffect(()=>{
+
+    let api = '';
+    if(query != ''){
+      //get blogs as per query entered.
+      api = `http://localhost:3000/api/blogs?userId=${loggedInUser.result._id}&query=${query}`
+    }else{
+      //get all blogs.
+      api = `http://localhost:3000/api/blogs?userId=${loggedInUser.result._id}`
+    }
     async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/blogs/?userId='+ loggedInUser.result._id);
-      data = await data.json();
-      setBlog(data);
+      const res = await fetch(api);
+      const blogList = await res.json();
+      setBlog(blogList);
+      console.log(blogList);
     }
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+  },[query])
+
+  const handleSearch = (data) =>{
+    setQuery(data);
+    console.log(data);
+  }
 
   return (
     <div className="relative flex flex-col w-full shadow-lg rounded-lg">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' className='p-2 w-[350px]' placeholder='Search here...'></input>
+          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-600' placeholder='Search blog title here...'></input>
         </div>
         <div>
           <Link href='/dashboard/blog' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>ADD</Link>

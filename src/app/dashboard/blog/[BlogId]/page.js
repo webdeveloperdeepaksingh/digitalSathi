@@ -1,13 +1,14 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
 import { FaCloudUploadAlt } from 'react-icons/fa';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
 import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
-import { UserContext } from '@/context/UserContext';
+
 
 export default function UpdateBlog({params}) {
 
@@ -16,14 +17,14 @@ export default function UpdateBlog({params}) {
     const [cat, setCat] = useState([]);     
     const [image, setImage] = useState(''); 
     const [imageData, setImageData] = useState(null); 
-    const {loggedInUser} = useContext(UserContext);
+    const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [errorMessage, setErrorMessage] = useState(''); 
     const [editorContent, setEditorContent] = useState('');
     const [data, setData] = useState({blgName:'', blgTags:'', shortIntro:'', blgDesc:'', blgCat:'', blgAuth:'', blgImage:'' })    
     
     useEffect(() =>{
       async function fetchCat() {
-        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
+        let catdata = await fetch('http://localhost:3000/api/categories');
         catdata = await catdata.json();
         setCat(catdata);
       }
@@ -65,7 +66,7 @@ export default function UpdateBlog({params}) {
         console.log(response);  
         toast('Image uploaded successfully!', {
           hideProgressBar: false,
-          autoClose: 2000,
+          autoClose: 1500,
           type: 'success'      
         });
     }
@@ -110,7 +111,17 @@ export default function UpdateBlog({params}) {
       const result = await fetch (`http://localhost:3000/api/blogs/${params.BlogId}`, 
       {
         method:'PUT',
-        body:JSON.stringify({blgName:data.blgName, blgTags:data.blgTags, shortIntro:data.shortIntro, blgDesc:editorContent, blgCat:data.blgCat, blgAuth:data.blgAuth, blgImage:data.blgImage}),
+        body:JSON.stringify(
+            {
+                blgName:data.blgName, 
+                blgTags:data.blgTags, 
+                shortIntro:data.shortIntro, 
+                blgDesc:editorContent, 
+                blgCat:data.blgCat, 
+                blgAuth:data.blgAuth, 
+                blgImage:data.blgImage, 
+                userId:loggedInUser.result?._id
+            }),
       });
 
       const post = await result.json();
@@ -138,20 +149,21 @@ export default function UpdateBlog({params}) {
     <div>
       <div className='relative flex  bg-gray-100 justify-center w-full p-6 shadow-lg rounded-lg'>
         <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
-            <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
+            <div className='grid md:grid-cols-1 w-full mb-3 gap-6'>
                 <div>
-                    <div className='flex items-center justify-center group bg-white relative h-[260px] max-w-[800px] border border-solid'>
+                    <div className='relative flex flex-col group bg-white  h-[360px] max-w-[1500px] border border-solid rounded-md'>
                         <Image className='w-[100%] h-[100%]' alt='image' src={image} style={{ objectFit: 'cover' }} fill></Image>
-                        <div className='hidden group-hover:block absolute cursor-pointer  opacity-50 text-gray-300  text-4xl'>
+                        <div className='hidden group-hover:block  cursor-pointer mx-auto mt-auto  opacity-50 text-gray-300   text-4xl'>
                             <button type='button' onClick={showChooseFileBox} id='fileUpload'><FaCloudUploadAlt/></button>
-                        </div>
+                        </div>     
+                        <p className='text-sm mt-auto ml-auto  opacity-50'>Size:[1500*360]</p>
                     </div>
                     <div className='flex flex-col'>
                         <div className='hidden border border-solid'>
                             <input type='file' id='fileUpload' ref={inputRef} accept='image/*' name='image' onChange={handleImage} ></input>
                         </div>
                         <div className='flex justify-center'>
-                            <button type='button' onClick={handleImageUpload} className='w-full mt-3 py-2 px-2 rounded-sm bg-white hover:bg-gray-50 text-black text-md font-bold border border-solid border-black'>UPLOAD</button>
+                            <button type='button' onClick={handleImageUpload} className='w-full mt-3 py-2 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
                         </div>
                     </div>
                 </div>
@@ -172,7 +184,7 @@ export default function UpdateBlog({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Blog Description:</label>
-                <TextEditor value={editorContent} handleEditorChange={handleEditorChange}/>
+                <TextEditor value={data.blgDesc} handleEditorChange={handleEditorChange}/>
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-2'> 
                 <div className='flex flex-col'>
@@ -194,7 +206,7 @@ export default function UpdateBlog({params}) {
                 </div>
             </div>
             <div className='mb-3'>
-                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPDATE</button>
+                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
             </div>
             {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>

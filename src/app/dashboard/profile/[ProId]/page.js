@@ -1,6 +1,5 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -9,14 +8,13 @@ import React from 'react';
 
 export default function Profile({params}) {
 
-  const [data, setData] = useState({proName:'', proFather:'', proDob:'', proJob:'', proQual:'', shortIntro:'', proAbout:'', proCloc:'', proPloc:'', proImage:''})
+  const [data, setData] = useState({proName:'', proFather:'', proDob:'', proJob:'', proQual:'', shortIntro:'', proAbout:'', proCloc:'', proPloc:'', proAdd:'', proId:'', proImage:''})
   const [editorContent, setEditorContent] = useState('');
   const [imageData, setImageData] = useState(null); 
   const [fileData, setFileData] = useState(null);
   const [image, setImage] = useState(''); 
   const router = useRouter();
-  const inputRef = useRef();
-
+ 
   useEffect(() =>{
     async function fetchData() {
       const proData = await fetch(`http://localhost:3000/api/profile/${params.ProId}`);
@@ -28,17 +26,13 @@ export default function Profile({params}) {
     fetchData();
   },[params.ProId])
 
-  const showChooseFileBox = () =>{
-    inputRef.current.click();
-};
-
 const handleImage = (e) => {
     setImage(URL.createObjectURL(e.target.files?.[0]));        
     setImageData(e.target.files?.[0])
     console.log(e.target.files?.[0]);
   };
 
-const handleImageUpload = async (e) =>{
+const handleImageUpload = async () =>{
     const formData = new FormData();
     formData.set('image', imageData);             
     data.proImage=`proImage_${params.ProId}.${imageData.name.split('.').pop()}`;
@@ -50,7 +44,7 @@ const handleImageUpload = async (e) =>{
     console.log(response);  
     toast('Image uploaded successfully!', {
       hideProgressBar: false,
-      autoClose: 2000,
+      autoClose: 1500,
       type: 'success'      
     });
 }
@@ -71,35 +65,68 @@ const handleImageUpload = async (e) =>{
     console.log(e.target.files?.[0]);
   };
 
-  const handleFileUpload = async (e) =>{
-  e.preventDefault();
-   const formData = new FormData();
-   formData.set('pdfFile', fileData)
-   const response = await fetch('http://localhost:3000/api/pdffiles', {
-      method: 'POST',        
-      body: formData
-  });
-  
-  console.log(response);  
-  toast('File uploaded successfully!', {
-    hideProgressBar: false,
-    autoClose: 2000,
-    type: 'success'      
-    });
-}
+  const handleFileUpload = async (doc) =>{
+    // doc.preventDefault();
+     const formData = new FormData();
+     formData.set('pdfFile', fileData);
+     let pdfFile =`${doc}_${params.ProId}.${fileData.name.split('.').pop()}`;
+
+     if(doc=="addProof"){
+        data.proAdd = pdfFile;
+      }
+      else{
+        data.proId = pdfFile;
+      }
+     
+     formData.set('fileName', pdfFile);
+    try
+     {
+        const response = await fetch('http://localhost:3000/api/pdffiles', {
+        method: 'POST',        
+        body: formData
+      });
+          console.log(response); 
+          if (response.ok) {
+          toast('File uploaded successfully!', {
+            hideProgressBar: false,
+            autoClose: 1500,
+            type: 'success'      
+          });
+        } else {
+          console.error('Error uploading file:', response.statusText);
+        }
+    } catch (error) {
+      console.error('An error occurred during file upload:', error);
+    } 
+  }
+
   const handleEditorChange = (newContent) => {
   setEditorContent(newContent);
   console.log(editorContent);
 }
   const handleSubmit = async (e) => {
   e.preventDefault();
-  
   try
   {
     const result = await fetch (`http://localhost:3000/api/profile/${params.ProId}`, 
     {
       method:'PUT',
-      body:JSON.stringify({proName:data.proName, proFather:data.proFather, proDob:data.proDob, proJob:data.proJob, proQual:data.proQual, shortIntro:data.shortIntro, proAbout:editorContent, proImage:data.proImage, proCloc:data.proCloc, proPloc:data.proPloc}),
+      body:JSON.stringify(
+        {
+          proName:data.proName, 
+          proFather:data.proFather, 
+          proDob:data.proDob, 
+          proJob:data.proJob, 
+          proQual:data.proQual, 
+          shortIntro:data.shortIntro, 
+          proAbout:editorContent, 
+          proImage:data.proImage, 
+          proCloc:data.proCloc, 
+          proPloc:data.proPloc,
+          proAdd:data.proAdd,
+          proId:data.proId, 
+          proId:data.proId
+        }),
     });
 
     const post = await result.json();
@@ -107,7 +134,7 @@ const handleImageUpload = async (e) =>{
     {toast('Profile saved successfully!', {
 
             hideProgressBar: false,
-            autoClose: 2000,
+            autoClose: 1500,
             type: 'success'
 
             });
@@ -123,21 +150,11 @@ const handleImageUpload = async (e) =>{
       <div className='relative flex bg-gray-100  w-full p-6 shadow-lg rounded-lg'>
         <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
-              <div>
-                <div className='flex items-center justify-center group bg-white relative h-[362px] max-w-[800px] border border-solid'>
-                  <Image className='w-[100%] h-[100%]' alt='image' src={image} style={{ objectFit: 'cover' }} fill></Image>
-                  <div className='hidden group-hover:block absolute cursor-pointer  opacity-50 text-gray-300  text-4xl'>
-                      <button type='button' onClick={showChooseFileBox} id='fileUpload'><FaCloudUploadAlt/></button>
-                  </div>
+              <div className='relative flex flex-col'>
+                <div className='p-3 flex flex-col group bg-white h-[504px]  border-2 rounded-md'>
+                  <Image  alt='image' src={image} width={600} height={504} className='rounded-sm' ></Image>
                 </div>
-                <div className='flex flex-col'>
-                  <div className='hidden border border-solid'>
-                      <input type='file' id='fileUpload' ref={inputRef} accept='image/*' name='image' onChange={handleImage} ></input>
-                  </div>
-                  <div className='flex justify-center'>
-                      <button type='button' onClick={handleImageUpload} className='w-full mt-3 py-2 px-2 rounded-sm bg-white hover:bg-gray-50 text-black text-md font-bold border border-solid border-black'>UPLOAD</button>
-                  </div>
-                </div>
+                <p  className='absolute text-xs bottom-2 right-2'>Size:[600*504]</p>
               </div>
                 <div className='flex flex-col gap-3'> 
                   <div className='flex flex-col'>
@@ -160,12 +177,20 @@ const handleImageUpload = async (e) =>{
                       <label>Qualification:*</label>
                       <input type='text' name='proQual' value={data?.proQual} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                   </div>
+                  <div className='flex flex-col'>
+                      <label>Upload Image:*</label>
+                      <div className='flex gap-1'>
+                        <input type='file' accept='image/*' name='image'  onChange={handleImage} className='w-full py-2 px-2 border rounded-md  focus:outline-amber-600 bg-white'></input>
+                        <button type='button' onClick={handleImageUpload} className='py-2 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
+                      </div>       
+                  </div>
+                  
                 </div>
             </div>
             <div className='flex flex-col mb-3'>
                 <label>Short Intro:</label>
                 <textarea type='text' name='shortIntro' value={data?.shortIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
-            </div>
+              </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>About Me:</label>
                 <TextEditor value={editorContent} handleEditorChange={handleEditorChange}/>
@@ -174,14 +199,14 @@ const handleImageUpload = async (e) =>{
                 <label>Address Proof:</label>
                 <div className='flex items-center'>
                     <input type='file' className='py-2 w-full px-2 mt-2 bg-white border rounded-md  focus:outline-amber-600'onChange={handleFileChange} ></input>
-                    <button type='button' onClick={handleFileUpload} className='py-2 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPLOAD</button>
+                    <button type='button' onClick={()=>handleFileUpload("addProof")} className='py-2 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPLOAD</button>
                 </div>
             </div>
             <div className='flex flex-col mb-3'>
                 <label>Id Proof:</label>
                 <div className='flex items-center'>
                     <input type='file' className='py-2 px-2 w-full mt-2 bg-white border rounded-md  focus:outline-amber-600' onChange={handleFileChange} ></input>
-                    <button type='button' onClick={handleFileUpload} className='py-2 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPLOAD</button>
+                    <button type='button' onClick={()=>handleFileUpload("idProof")} className='py-2 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPLOAD</button>
                 </div>
             </div>
             <div className='grid grid-cols-2 gap-3'>

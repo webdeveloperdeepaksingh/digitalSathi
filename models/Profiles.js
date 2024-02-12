@@ -38,6 +38,14 @@ const proSchema = new mongoose.Schema ({
         type: String,
         unique: false,
     },
+    proAdd:{
+        type: String,
+        unique: false,
+    },
+    proId:{
+        type: String,
+        unique: false,
+    },
     proImage:{
         type: String,
         unique: false,

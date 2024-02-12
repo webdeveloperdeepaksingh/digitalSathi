@@ -40,6 +40,6 @@ export const DELETE = async (request, {params}) =>{
       
       } catch (error) {
             return new NextResponse ("Erron while deleting data" + error, {status: 500});
-          }
+      }
 }
 

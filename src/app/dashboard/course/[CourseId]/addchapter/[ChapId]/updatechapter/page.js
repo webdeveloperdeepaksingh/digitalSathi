@@ -46,7 +46,7 @@ export default function UpdateChapter({params}) {
 
     const post = await result.json();
     console.log(post);
-    router.push(`/dashboard/course/${_id}/chapter`);
+    router.push(`/dashboard/course/${_id}/addchapter`);
 
     toast('Chapter renamed successfully!', {
 
@@ -73,7 +73,7 @@ export default function UpdateChapter({params}) {
                     <div className='flex w-full gap-1'>
                         <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
                         <button type='button' className='py-2 px-3 rounded-sm bg-gray-600 hover:bg-gray-500 text-white font-bold'>
-                            <Link href={`/dashboard/course/${params.CourseId}/chapter`}>BACK</Link>
+                            <Link href={`/dashboard/course/${params.CourseId}/addchapter`}>BACK</Link>
                         </button>
                     </div>
                 </form>

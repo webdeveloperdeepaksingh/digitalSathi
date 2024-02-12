@@ -9,6 +9,7 @@ export default function UpdateCategory({params}) {
   const router = useRouter();
   const [data, setData] = useState({catName:''})
   const [errorMessage, setErrorMessage] = useState('');
+  
 
   useEffect(() =>{
     async function fetchData() {
@@ -49,7 +50,7 @@ export default function UpdateCategory({params}) {
       const result = await fetch (`http://localhost:3000/api/categories/${params.CatId}`, 
       {
         method:'PUT',
-        body:JSON.stringify({catName: data.catName}),
+        body:JSON.stringify({catName: data.catName }),
       });
   
         const post = await result.json();

@@ -93,26 +93,26 @@ const handleSubmit = async (e) => {
 
   return (
     <div>
-      <div className='relative bg-gray-100 w-full rounded-lg shadow-lg '>
-        <div className='bg-amber-600 p-5 font-bold text-xl'>
-          <h1 className='text-white'>ACCOUNT SETTINGS: -</h1>
+      <div className='relative bg-gray-100 w-full rounded-lg shadow-lg p-9'>
+        <div className='bg-white border-2 rounded-md'>
+          <h1 className='p-4 font-bold text-3xl text-center '>ACCOUNT SETTINGS</h1>
         </div>
-        <form className='p-5' onSubmit={handleSubmit}>
+        <form className='pt-3' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>Username:</label>
+            <label className='font-semibold uppercase'>Username:</label>
             <input type='text' name='usrName' value={data.usrName} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>Email Id:</label>
+            <label className='font-semibold uppercase'>Email Id:</label>
             <input type='email' name='usrEmail' value={data.usrEmail} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
-          <div className='grid grid-cols-2 gap-3'>
+          <div className='grid grid-cols-2 gap-1'>
             <div className='flex flex-col mb-3 gap-2'>
-                <label>Phone:</label>
+                <label className='font-semibold uppercase'>Phone:</label>
                 <input type='text' name='usrPhone' value={data.usrPhone} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600' placeholder='with country code'></input>
             </div>
             <div className='flex flex-col mb-3 gap-2'>
-                <label>Role:</label>
+                <label className='font-semibold uppercase'>Role:</label>
                 <select type='select' name='usrRole' value={data.usrRole} onChange={handleChange} className='py-2 font-bold px-2 rounded-md border focus:outline-amber-600  '>
                    <option value='' className='text-center'>--- Select Role ---</option>
                    <option  value='ADMIN' className='font-bold text-sm'>ADMIN</option>

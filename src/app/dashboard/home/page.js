@@ -1,12 +1,11 @@
 'use client';
-import { useContext } from 'react';
-import { UserContext } from '@/context/UserContext';
 import { BsCashCoin } from "react-icons/bs";
 import React from 'react';
+import Cookies from 'js-cookie';
 
-export default function Home() {
+export default function Home() {   
 
-  const {loggedInUser} = useContext(UserContext);
+  const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
   
   return (
     <div>

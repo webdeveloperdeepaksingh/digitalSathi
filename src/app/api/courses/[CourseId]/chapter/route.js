@@ -1,4 +1,4 @@
-import { Courses } from "../../../../../../models/Courses";
+import {Products} from "../../../../../../models/Products";
 import connect from "../../../../../../server";
 import { NextResponse } from "next/server";
 
@@ -7,7 +7,7 @@ export const GET = async (request, {params}) => {
   try
   {
     await connect ();
-    const course = await Courses.findById(params.CourseId);
+    const course = await Products.findById(params.CourseId);
 
     if (!course) {
       return NextResponse("No course found with the given ID", {status: 404});
@@ -26,7 +26,7 @@ export  const  POST = async (request, {params}) =>{
     const payload = await request.json(); 
     await connect ();
 
-    const course = await Courses.findById(params.CourseId)
+    const course = await Products.findById(params.CourseId)
     course.chapters.push(payload)
 
     const result = await course.save();

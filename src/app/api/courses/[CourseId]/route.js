@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
 import connect from "../../../../../server";
-import { Courses } from "../../../../../models/Courses";
+import {Products} from "../../../../../models/Products";
 
 
 export const GET = async (request, {params}) => {
 try 
   {
     await connect ();
-    const course = await Courses.findById(params.CourseId);
+    const course = await Products.findById(params.CourseId);
     
     if (!course) {
         return new NextResponse("No course found with the given ID", {status: 404});
@@ -22,16 +22,16 @@ try
 export const PUT = async (request, {params}) =>{
 try 
   {
-      const {coName, coTags, coIntro, coDesc, coPrice, coDisc, coVal, coCat, coImage} = await request.json();
+      const {prodName, prodTags, prodAuth, prodIntro, prodTax, prodDisct, prodDesc, prodCat, prodVal, prodPrice, prodDisc, prodImage } = await request.json();
       await connect ();
-      const course = await Courses.findById(params.CourseId);
+      const course = await Products.findById(params.CourseId);
 
       if (!course) {
       return new NextResponse("No course found with the given ID", {status: 404});
       }
 
    // Update the course
-      Object.assign(course, {coName, coTags, coIntro, coDesc, coPrice, coDisc, coVal, coCat, coImage});
+      Object.assign(course, {prodName, prodTags, prodAuth, prodIntro, prodTax, prodDisct,  prodDesc, prodCat, prodVal, prodPrice, prodDisc, prodImage });
       await course.save();
       return NextResponse.json({ message: 'Course updated successfully', success:true }, {status:200});
 
@@ -41,18 +41,17 @@ try
 }
 
 export const DELETE = async (request, {params}) =>{
-try 
+
+   try 
    {
-      await connect ();
-      const course = await Courses.findById(params.CourseId);
-      if (!course) {
-      return new NextResponse("No course found with the given ID", {status: 404});
-      }
-
-      await course.pull({ _id: params.CourseId });
-
-      return new NextResponse(JSON.stringify({message: 'Course removed successfully.'}), {status: 200});
-   }catch (error) {
-      return new NextResponse ("Erron while deleting data: " + error, {status: 500});
-      } 
+         const courseId = params.CourseId;
+         const record = {_id:courseId}
+         
+         await connect ();
+         let posts = await Products.deleteOne(record);
+         return NextResponse.json({posts, success:true}, {status:200});
+   
+   } catch (error) {
+         return new NextResponse ("Erron while deleting data: " + error, {status: 500});
+   }
 }

@@ -1,15 +1,14 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { toast } from "react-toastify";
+import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { UserContext } from '@/context/UserContext';
-
 
 export default function AddCategory() {
 
   const router = useRouter();
   const [data, setData] = useState({catName:''})
-  const {loggedInUser} = useContext(UserContext);
+  const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) =>{

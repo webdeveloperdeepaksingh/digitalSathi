@@ -21,7 +21,7 @@ export const PUT = async (request, {params}) =>{
 
       try 
       {
-            const {blgName, shortIntro, blgDesc, blgCat, blgAuth, blgImage} = await request.json();
+            const {blgName, blgTags, shortIntro, blgDesc, blgCat, blgAuth, blgImage} = await request.json();
             const blogId = params.BlogId;
             const filter = {_id:blogId}
             await connect ();
@@ -31,7 +31,7 @@ export const PUT = async (request, {params}) =>{
             if(existingBlog){
             return NextResponse.json({ success: false, message: 'Blog title already exists !' }, {status:400});
             }else{
-            const posts = await Blogs.findOneAndUpdate(filter, {blgName, shortIntro, blgDesc, blgCat, blgAuth, blgImage});
+            const posts = await Blogs.findOneAndUpdate(filter, {blgName, blgTags, shortIntro, blgDesc, blgCat, blgAuth, blgImage});
             return NextResponse.json({result:posts, success:true}, {status:200});
             }
       

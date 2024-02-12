@@ -10,6 +10,7 @@ export default function WatchTopic({params}) {
  const [top, setTop] = useState('');
  const [chap, setChap] = useState([]);
  const [toggle, setToggle] = useState(false);
+ const PDF_FILE_URL = `http://localhost:3000/public/pdf/${top.pdfFile}`
 
  useEffect(() =>{  
     async function fetchChap() {
@@ -45,16 +46,25 @@ export default function WatchTopic({params}) {
         setToggle(index);
     }
 }
+ const handleDownload = () => {
+    const fileName = url.split("/").pop();
+    const aTag = document.createComment("a");
+    aTag.href = url;
+    aTag.setAttribute("download", fileName);
+    document.body.appendChild(aTag);
+    aTag.click();
+    aTag.remove();
+ }
 
   return (
     <div>
     <div className='relative flex flex-col w-full p-9 shadow-lg rounded-lg'>
     <div>
-        <div className='w-full gap-4 grid md:grid-cols-2'>
-            <div className='flex flex-col border border-solid p-5 rounded-lg'>
+        <div className='md:flex w-auto gap-2'>
+            <div className='flex flex-col w-full mb-3 border border-solid rounded-lg'>
                 <h3 className='bg-gray-600 text-xl text-white text-center p-5'>TOPIC: {top.topName} </h3>
                 <div className='flex w-full justify-center'>
-                    <div className='w-full md:h-[350px] h-[250px] border border-solid'>
+                    <div className='w-full md:h-[350px] h-[300px] border border-solid'>
                         <iframe className="w-full aspect-video h-full" src={top.videoUrl}
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                             allowFullScreen
@@ -63,7 +73,7 @@ export default function WatchTopic({params}) {
                     </div>
                 </div>           
             </div>
-            <div className='flex flex-col overflow-auto border border-solid pb-4 pt-6  rounded-lg'>
+            <div className='flex flex-col md:min-w-[400px] overflow-auto border-2 py-6  rounded-lg'>
                 {
                     chap?.map((ch, index) => {
                     return (
@@ -78,7 +88,7 @@ export default function WatchTopic({params}) {
                             ch.topics?.map((tp, tpIndex) => {
                             return (
                                 <>
-                                <div className={ toggle === index ? 'flex  relative  hover:bg-gray-100 border border-solid mx-5 mb-1' : 'hidden' }>
+                                <div key={tp._id} className={ toggle === index ? 'flex  relative  hover:bg-gray-100 border border-solid mx-5 mb-1' : 'hidden' }>
                                 <p className='p-2'>{tp.topName}</p>
                                 <div className='flex items-center p-0'>
                                     <button className='flex p-0 absolute items-center  gap-1 right-3'>
@@ -93,8 +103,9 @@ export default function WatchTopic({params}) {
                 </div>
             </div>
         </div>
-        <div className='w-full mt-5 rounded-lg items-center bg-gray-200 hover:bg-gray-100 cursor-pointer shadow-lg h-[50px]'>
-            <p className='p-3 font-bold'>PDF File</p>
+        <div  className='relative flex w-full mt-5 rounded-lg items-center bg-gray-200  cursor-pointer shadow-lg h-[50px]'>
+            <p className='p-3 font-bold'>{top.topName}</p>
+            <button onClick={() =>{handleDownload(PDF_FILE_URL)}} className='absolute right-3 px-2 py-2 text-xs mr-auto  uppercase font-bold shadow-lg rounded-sm bg-white'>Download Notes</button>
         </div>
     </div>
 </div>

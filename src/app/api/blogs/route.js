@@ -9,10 +9,16 @@ export const GET = async (request, response, next) => {
 
       const url = new URL(request.url);
       const userId=url.searchParams.get('userId');
+      const query = url.searchParams.get('query');
+      
       await connect ();
       let user=await Users.findOne({_id:userId});
       let posts = await  Blogs.find();
+
       posts=posts.filter(a=> user.usrRole == 'ADMIN' || a.userId == userId);
+      if (query){
+        posts = posts.filter(a => a.blgName.toLowerCase().includes(query.toLowerCase()));
+      }
       return new NextResponse (JSON.stringify(posts), {status: 200});
 
   }catch(error){
@@ -23,7 +29,7 @@ export const GET = async (request, response, next) => {
 export  const  POST = async (request) =>{ 
   try  
     {
-      const {blgName, shortIntro, blgDesc, blgCat, blgAuth, blgImage, userId} = await request.json(); 
+      const {blgName,blgTags, shortIntro, blgDesc, blgCat, blgAuth, blgImage, userId} = await request.json(); 
       await connect ();
 
       const existingBlog = await Blogs.findOne({blgName});
@@ -31,7 +37,7 @@ export  const  POST = async (request) =>{
       if(existingBlog){
         return NextResponse.json({ success: false, message: 'Blog title already exists !' }, {status:400});
       }else{
-        const blog = new Blogs({blgName, shortIntro, blgDesc, blgCat, blgAuth, blgImage, userId});
+        const blog = new Blogs({blgName, blgTags, shortIntro, blgDesc, blgCat, blgAuth, blgImage, userId});
         const result = await blog.save();
         return NextResponse.json({result, success:true}, {status: 200});
       }

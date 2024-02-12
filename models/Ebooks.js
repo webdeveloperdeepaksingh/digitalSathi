@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 
-
 const chapSchema = new mongoose.Schema ({    
     chapName:{
         type: String,
@@ -15,45 +14,57 @@ const chapSchema = new mongoose.Schema ({
 },{timestamps: true});
 
 const ebkSchema = new mongoose.Schema ({      
-    ebkName:{
+    prodName:{
         type: String,
         unique: false,
     },
-    ebkTags:[{
+    prodTags:[{
         type: String,
         unique: false 
     }],
-    ebkIntro:{
+    prodIntro:{
         type: String,
         sparse: true,
         unique: false 
     },
-    ebkDesc:{
+    prodDesc:{
         type: String,
         sparse: true,
         unique: false    
     },
-    ebkCat:{
+    prodType:{
+        type: String,
+        unique: false 
+    },
+    prodTax:{
+        type: String,
+        unique: false 
+    },
+    prodDisct:{
+        type: String,
+        unique: false 
+    },
+    prodCat:{
         type: String,
         sparse: true,
         unique: false 
     },
-    ebkAuth:{
+    prodAuth:{
         type: String,
         sparse: true,
         unique: false 
     },
-    ebkPrice:{
+    prodPrice:{
         type: String,
         sparse: true,
         unique: false 
     },
-    ebkDisc:{
+    prodDisc:{
         type: String,
         sparse: true,
         unique: false 
     },
-    ebkImage:{
+    prodImage:{
         type: String,
         unique:false
     },

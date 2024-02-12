@@ -2,22 +2,30 @@ import mongoose from "mongoose";
 
 const settingsSchema = new mongoose.Schema ({   
      
-    webTitle:{
+    brandTitle:{
         type: String,
         required: [true, 'User name is required!'],
         unique: false,
     },
-    webTags:[{
+    brandTags:[{
         type: String,
         unique: false    
     }],
-    metaData:{
+    brandIntro:{
         type: String,
         unique: false        
     },
-    webCurr:{
+    brandCurr:{
         type: String,
         required: [true, 'Currency is required!'],
+        unique: false
+    },
+    brandLogo:{
+        type: String,
+        unique: false
+    },
+    brandIcon:{
+        type: String,
         unique: false
     },
 },{timestamps: true});

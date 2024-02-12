@@ -1,31 +1,46 @@
 'use client';
-import { UserContext } from '@/context/UserContext';
 import Link from 'next/link';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect} from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
-  
+import Cookies from 'js-cookie';
 
 export default function CategoryList() {
 
    const [cat, setCat] = useState([]);
-   const {loggedInUser} = useContext(UserContext);
+   const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
+   const [query, setQuery] = useState([]);
 
-  useEffect(() =>{
-    async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
-      data = await data.json();
-      setCat(data);
-    }
-    fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[])
+   useEffect(()=>{
+ 
+     let api = '';
+     if(query != ''){
+       //get category as per query entered.
+       api = `http://localhost:3000/api/categories?query=${query}`
+     }else{
+       //get all categories.
+       api = `http://localhost:3000/api/categories`
+     }
+     async function fetchData() {
+       const res = await fetch(api);
+       const catList = await res.json();
+       setCat(catList);
+       console.log(catList);
+     }
+     fetchData();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   },[query])
+ 
+   const handleSearch = (data) =>{
+     setQuery(data);
+     console.log(data);
+   }
 
   return (
     <div className="relative flex flex-col w-full shadow-lg rounded-lg">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' className='p-2 w-[350px]' placeholder='Search here...'></input>
+          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-600' placeholder='Search category name here...'></input>
         </div>
         <div>
           <Link href='/dashboard/category' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>ADD</Link>

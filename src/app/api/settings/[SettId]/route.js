@@ -7,10 +7,12 @@ export const GET = async (request, {params}) => {
   {
 
     await connect ();
-    const posts = await  Settings.find()
-    const settById = posts.filter((item)=> item.id == params.SettId)
-    return NextResponse.json({ result:settById, success:true}, {status: 200});
+    const posts = await  Settings.findById(params.SettId)
 
+    if (!posts) {
+      return new NextResponse("No post found with the given ID", {status: 404});
+    }
+    return NextResponse.json({result:posts}, {status: 200}); 
   } catch (error){
     return NextResponse.json({result:"No Data Found", success:false})
   }
@@ -19,12 +21,12 @@ export const GET = async (request, {params}) => {
 export  const  PUT = async (request, {params}) =>{ 
   try  
     {
-      const {webTitle, webTags, webCurr, metaData} = await request.json(); 
+      const { brandTitle, brandTags, brandCurr, brandIntro, brandLogo, brandIcon } = await request.json(); 
       const settingId = params.SettId;
       const filter = {_id:settingId}
       await connect ();
 
-      const settings = await Settings.findOneAndUpdate(filter, {webTitle, webTags, webCurr, metaData});
+      const settings = await Settings.findOneAndUpdate(filter, { brandTitle, brandTags, brandCurr, brandIntro, brandLogo, brandIcon });
       return NextResponse.json({result:settings, success:true}, {status: 200});
 
     }catch(error){

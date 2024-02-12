@@ -21,12 +21,12 @@ export const GET = async (request, {params}) => {
 export  const  PUT = async (request, {params}) =>{ 
   try  
     {
-      const {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proImage, proCloc, proPloc} = await request.json(); 
+      const {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proImage, proCloc, proPloc, proAdd, proId} = await request.json(); 
       const profileId = params.ProId;
       const filter = {_id:profileId}
       await connect ();
 
-      const profile = await Profiles.findOneAndUpdate(filter, {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proImage, proCloc, proPloc});
+      const profile = await Profiles.findOneAndUpdate(filter, {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proImage, proCloc, proPloc, proAdd, proId});
       return NextResponse.json({result:profile, success:true}, {status: 200});
 
     }catch(error){

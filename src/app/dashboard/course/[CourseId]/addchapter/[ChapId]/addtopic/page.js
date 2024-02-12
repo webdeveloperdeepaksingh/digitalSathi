@@ -11,16 +11,6 @@ export default function AddTopic({params}) {
   const _id = params.ChapId;
   const [fileData, setFileData] = useState(null);
   const router = useRouter();
-  
-  // useEffect(() =>{
-  //   async function fetchChap() {
-  //     const response = await fetch(`http://localhost:3000/api/courses/${params.CourseId}/chapter`);
-  //     const chapData = await response.json();
-  //     setChap(chapData);
-  //   }
-  //   fetchChap();
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // },[]);
 
   useEffect(() =>{
     async function fetchTopList(){

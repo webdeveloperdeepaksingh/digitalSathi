@@ -18,11 +18,11 @@ export const GET = async (request) => {
 export  const  POST = async (request, {params}) =>{ 
   try  
     {
-      const {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proCloc, proPloc} = await request.json(); 
+      const {proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proCloc, proPloc, proAdd, proId} = await request.json(); 
       
       await connect ();
 
-      const profile = new Profile({proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proCloc, proPloc});
+      const profile = new Profiles({proName, proFather, proDob, proJob, proQual, shortIntro, proAbout, proCloc, proPloc, proAdd, proId});
       const profileData = await profile.save();
       return NextResponse.json({result:profileData, success:true}, {status: 200});
 

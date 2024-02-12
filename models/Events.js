@@ -2,50 +2,71 @@ import mongoose from "mongoose";
 
 const evtSchema = new mongoose.Schema ({   
      
-    evtName:{
+    prodName:{
         type: String,
         required: [true, 'Event title is required.'],
-        unique: true
     },
-    evtTags:[{
+    prodTags:[{
         type: String,
         unique: false 
     }],
-    shortIntro:{
-        type: String,        
+    prodIntro:{
+        type: String,
+        unique: false         
     },
-    evtDesc:{
-        type: String,      
+    prodDesc:{
+        type: String,   
+        unique: false    
     },
-    evtCat:{
+    prodType:{
+        type: String, 
+        unique: false      
+    },
+    prodTax:{
+        type: String,
+        unique: false 
+    },
+    prodDisct:{
+        type: String,
+        unique: false 
+    },
+    prodCat:{
         type: String,
         required: [true, 'Category name is required.'],
     },
-    evtPer:{
+    prodPer:{
         type: String,
+        unique: false 
     },
-    evtPhone:{
+    prodPhone:{
         type: String,
+        unique: false 
     },
-    origPrice:{
+    prodPrice:{
         type: String,
+        unique: false 
     },
-    discPrice:{
+    prodDisc:{
         type: String,
+        unique: false 
     },
-    evtDate:{
+    prodDate:{
         type: String,
+        unique: false 
     },
-    evtTime:{
+    prodTime:{
         type: String,
+        unique: false 
     },
-    evtMod:{
+    prodMod:{
         type: String,
+        unique: false 
     },
-    evtLoc:{
+    prodLoc:{
         type: String,
+        unique: false 
     },
-    evtImage:{
+    prodImage:{
         type: String,
         unique: false
     },

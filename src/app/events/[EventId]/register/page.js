@@ -2,12 +2,13 @@
 import React, { useState, useEffect } from 'react';
 import NavBar from '@/components/NavBar/page';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 
 
 export default function RegisterEvent({params}) {
 
-  const [data, setData] = useState({audName:'', evtName:'', audEmail:'', audPhone:'', audPay:'', userId:''});
+  const [data, setData] = useState({partName:'', prodName:'', partEmail:'', partPhone:'', partPay:'', hostContact:'', userId:''});
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 
@@ -36,15 +37,15 @@ export default function RegisterEvent({params}) {
     setErrorMessage(''); //Clear the previous error
     let errMsg=[];
 
-    if (!data.audName?.trim() || '') {
+    if (!data.partName?.trim() || '') {
       errMsg.push('Name is required.');    
     }
 
-    if (!data.audEmail?.trim() || '') {
+    if (!data.partEmail?.trim() || '') {
       errMsg.push('Please enter your email.');    
     }
 
-    if (!data.audPhone?.trim() || '') {
+    if (!data.partPhone?.trim() || '') {
       errMsg.push('Please enter your phone.');    
     }
 
@@ -58,7 +59,16 @@ export default function RegisterEvent({params}) {
       const result = await fetch ('http://localhost:3000/api/audience', 
       {
         method:'POST',
-        body:JSON.stringify({audName:data.audName, evtName:data.evtName, audEmail:data.audEmail, audPhone:data.audPhone, audPay:data.audPay, userId:data.userId}),
+        body:JSON.stringify(
+          {
+            partName:data.partName, 
+            prodName:data.prodName, 
+            partEmail:data.partEmail, 
+            partPhone:data.partPhone, 
+            partPay:data.partPay, 
+            hostContact:data.prodAuth, 
+            userId:data.userId
+          }),
       });
 
       const post = await result.json();
@@ -73,13 +83,11 @@ export default function RegisterEvent({params}) {
         }
       else
       {
-        // toast('Ebook added successfully!', {
-
-        //       hideProgressBar: false,
-        //       autoClose: 2000,
-        //       type: 'success'
-
-        //       });
+        toast('Registered successfully!', {
+          hideProgressBar: false,
+          autoClose: 2000,
+          type: 'success'
+        });
         router.push(`/events/${params.EventId}`);
       }
       }catch(error) {
@@ -94,23 +102,27 @@ export default function RegisterEvent({params}) {
         <form className='p-9 shadow-xl rounded-lg border  border-amber-600 ' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3'>
               <label className='font-bold'>Full Name:*</label>
-              <input type='text' name='audName' value={data.audName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+              <input type='text' name='partName' value={data.partName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3'>
               <label className='font-bold'>Email:*</label>
-              <input type='email' name='audEmail' value={data.audEmail} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+              <input type='email' name='partEmail' value={data.partEmail} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3'>
               <label className='font-bold'>Phone:*</label>
-              <input type='text' name='audPhone' value={data.audPhone} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+              <input type='text' name='partPhone' value={data.partPhone} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-5'>
               <label className='font-bold'>Registering For:*</label>
-              <input disabled type='text' name='evtName' value={data.evtName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+              <input disabled type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex-col mb-5  hidden'>
               <label className='font-bold'>User Id:*</label>
-              <input type='text' name='evtName' value={data.userId} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+              <input type='text' name='userId' value={data.userId} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+          </div>
+          <div className='flex-col mb-5 hidden'>
+              <label className='font-bold'>Host Number:*</label>
+              <input type='text' name='userId' value={data.prodAuth} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
           </div>
           <div className='flex gap-1 mb-3'>
             <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SUBMIT</button>

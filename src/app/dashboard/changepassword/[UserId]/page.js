@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { toast } from 'react-toastify';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function ChangePassword({params}) {
@@ -80,21 +80,21 @@ export default function ChangePassword({params}) {
   }
   return (
     <div>
-      <div className='relative w-full bg-gray-100 rounded-lg shadow-lg '>
-        <div className='bg-amber-600 p-5 font-bold text-2xl'>
-          <h1 className='text-white uppercase'>Change Password: -</h1>
+      <div className='relative w-full bg-gray-100 rounded-lg shadow-lg p-9 '>
+        <div className='bg-white p-3 font-bold text-center text-3xl rounded-md border-2'>
+          <h1 className='uppercase'>Change Password</h1>
         </div>
-        <form className='p-5' onSubmit={handleSubmit}>
+        <form className='pt-3' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>Old Password:*</label>
+            <label className='font-semibold uppercase'>Old Password:*</label>
             <input type='password' name='oldPass' value={data?.oldPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>New Password:*</label>
+            <label className='font-semibold uppercase'>New Password:*</label>
             <input type='password'name='usrPass' value={data?.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>Confirm Password:*</label>
+            <label className='font-semibold uppercase'>Confirm Password:*</label>
             <input type='password' name='confPass' value={data?.confPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>  
           <div className='mb-3'>

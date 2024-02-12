@@ -1,4 +1,4 @@
-import { Ebooks } from "../../../../../../../../models/Ebooks";
+import { Products } from "../../../../../../../../models/Products";
 import { NextResponse } from "next/server";
 import connect from "../../../../../../../../server";
 
@@ -7,7 +7,8 @@ export const DELETE = async (request, {params}) =>{
     try 
       {
         await connect ();
-        const ebook = await Ebooks.findById(params.EbookId);
+        const ebook = await Products.findById(params.EbookId);
+        
         if (!ebook) {
           return new NextResponse("No ebook found with the given ID", {status: 404});
         }

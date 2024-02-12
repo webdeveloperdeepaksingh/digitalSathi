@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { Courses } from "../../../../../../../../../models/Courses";
+import { Products } from "../../../../../../../../../models/Products";
 import connect from "../../../../../../../../../server";
 
 export const GET = async (request, {params}) => {
@@ -8,7 +8,7 @@ try
   {
     await connect ();
 
-    const course = await Courses.findById(params.CourseId);
+    const course = await Products.findById(params.CourseId);
     if (!course) {
         return new NextResponse("No course found with the given ID", {status: 404});
     }
@@ -36,7 +36,7 @@ export const PUT = async (request, {params}) =>{
     {
       const {topName,videoUrl, pdfFile} = await request.json();
       await connect ();
-      const course = await Courses.findById(params.CourseId);
+      const course = await Products.findById(params.CourseId);
 
       if (!course) {
           return new NextResponse("No course found with the given ID", {status: 404});
@@ -68,7 +68,7 @@ try
   {
       await connect ();
 
-      const course = await Courses.findById(params.CourseId);
+      const course = await Products.findById(params.CourseId);
       if (!course) {
       return new NextResponse("No course found with the given ID", {status: 404});
       }

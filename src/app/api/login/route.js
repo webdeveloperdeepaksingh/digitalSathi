@@ -21,16 +21,16 @@ export  const  POST = async (request, response, next) =>{
         }
         
         const token = jwt.sign({id: userByName._id}, process.env.SECRET_STR, {expiresIn: process.env.LOGIN_EXPIRES});
-        userByName.usrPass=null; // stopping password to get sent in response.
+        userByName.usrPass = null; // stopping password to get sent in response.
 
-        const response = NextResponse.json({result:userByName, success:true, token:token}, {status: 200});
+        const response = NextResponse.json({result:{id:userByName._id,role:userByName.usrRole}, success:true, token:token}, {status: 200});
         response.cookies.set({          
           name: 'token',
           value: token,
           maxAge: process.env.LOGIN_EXPIRES,
           httpOnly: true, // This prevents scripts from accessing
           sameSite: 'strict', // This does not allow other sites to access
-        }); 
+        });        
         return response;
 
       }catch(error){

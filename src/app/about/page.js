@@ -4,6 +4,11 @@ import Image from 'next/image';
 import InnerBanner from '../../../public/images/inrbnr.jpg';
 import React from 'react';
 
+export const metadata = {
+  title: "DigitalSathi: About Us",
+  description: "About Us"
+}
+
 export default function AboutUs() {
   return (
     <div>

@@ -1,6 +1,6 @@
 import connect from "../../../../../../server";
 import { NextResponse } from "next/server";
-import { Ebooks } from "../../../../../../models/Ebooks";
+import { Products } from "../../../../../../models/Products";
 
 
 export const GET = async (request, {params}) => {
@@ -8,7 +8,7 @@ export const GET = async (request, {params}) => {
 try
     {
       await connect ();
-      const ebook = await Ebooks.findById(params.EbookId);
+      const ebook = await Products.findById(params.EbookId);
   
       if (!ebook) {
         return NextResponse("No ebook found with the given ID", {status: 404});
@@ -26,7 +26,7 @@ try
       const payload = await request.json(); 
       await connect ();
   
-      const ebook = await Ebooks.findById(params.EbookId)
+      const ebook = await Products.findById(params.EbookId)
       ebook.chapters.push(payload)
   
       const result = await ebook.save();

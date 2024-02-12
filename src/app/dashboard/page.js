@@ -3,28 +3,28 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { IoIosArrowDown } from "react-icons/io";
-import { MdManageAccounts, MdOutlineExitToApp } from "react-icons/md";
-import ProfileImage from '../../../public/images/deepaksingh.png';
 import logo from '../../../public/images/logo.png';
-import { CgProfile } from "react-icons/cg";
 import { IoIosPeople } from "react-icons/io";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import {BsArrowLeftShort, BsBook, BsCalendarEvent, BsQuestionSquare} from 'react-icons/bs';
 import {BiCategory} from 'react-icons/bi';
 import {AiOutlineHome} from 'react-icons/ai';
 import { GiSettingsKnobs } from "react-icons/gi";
-import {FaChalkboardTeacher, FaBlog, FaUserAlt, FaUserCircle} from 'react-icons/fa';
+import {FaChalkboardTeacher, FaBlog, FaUserAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import { useContext } from 'react';
-import { UserContext } from '@/context/UserContext';
+import { FaCartPlus } from 'react-icons/fa6';
 import SideMenu from '@/components/SideMenu/page';
- 
+import { useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+  
 export default function DashBoard({children}) {
 
- const {loggedInUser} = useContext(UserContext);
+ const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
+ const cartItems = useSelector((store) => store.cart)
  const [showMenu, setShowMenu] = useState(false);
  const [profile, setProfile] = useState('');
-
+ 
+ 
  useEffect(()=>{
     async function fetchProfile(){
         const res = await fetch('http://localhost:3000/api/profile');
@@ -70,11 +70,16 @@ export default function DashBoard({children}) {
             name: showMenu == false ? 'EVENTS' : '',
             url:'/dashboard/eventlist',
             icon:<BsCalendarEvent/>
-        },
+        },    
         {
-            name: showMenu == false ? 'AUDIENCE' : '',
+            name: showMenu == false ? 'PARTICIPENTS' : '',
             url:'/dashboard/audiencelist',
             icon:<IoIosPeople/>
+        },
+        {
+            name: showMenu == false ? 'BLOGS' : '',
+            url:'/dashboard/bloglist',
+            icon:<FaBlog/>
         },
         {
             name: showMenu == false ? 'REVENUE' : '',
@@ -94,7 +99,7 @@ export default function DashBoard({children}) {
         },
         {
             name: showMenu == false ? 'SETTINGS' : '',
-            url:'/dashboard/settings/6596d89b5bfe828446ea0fb6',
+            url:'/dashboard/settings/65c8e1dad3c601a36e0dd62f',
             icon:<GiSettingsKnobs className='rotate-180'/>
         }
     );
@@ -106,11 +111,6 @@ export default function DashBoard({children}) {
             name: showMenu == false ? 'HOME' : '',
             url:'/dashboard/home',
             icon:<AiOutlineHome/>
-        },
-        {
-            name: showMenu == false ? 'CATEGORY' : '',
-            url:'/dashboard/categorylist',
-            icon:<BiCategory/>
         },
         {
             name: showMenu == false ? 'COURSES' : '',
@@ -128,7 +128,7 @@ export default function DashBoard({children}) {
             icon:<BsCalendarEvent/>
         },
         {
-            name: showMenu == false ? 'AUDIENCE' : '',
+            name: showMenu == false ? 'PARTICIPENTS' : '',
             url:'/dashboard/audiencelist',
             icon:<IoIosPeople/>
         },
@@ -168,15 +168,12 @@ export default function DashBoard({children}) {
   const handleToggle = () => {
         setToggle(!toggle)
   }
-
   
   return (
     <div className='p-0'>
         <div className='flex w-full'>
-            <div className={showMenu == false ? 'relative w-[80px] flex md:w-[250px] duration-500 flex-col h-screen bg-amber-600' : 'relative flex w-[80px] duration-500 flex-col h-screen bg-amber-600'}>
-                <div className='h-[100px] px-0 w-full'>
-                    <Image className='px-2 py-2' src={logo} alt='digitalSathi'  height={0} width={0} priority />
-                </div>
+            <div className={showMenu == false ? 'relative w-[80px] flex md:w-[250px] duration-500 flex-col h-screen bg-amber-600' : 'relative flex w-[80px] duration-500 flex-col h-screen bg-amber-600'}> 
+                <Image className='px-2 py-2' src={logo} alt='digitalSathi'  height={100} width={250} />
                 <hr/>
                 <ul className='p-3'>
                 {sideMenu.map((item, i) => {
@@ -194,18 +191,16 @@ export default function DashBoard({children}) {
                 </span>
             </div>
             <div className='w-full'>
-                <header className=' flex h-[100px] p-5 items-center w-full justify-end bg-white shadow-lg'>
-                    <div className='relative p-0 w-[auto]'>
-                        <div className='flex items-center font-bold pl-3 rounded-sm border border-solid border-amber-600'>
-                            <p>Welcome {profile?.proName} !</p>
-                            <div className='relative border-r-2 h-[65px] w-[75px] rounded-md'>
-                                <Image alt={profile?.proName} className='p-3'  src={`/images/${profile?.proImage}`} objectFit='cover' fill />
-                            </div>
-                            <div className='px-1'>
+                <header className=' flex h-[100px] p-4 items-center w-full justify-end bg-white shadow-lg'>
+                    <div className='relative w-[auto]'>
+                        <div className='flex items-center p-3 font-bold rounded-md border border-solid border-amber-600'>
+                            <p className=''>Welcome {profile?.proName} !</p>
+                            <Image alt={profile?.proName} className='rounded-sm mx-2'  src={`/images/${profile?.proImage}`} width={65} height={65} />
+                            <div className=''>
                                 <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={handleToggle}><IoIosArrowDown /></button>
                             </div>
                         </div>
-                        <div className='absolute bottom-[-190px] right-6 z-100'>
+                        <div className='absolute bottom-[-180px] right-4 z-100'>
                             <SideMenu  isShown={toggle}/>
                         </div>    
                     </div>

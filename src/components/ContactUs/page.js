@@ -31,7 +31,7 @@ setErrorMessage(''); //Clear the previous error
     let errMsg=[];
     
     if (!data.eqrPerson.trim()) {
-        errMsg.push('Name is required.');    
+        errMsg.push('Full name is required.');    
     }
     
     if (!data.eqrPhone.trim()) {
@@ -56,7 +56,7 @@ try
 
   const post = await result.json();
   console.log(post);
-  alert('Form submitted successfully...!')
+  alert('Enquiry submitted successfully...!')
   router.push('/contactus');
 
 }catch(error) {

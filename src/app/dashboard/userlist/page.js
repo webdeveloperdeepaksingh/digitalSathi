@@ -1,28 +1,47 @@
 'use client';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
 
+
 export default function UserList() {
 
-  const [showAlert, setShowAlert] = useState(false);
+  const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
   const [user, setUser] = useState([]);
+  const [query, setQuery] = useState([]);
+  
+  useEffect(()=>{
 
-  useEffect(() =>{
+    let api = '';
+    if(query != ''){
+      //get courses as per query entered.
+      api = `http://localhost:3000/api/users?userId=${loggedInUser.result._id}&query=${query}`
+    }else{
+      //get all courses.
+      api = `http://localhost:3000/api/users?userId=${loggedInUser.result._id}`
+    }
     async function fetchData() {
-      let data = await fetch('http://localhost:3000/api/users');
-      data = await data.json();
-      setUser(data);
+      const res = await fetch(api);
+      const userList = await res.json();
+      setUser(userList);
+      console.log(userList);
     }
     fetchData();
-  },[])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[query])
+
+  const handleSearch = (data) =>{
+    setQuery(data);
+    console.log(data);
+  }
 
   return (
     <div className="relative flex flex-col w-full shadow-lg rounded-lg">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' className='p-2 w-[350px]' placeholder='Search here...'></input>
+          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-600' placeholder='Search user name here...'></input>
         </div>
         <div>
           <Link href='/dashboard/user' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>ADD</Link>

@@ -87,26 +87,26 @@ export default function UpdateUser({params}) {
   }
   return (
     <div>
-      <div className='relative w-full bg-gray-100 rounded-lg shadow-lg '>
-        <div className='bg-amber-600 p-5 font-bold text-2xl'>
-          <h1 className='text-white'>ACCOUNT SETTINGS -</h1>
+      <div className='relative w-full bg-gray-100 rounded-lg shadow-lg p-9 '>
+        <div className='bg-white p-3 font-bold text-center text-3xl rounded-md border-2'>
+          <h1>ACCOUNT SETTINGS</h1>
         </div>
-        <form className='p-5' onSubmit={handleSubmit}>
+        <form className='pt-3' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>User Name:</label>
+            <label className='font-semibold uppercase'>User Name:</label>
             <input type='text' name='usrName' value={data?.usrName} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
-            <label>Email Id:</label>
+            <label className='font-semibold uppercase'>Email Id:</label>
             <input type='email'name='usrEmail' value={data?.usrEmail} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
           </div>
           <div className='grid grid-cols-2 gap-3'>
             <div className='flex flex-col mb-3 gap-2'>
-                <label>Phone:</label>
+                <label className='font-semibold uppercase'>Phone:</label>
                 <input type='text' name='usrPhone' value={data?.usrPhone} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
             </div>
             <div className='flex flex-col mb-3 gap-2'>
-                <label>Role:</label>
+                <label className='font-semibold uppercase'>Role:</label>
                 <select disabled type='select' name='usrRole' value={data?.usrRole} onChange={handleChange} className='py-2 font-bold px-2 rounded-md border focus:outline-amber-600  '>
                    <option value='' className='text-center'>--- Select Role ---</option>
                    <option  value='INSTRUCTOR' className='font-bold text-sm'>INSTRUCTOR</option>
