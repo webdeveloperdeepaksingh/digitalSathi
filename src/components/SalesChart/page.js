@@ -55,7 +55,7 @@ export default function SalesChart() {
     const productCourseValues = salesData.reduce((acc, item) => {
         if (item.custProducts.some((product) => product.prodType === "courses")) {
         const month = new Intl.DateTimeFormat('en-US', options).format(new Date(item.createdAt));
-          acc[month] = (acc[month] || 0) + item.amtToPay;
+          acc[month] = (acc[month] || 0) + item.custProducts.filter((product) => product.prodType === "courses").reduce((acc1, product1) => acc1 + product1.prodValue, 0);
         }
         return acc;
       }, {});
@@ -63,7 +63,7 @@ export default function SalesChart() {
       const productEventValues = salesData.reduce((acc, item) => {
         if (item.custProducts.some((product) => product.prodType === "events")) {
           const month = new Intl.DateTimeFormat('en-US', options).format(new Date(item.createdAt));
-          acc[month] = (acc[month] || 0) + item.amtToPay;
+          acc[month] = (acc[month] || 0) + item.custProducts.filter((product) => product.prodType === "events").reduce((acc1, product1) => acc1 + product1.prodValue, 0);
         }
         return acc;
       }, {});
@@ -71,7 +71,7 @@ export default function SalesChart() {
       const productEbookValues = salesData.reduce((acc, item) => {
         if (item.custProducts.some((product) => product.prodType === "ebooks")) {
           const month = new Intl.DateTimeFormat('en-US', options).format(new Date(item.createdAt));
-          acc[month] = (acc[month] || 0) + item.amtToPay;
+          acc[month] = (acc[month] || 0) + item.custProducts.filter((product) => product.prodType === "ebooks").reduce((acc1, product1) => acc1 + product1.prodValue, 0);
         }
         return acc;
       }, {});

@@ -28,6 +28,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
 
 export default async function BlogLandingPage({params}) {
 
+  if(!BASE_API_URL){
+    return null; //must be written to deploy successfully.
+  }
     const blg = await getBlog(params.BlogId);
 
   return (

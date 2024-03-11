@@ -30,6 +30,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
 
 export default async function EventLandingPage({params}) {
 
+  if(!BASE_API_URL){
+    return null; //must be written to deploy successfully.
+  }
   const evt = await getEventById(params.EventId);
   console.log(evt);
 

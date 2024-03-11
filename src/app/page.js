@@ -1,4 +1,5 @@
 import Footer from '@/components/Footer/page'
+import { BASE_API_URL } from '../../utils/constants';
 import Banner from '../../public/images/bnr.jpg';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,7 +7,7 @@ import Link from 'next/link';
 export async function generateMetadata({ params, searchParams }, parent) {
   
     const _id = "65c8e1dad3c601a36e0dd62f"
-    const res = await fetch(`http://localhost:3000/api/settings/${_id}`);
+    const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
     const meta = await res.json();
     // const previousImages = (await parent).openGraph?.images || []
     return {
@@ -23,6 +24,10 @@ export async function generateMetadata({ params, searchParams }, parent) {
   }
 
 export default function Home() {
+  if(!BASE_API_URL){
+    return null; //must be written to deploy successfully.
+  }
+  
   return (
     <main >
       <div className='h-[86px]'></div>

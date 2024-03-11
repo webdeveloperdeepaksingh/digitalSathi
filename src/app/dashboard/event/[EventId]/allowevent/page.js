@@ -143,7 +143,7 @@ export default function AllowEvent({params}) {
             }
             try
             {
-              const result = await fetch (`${BASE_API_URL}/api/events/${params.CourseId}`, 
+              const result = await fetch (`${BASE_API_URL}/api/events/${params.EventId}`, 
               {
                 method:'PUT',
                 body:JSON.stringify(

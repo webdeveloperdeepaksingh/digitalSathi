@@ -31,6 +31,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
 
 export default async function CourseLandingPage({params, searchParams}) {
 
+  if(!BASE_API_URL){
+    return null; //must be written to deploy successfully.
+  }
   const prod = await getCourseById(params.CourseId);
   console.log(prod);
 

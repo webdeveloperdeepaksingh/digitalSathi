@@ -31,6 +31,9 @@ export async function generateMetadata({ params, searchParams }, parent) {
 
 export default async function EbooksLandingPage({params}) {
 
+  if(!BASE_API_URL){
+    return null; //must be written to deploy successfully.
+  }
   const ebk = await getEbookById(params.EbookId);
 
   return (
