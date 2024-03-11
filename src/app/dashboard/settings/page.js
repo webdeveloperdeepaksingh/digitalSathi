@@ -1,16 +1,13 @@
 'use client';
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { BASE_API_URL } from '../../../../utils/constants';
+import React, { useState } from 'react';
+ 
+export default function SettingsPage() {
 
-export default function SettingsPage({params}) {
-
-  const [data, setData] = useState({brandTitle:'', brandTags:'', brandCurr:'', brandIntro:''})
+  const [data, setData] = useState({brandTitle:'', brandTags:'',brandTax:'', brandCurr:'', brandIntro:''})
   const [errorMessage, setErrorMessage] = useState('');
-  
-
-
+   
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -22,7 +19,6 @@ export default function SettingsPage({params}) {
   }); 
   }
 
-  
   const handleSubmit = async (e) => {
   e.preventDefault();
   setErrorMessage(''); //Clear the previous error
@@ -30,6 +26,9 @@ export default function SettingsPage({params}) {
 
   if (!data.brandTitle.trim()) {
     errMsg.push('Web title is required.');    
+  }
+  if (!data.brandTax.trim()) {
+    errMsg.push('Tax rate is required.');    
   }
 
   if (!data.brandCurr.trim()) {
@@ -43,13 +42,14 @@ export default function SettingsPage({params}) {
   {
   try
     {
-      const result = await fetch ('http://localhost:3000/api/settings', 
+      const result = await fetch (`${BASE_API_URL}/api/settings`, 
       {
         method:'POST',
         body:JSON.stringify(
           {
             brandTitle:data.brandTitle, 
             brandTags:data.brandTags, 
+            brandTax: data.brandTax,
             brandCurr:data.brandCurr, 
             brandIntro:data.brandIntro,
           }),
@@ -88,15 +88,21 @@ export default function SettingsPage({params}) {
             <label className='font-semibold uppercase'>Web Intro:</label>
             <textarea type='text' name='brandIntro' value={data.brandIntro} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600' rows='4'></textarea>
           </div>
-          <div className='flex flex-col mb-3 gap-2'>
-            <label className='font-semibold uppercase'>Currency:</label>
-            <select type='select' name='brandCurr' value={data.brandCurr} onChange={handleChange} className='py-2 px-2 font-bold rounded-md border focus:outline-amber-600  '>
-              <option value='' className='text-center'>--- Select Currency ---</option>
-              <option value='USD' className='font-bold text-sm'>USD - [$]</option>
-              <option  value='INR' className='font-bold text-sm'>INR - [&#8377;]</option>
-              <option value='GBP' className='font-bold text-sm'>GBP - [£]</option>
-              <option value='EURO'className='font-bold text-sm'>EURO - [€]</option>
-            </select>
+          <div className='grid md:grid-cols-2 mb-3 gap-2'>
+            <div className='flex flex-col gap-1'>
+              <label className='font-semibold uppercase'>TAX RATE:</label>
+              <input type='number' name='brandTax' value={data.brandTax} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600 ' placeholder='In %'></input>
+            </div>
+            <div className='flex flex-col gap-1'>
+              <label className='font-semibold uppercase'>Currency:</label>
+              <select type='select' name='webCurr' value={data.brandCurr} onChange={handleChange} className='py-2 px-2 font-bold rounded-md border focus:outline-amber-600  '>
+                <option value='' className='text-center'>--- Select Currency ---</option>
+                <option value='USD' className='font-bold text-sm'>USD - [$]</option>
+                <option  value='INR' className='font-bold text-sm'>INR - [&#8377;]</option>
+                <option value='GBP' className='font-bold text-sm'>GBP - [£]</option>
+                <option value='EURO'className='font-bold text-sm'>EURO - [€]</option>
+              </select>
+            </div>
           </div>
           <div className='my-3'>
             <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>

@@ -21,12 +21,12 @@ export const GET = async (request, {params}) => {
 export  const  PUT = async (request, {params}) =>{ 
   try  
     {
-      const { brandTitle, brandTags, brandCurr, brandIntro, brandLogo, brandIcon } = await request.json(); 
+      const { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon } = await request.json(); 
       const settingId = params.SettId;
       const filter = {_id:settingId}
       await connect ();
 
-      const settings = await Settings.findOneAndUpdate(filter, { brandTitle, brandTags, brandCurr, brandIntro, brandLogo, brandIcon });
+      const settings = await Settings.findOneAndUpdate(filter, { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon });
       return NextResponse.json({result:settings, success:true}, {status: 200});
 
     }catch(error){
@@ -34,7 +34,7 @@ export  const  PUT = async (request, {params}) =>{
         const messages = Object.values(error.errors).map(val => val.message);
         return NextResponse.json({ success: false, message: messages }, {status:400});
       }else{
-        return new NextResponse ("Erron while saving data" + error, {status: 400});
+        return new NextResponse ("Error while saving data: " + error, {status: 400});
       }
     }
 }

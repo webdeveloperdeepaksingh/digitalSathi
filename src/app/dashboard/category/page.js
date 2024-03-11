@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { toast } from "react-toastify";
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { BASE_API_URL } from '../../../../utils/constants';
 
 export default function AddCategory() {
 
@@ -38,7 +39,7 @@ export default function AddCategory() {
   
     try
     {
-      const result = await fetch ('http://localhost:3000/api/categories', 
+      const result = await fetch (`${BASE_API_URL}/api/categories`, 
       {
         method:'POST',
         body:JSON.stringify({catName: data.catName, userId: loggedInUser.result._id}),
@@ -56,10 +57,10 @@ export default function AddCategory() {
           }      
         }
         else{
-        toast('Category added successfully!', 
+        toast('Category added...!', 
           {
             hideProgressBar: false,
-            autoClose: 2000,
+            autoClose: 1000,
             type: 'success'
           });
           router.push('/dashboard/categorylist');
@@ -75,10 +76,10 @@ export default function AddCategory() {
         <form className='p-2 w-full' onSubmit={handleSubmit}>
             <div className='flex flex-col mb-3 '>
                 <label className='font-bold'>CATEGORY:</label>
-                <input type='text' name='catName' value={data.catName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                <input type='text' name='catName' value={data.catName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
             </div>
             <div className='mb-3'>
-                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
             </div>
             {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>

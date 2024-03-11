@@ -1,5 +1,7 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
+import { BASE_API_URL } from '../../../../../../utils/constants';
+import Loading from '../../loading';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
@@ -14,6 +16,7 @@ export default function UpdateEbook({params}) {
     const [cat, setCat] = useState([]);
     const [image, setImage] = useState('');
     const [imageData, setImageData] = useState(null); 
+    const [isLoading, setIsLoading] = useState(true);
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [editorContent, setEditorContent] = useState(''); 
     const [errorMessage, setErrorMessage] = useState(''); 
@@ -21,7 +24,7 @@ export default function UpdateEbook({params}) {
 
     useEffect(() =>{
         async function fetchData() {
-          let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
+          let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=`+ loggedInUser.result._id);
           catdata = await catdata.json();
           setCat(catdata);
         }
@@ -30,15 +33,29 @@ export default function UpdateEbook({params}) {
       },[]);
     
     useEffect(() =>{
-        async function fetchData() {
-        const ebookData = await fetch(`http://localhost:3000/api/ebooks/${params.EbookId}`);
-        const ebook = await ebookData.json();
-        setData(ebook.result);
-        setEditorContent(ebook.result.prodDesc)
-        setImage(`/images/${ebook.result.prodImage}`) 
+    async function fetchData() {
+        try 
+        {
+            const res = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}`);
+            if(!res.ok){
+                throw new Error("Error fetching ebook data.");
+            }
+            const ebook = await res.json();
+            setData(ebook.result);
+            setEditorContent(ebook.result.prodDesc)
+            setImage(`/images/${ebook.result?.prodImage}`)
+         } catch (error) {
+            console.error("Error fetching data: ", error);
+        }finally{
+            setIsLoading(false);
+        }
     }
 fetchData();
 },[params.EbookId]);
+
+    if(isLoading){
+        return <div><Loading/></div>
+    }
 
     const handleImage = (e) => {
         setImage(URL.createObjectURL(e.target.files?.[0]));
@@ -46,35 +63,81 @@ fetchData();
         console.log(e.target.files?.[0]);
       };
     
-      const handleImageUpload = async (e) =>{
+    const handleImageUpload = async (e) => {
         e.preventDefault();
-         const formData = new FormData();
-         formData.set('image', imageData);  
-         data.prodImage = `ebkImage_${params.EbookId}.${imageData.name.split('.').pop()}`;
-         formData.set('fileName', data.prodImage);
-         const response = await fetch('http://localhost:3000/api/imagefiles', {
-            method: 'POST',        
-            body: formData
+        const formData = new FormData();
+        formData.append('image', imageData); // Use 'append' instead of 'set'
+        data.prodImage = `ebkImage_${params.EbookId}.${imageData.name.split('.').pop()}`;
+        formData.append('fileName', data.prodImage); // Use 'append' here as well
+     
+        try {
+            const response = await fetch(`${BASE_API_URL}/api/imagefiles`, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                console.log('Image uploaded successfully!');
+                toast('Image uploaded successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });        
+            } else {
+                console.error('Image upload failed:', response.status);
+                toast('Image upload failed!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                }); 
+            }
+        } catch (error) {
+            console.error('Error during image upload:', error);
+        }
+    };
+
+    const handleRemoveImage = async (e) => {
+    e.preventDefault();
+    try 
+    {
+        const imgName = data.prodImage;
+        const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ imgName }), // Send the file name to delete
         });
-        
-        console.log(response);  
-        toast('Image uploaded successfully!', {
-          hideProgressBar: false,
-          autoClose: 2000,
-          type: 'success'      
-        });
+
+        const dataImg = await response.json();
+        if (response.ok) {
+             toast('Image removed successfully!', {
+                hideProgressBar: false,
+                autoClose: 1000,
+                type: 'success'      
+            });        
+        } else {
+             toast('Image remove failed!', {
+                hideProgressBar: false,
+                autoClose: 1000,
+                type: 'error'      
+            }); 
+        }
+    } catch (error) {
+        console.error('Error removing image:', error);
     }
+   };
   
-      const handleChange = (e) => {
-          const name = e.target.name;
-          const value = e.target.value;
-          console.log(name, value);
-          setData((prev) =>{
-          return {
-              ...prev, [name]: value
-          }
-        }); 
-      }
+    const handleChange = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        console.log(name, value);
+        setData((prev) =>{
+        return {
+            ...prev, [name]: value
+        }
+    }); 
+    }
   
       const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
@@ -104,7 +167,7 @@ fetchData();
     }
     try
       {
-        const result = await fetch (`http://localhost:3000/api/ebooks/${params.EbookId}`, 
+        const result = await fetch (`${BASE_API_URL}/api/ebooks/${params.EbookId}`, 
         {
           method:'PUT',
           body:JSON.stringify(
@@ -153,43 +216,44 @@ fetchData();
         <form className='p-3 w-full'encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div>
-                    <div className='relative flex flex-col group bg-white  h-[918px] w-[583px] border border-solid rounded-md'>
+                    <div className='relative flex flex-col group  bg-white  h-[918px] w-[583px] border border-solid rounded-md'>
                         <Image  alt='image' src={image} width={583} height={918}></Image>
-                        <p className='absolute text-sm right-2 bottom-2'>Size:[583*918]</p>
+                        <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[583*918]</p>
+                        <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                     </div>
                 </div>
                 <div className='flex flex-col gap-3'> 
                     <div className='flex flex-col'>
                         <label>Title:*</label>
-                        <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Tags:</label>
-                        <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Author:</label>
-                        <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Original Price:</label>
-                        <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Discounted Price:</label>
-                        <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Tax Rate:</label>
-                        <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Discount %:</label>
-                        <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
                         <label>Category:*</label>
-                        <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'>
+                        <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'>
                             <option value='' className='text-center'>--- Choose Category ---</option>
                             {
                                 cat.map((item) => {
@@ -202,13 +266,13 @@ fetchData();
                     </div>
                     <div className='flex flex-col'>
                         <label>Short Intro:</label>
-                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
+                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='4'></textarea>
                     </div>
                     <div className='flex flex-col'>
                         <label>Upload Image:</label>
                         <div className='flex gap-1 mt-2'>
-                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-600' ></input>
-                            <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
+                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-500' ></input>
+                            <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-500 text-md font-bold border border-solid border-amber-500'>UPLOAD</button>
                         </div>
                     </div> 
                 </div>
@@ -218,7 +282,7 @@ fetchData();
                 <TextEditor value={editorContent} handleEditorChange={handleEditorChange}  />
             </div>
             <div className='my-3'>
-                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
             </div>
             {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>

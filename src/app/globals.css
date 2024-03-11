@@ -2,8 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overflow-x: hidden;
+}
+
 .notifyEdit{
   background-color: #FFAC1C;
   color : #FFAC1C;
  }
+
+ #parent {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#child {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 17px; /* Adjust this value for cross-browser compatibility */
+  box-sizing: content-box; /* Ensures the width remains 100% + scrollbar width */
+}
+
 

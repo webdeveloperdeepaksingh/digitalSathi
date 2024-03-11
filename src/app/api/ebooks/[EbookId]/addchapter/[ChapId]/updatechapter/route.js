@@ -26,7 +26,7 @@ try
 export const PUT = async (request, {params}) =>{
 try 
     {
-      const {chapName, pdfFile} = await request.json();
+      const {chapName, chapPdf} = await request.json();
       await connect ();
       const ebook = await Products.findById(params.EbookId);
 
@@ -40,7 +40,7 @@ try
       }
 
     // Update the chapter
-      Object.assign(chapter, {chapName, pdfFile});
+      Object.assign(chapter, {chapName, chapPdf});
       await ebook.save();
       return NextResponse.json({ message: 'Chapter updated successfully', success:true }, {status:200});
 

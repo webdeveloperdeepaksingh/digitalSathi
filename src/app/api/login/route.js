@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 import connect from "../../../../server";
 import Users from "../../../../models/Users";
 
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const util = require('util');
@@ -14,8 +13,7 @@ export  const  POST = async (request, response, next) =>{
         await connect ();
         //Check if the user exists with the given usrName & usrPass. 
         let userByName = await Users.findOne({ $or: [{ usrName }, { usrEmail: usrName }] });
-        // const isMatch = await bcrypt.compare(usrPass, userByName.usrPass);
-          
+           
         if (!userByName || !(await bcrypt.compare(usrPass, userByName.usrPass))) {
           return NextResponse.json({ success: false, token:'',  message: 'Invalid user or password...!' }, {status:400});
         }
@@ -23,14 +21,14 @@ export  const  POST = async (request, response, next) =>{
         const token = jwt.sign({id: userByName._id}, process.env.SECRET_STR, {expiresIn: process.env.LOGIN_EXPIRES});
         userByName.usrPass = null; // stopping password to get sent in response.
 
-        const response = NextResponse.json({result:{id:userByName._id,role:userByName.usrRole}, success:true, token:token}, {status: 200});
-        response.cookies.set({          
-          name: 'token',
-          value: token,
-          maxAge: process.env.LOGIN_EXPIRES,
-          httpOnly: true, // This prevents scripts from accessing
-          sameSite: 'strict', // This does not allow other sites to access
-        });        
+        const response = NextResponse.json({result:{id:userByName._id, role:userByName.usrRole}, success:true, token:token}, {status: 200});
+        // response.cookies.set({          
+        //   name: 'token',
+        //   value: token,
+        //   maxAge: process.env.LOGIN_EXPIRES,
+        //   httpOnly: true, // This prevents scripts from accessing
+        //   sameSite: 'strict', // This does not allow other sites to access
+        // });        
         return response;
 
       }catch(error){

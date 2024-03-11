@@ -3,33 +3,63 @@ import Link from 'next/link';
 import React, { useState, useEffect} from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import Loading from './loading';
+import { BASE_API_URL } from '../../../../utils/constants';
 import Cookies from 'js-cookie';
+import Pagination from '@/components/Pagination/page';
 
 export default function CategoryList() {
 
    const [cat, setCat] = useState([]);
+   const [isLoading, setIsLoading] = useState(true);
    const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
    const [query, setQuery] = useState([]);
+   const [currentPage, setCurrentPage] = useState(0);
+   const [totalPages, setTotalPages] = useState(0);
 
    useEffect(()=>{
  
      let api = '';
      if(query != ''){
        //get category as per query entered.
-       api = `http://localhost:3000/api/categories?query=${query}`
+       api = `${BASE_API_URL}/api/categories?query=${query}`
      }else{
-       //get all categories.
-       api = `http://localhost:3000/api/categories`
-     }
-     async function fetchData() {
-       const res = await fetch(api);
-       const catList = await res.json();
-       setCat(catList);
-       console.log(catList);
-     }
-     fetchData();
+      let page=0;
+      if(totalPages === 0){
+        page = currentPage + 1;
+      }
+      else {
+        page = Math.min(currentPage + 1,  totalPages);
+      }
+
+      if(isNaN(page)){
+        page=1;
+      }
+      api = `${ BASE_API_URL }/api/categories?pageNbr=${page}`
+    }
+    async function fetchData() {
+    try 
+      {
+        const res = await fetch(api);
+        if (!res.ok) {
+          throw new Error('Error fetching category data');
+        }
+        const catList = await res.json();
+        setCat(catList.posts);
+        setTotalPages(catList.totalPages);
+      } catch (error) {
+        console.error('Error fetching category data:', error);
+      } finally {
+        setIsLoading(false); 
+      }
+    }
+    fetchData();
    // eslint-disable-next-line react-hooks/exhaustive-deps
-   },[query])
+   },[query, currentPage])
+
+   if (isLoading) {
+    return <div><Loading/></div>; // Show loading state
+  }
  
    const handleSearch = (data) =>{
      setQuery(data);
@@ -40,10 +70,10 @@ export default function CategoryList() {
     <div className="relative flex flex-col w-full shadow-lg rounded-lg">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-600' placeholder='Search category name here...'></input>
+          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-500' placeholder='Search category name here...'></input>
         </div>
         <div>
-          <Link href='/dashboard/category' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>ADD</Link>
+          <Link href='/dashboard/category' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</Link>
         </div>
       </div>
       <table className="table-auto w-full text-left">
@@ -69,6 +99,7 @@ export default function CategoryList() {
           }
         </tbody>
       </table>
+      <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

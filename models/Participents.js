@@ -1,34 +1,43 @@
 import mongoose from "mongoose";
 
 const partSchema = new mongoose.Schema ({   
-     
-    partName:{
-        type: String,
-        unique: false,
-    },
     prodName:{
         type: String,
-        unique: false,
-        
+        unique: false,     
     },
-    partEmail:{
+    prodValue:{
+        type: String,
+        unique: false,     
+    },
+    prodAuth:{
+        type: String,
+        unique: false
+    },
+    prodCont:{
+        type: String,
+        unique: false
+    },
+    prodDate:{
+        type: String,
+        unique: false
+    },
+    prodTime:{
+        type: String,
+        unique: false 
+    },
+    custName:{
+        type: String,
+        unique: false,
+    },
+    custEmail:{
         type: String,
         sparse: true,
-        unique: true 
-        
+        unique: true      
     },
-    partPhone:{
+    custPhone:{
         type: String,
         sparse: true,
         unique: true
-    },
-    partPay:{
-        type: String,
-        unique: false
-    },
-    hostContact:{
-        type: String,
-        unique: false
     },
     userId:{
         type: String,

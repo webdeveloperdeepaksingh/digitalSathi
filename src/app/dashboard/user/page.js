@@ -3,6 +3,7 @@ import React from 'react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { BASE_API_URL } from '../../../../utils/constants';
 
 export default function AddUser() {
 
@@ -53,7 +54,7 @@ export default function AddUser() {
 
   try
   {
-    const result = await fetch ('http://localhost:3000/api/users', 
+    const result = await fetch (`${BASE_API_URL}/api/users`, 
     {
       method:'POST',
       body:JSON.stringify({usrName: data.usrName, usrPass:data.usrPass, usrEmail:data.usrEmail, usrPhone:data.usrPhone, usrRole:data.usrRole}),
@@ -71,9 +72,10 @@ export default function AddUser() {
         }      
       }
     else{
-        toast('User added successfully!', {
+        toast('User added successfully!', 
+      {
         hideProgressBar: false,
-        autoClose: 2000,
+        autoClose: 1000,
         type: 'success'
       });
       router.push('/dashboard/userlist');
@@ -84,31 +86,31 @@ export default function AddUser() {
   }
   return (
     <div>
-      <div className='relative w-full  bg-gray-100 rounded-lg shadow-lg '>
-        <div className='bg-amber-600 p-5 font-bold text-2xl'>
-          <h1 className='text-white'>CREATE USER ACCOUNT -</h1>
+      <div className='relative w-full  bg-gray-100 rounded-lg shadow-lg p-9'>
+        <div className='bg-amber-500 p-5  rounded-sm'>
+          <h1 className='text-white text-center text-3xl font-bold'>CREATE USER ACCOUNT</h1>
         </div>
-        <form className='p-9' onSubmit={handleSubmit}>
+        <form className='py-4 px-2' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
             <label>Username:*</label>
-            <input type='text' name='usrName' value={data.usrName} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='text' name='usrName' value={data.usrName} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
             <label>Create Password:*</label>
-            <input type='password' name='usrPass' value={data.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='password' name='usrPass' value={data.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
             <label>Email Id:*</label>
-            <input type='email' name='usrEmail' value={data.usrEmail} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='email' name='usrEmail' value={data.usrEmail} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>
           <div className='grid grid-cols-2 gap-3'>
             <div className='flex flex-col mb-3 gap-2'>
                 <label>Phone:*</label>
-                <input type='text' name='usrPhone' value={data.usrPhone} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600' placeholder='with country code'></input>
+                <input type='text' name='usrPhone' value={data.usrPhone} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500' placeholder='with country code'></input>
             </div>
             <div className='flex flex-col mb-3 gap-2'>
                 <label>Role:*</label>
-                <select type='select' name='usrRole' value={data.usrRole} onChange={handleChange} className='py-2 font-bold px-2 rounded-md border focus:outline-amber-600  '>
+                <select type='select' name='usrRole' value={data.usrRole} onChange={handleChange} className='py-2 font-bold px-2 rounded-md border focus:outline-amber-500  '>
                    <option value='' className='text-center'>--- Select Role ---</option>
                    <option  value='ADMIN' className='font-bold text-sm'>ADMIN</option>
                    <option  value='INSTRUCTOR' className='font-bold text-sm'>INSTRUCTOR</option>
@@ -117,7 +119,7 @@ export default function AddUser() {
             </div>
           </div>
           <div className='mb-3'>
-            <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+            <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
           </div>
           {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>

@@ -2,29 +2,25 @@
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
-import { FaCloudUploadAlt } from "react-icons/fa";
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import { useRef } from "react";
 import React from 'react';
+import { BASE_API_URL } from "../../../../utils/constants";
 import TextEditor from '@/components/TinyMce/Editor';
 
 
 export default function AddCourse() {
    
-    const inputRef = useRef();
     const router = useRouter();
     const [cat, setCat] = useState([]); 
-    const [image, setImage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
-    const [imageData, setImageData] = useState(null); 
-    const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodType:'courses',prodAuth:'', prodDesc:'', prodPrice:'', prodDisc:'', prodVal:'', prodCat:'', prodImage:'', prodTax:'', prodDisct:''})    
+    const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodType:'', prodAuth:'', prodDesc:'', prodPrice:'', prodDisc:'', prodVal:'', prodCat:'',  prodTax:'', prodDisct:''})    
     
 
     useEffect(() =>{
       async function fetchData() {
-        let catdata = await fetch('http://localhost:3000/api/categories');
+        let catdata = await fetch(`${BASE_API_URL}/api/categories`);
         catdata = await catdata.json();
         setCat(catdata);
       }
@@ -32,35 +28,7 @@ export default function AddCourse() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 
-    const showChooseFileBox = () =>{
-        inputRef.current.click();
-    };
-
-    const handleImage = (e) => {
-        setImage(URL.createObjectURL(e.target.files?.[0]));
-        setImageData(e.target.files?.[0])
-        console.log(e.target.files?.[0]);
-      };
     
-      const handleImageUpload = async (e) =>{
-        e.preventDefault();
-         const formData = new FormData();
-         formData.set('image', imageData);  
-         const date = Date.now();      
-         data.prodImage = `coImage_${date}.${imageData.name.split('.').pop()}`;
-         formData.set('fileName', data.prodImage);
-         const response = await fetch('http://localhost:3000/api/imagefiles', {
-            method: 'POST',        
-            body: formData
-        });
-        
-        console.log(response);  
-        toast('Image uploaded successfully!', {
-          hideProgressBar: false,
-          autoClose: 2000,
-          type: 'success'      
-        });
-    }
 
     const handleChange = (e) => {
         const name = e.target.name;
@@ -101,15 +69,16 @@ export default function AddCourse() {
     }
     try
     {
-      const result = await fetch ('http://localhost:3000/api/courses', 
+      const result = await fetch (`${BASE_API_URL}/api/courses`, 
       {
         method:'POST',
-        body:JSON.stringify(
+        body:JSON.stringify
+        (
             {
                 prodName: data.prodName, 
                 prodTags:data.prodTags, 
                 prodIntro:data.prodIntro, 
-                prodType:data.prodType, 
+                prodType:"courses", 
                 prodAuth: data.prodAuth,
                 prodTax:data.prodTax, 
                 prodDisct:data.prodDisct, 
@@ -118,9 +87,9 @@ export default function AddCourse() {
                 prodDisc:data.prodDisc, 
                 prodVal:data.prodVal, 
                 prodCat:data.prodCat, 
-                prodImage:data.prodImage, 
                 userId: loggedInUser.result._id
-            }),
+            }
+        ),
       });
 
       const post = await result.json();
@@ -135,7 +104,7 @@ export default function AddCourse() {
         }else{
             toast('Course added successfully!', {
                 hideProgressBar: false,
-                autoClose: 1500,
+                autoClose: 1000,
                 type: 'success'
             });
             router.push('/dashboard/courselist');
@@ -146,48 +115,25 @@ export default function AddCourse() {
   }
   return (
     <div>
-      <div className='relative flex  justify-center  bg-gray-100  w-full p-6 shadow-lg rounded-lg'>
+      <div className='relative flex  justify-center  bg-gray-100  w-full p-9 shadow-lg rounded-lg'>
         <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
-            <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
-                <div>
-                    <div className='relative flex flex-col group bg-white  h-[260px] max-w-[800px] border border-solid rounded-md'>
-                        <Image className='w-[100%] h-[100%]' alt='image' src={image} style={{ objectFit: 'cover' }} fill></Image>
-                        <div className='hidden group-hover:block mx-auto mt-auto cursor-pointer  opacity-50 text-gray-300  text-4xl'>
-                            <button type='button' onClick={showChooseFileBox} id='fileUpload'><FaCloudUploadAlt/></button>
-                        </div>
-                        <p className='text-sm mt-auto ml-auto  opacity-50'>Size:[260*800]</p>
-                    </div>
-                    <div className='flex flex-col'>
-                        <div className='hidden border border-solid'>
-                            <input type='file' id='fileUpload' ref={inputRef} accept='image/*' name='image' onChange={handleImage} ></input>
-                        </div>
-                        <div className='flex justify-center'>
-                            <button type='button' onClick={handleImageUpload} className='w-full mt-3 py-2 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
-                        </div>
-                    </div>
+            <div className='flex flex-col mb-3'>
+                <label>Course Title:</label>
+                <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+            </div>
+            <div className='grid md:grid-cols-2 w-full mb-3 gap-1'>
+                <div className='flex flex-col'>
+                    <label>Course Tags:</label>
+                    <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
-                <div className='flex flex-col gap-3'> 
-                    <div className='flex flex-col'>
-                        <label>Course Title:</label>
-                        <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Course Tags:</label>
-                        <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Course Instructor:</label>
-                        <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Short Intro:</label>
-                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
-                    </div>
-                    <div className='hidden'>
-                        <label>Product Type:</label>
-                        <input type='text' name='prodType' value={data.prodType} onChange={handleChange}  className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></input>
-                    </div>
+                <div className='flex flex-col'>
+                    <label>Course Instructor:</label>
+                    <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label>Short Intro:</label>
+                <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='4'></textarea>
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
@@ -196,27 +142,27 @@ export default function AddCourse() {
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Original Price:</label>
-                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Discounted Price:</label>
-                    <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                    <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Tax Rate:</label>
-                    <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                    <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Discount %:</label>
-                    <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                    <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
             </div>
             <div className='grid md:grid-cols-2 mb-5 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Course Validity:</label>
-                    <select type='select' name='prodVal' value={data.prodVal} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-600'>
+                    <select type='select' name='prodVal' value={data.prodVal} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-500'>
                         <option value='' className='text-center'>--- Choose Validity ---</option>
                         <option value='lifeTime'>Lifetime</option>
                         <option value='days-360'>Days - 360</option>
@@ -225,7 +171,7 @@ export default function AddCourse() {
                 </div>
                 <div className='flex flex-col'>
                     <label>Category:</label>
-                    <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 font-bold border rounded-md  focus:outline-amber-600'>
+                    <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 font-bold border rounded-md  focus:outline-amber-500'>
                         <option value='' className='text-center'>--- Choose Category ---</option>
                         {
                             cat.map((item) => {
@@ -237,7 +183,7 @@ export default function AddCourse() {
                     </select>
                 </div>
             </div>
-            <button type='submit' className='mb-3 py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+            <button type='submit' className='mb-3 py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
             {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>
       </div>

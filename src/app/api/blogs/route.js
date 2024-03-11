@@ -8,21 +8,28 @@ export const GET = async (request, response, next) => {
   try{
 
       const url = new URL(request.url);
-      const userId=url.searchParams.get('userId');
+      const userId = url.searchParams.get('userId');
       const query = url.searchParams.get('query');
-      
-      await connect ();
-      let user=await Users.findOne({_id:userId});
-      let posts = await  Blogs.find();
+      const page = url.searchParams.get('pageNbr');
+      const pageSize = 20;
 
-      posts=posts.filter(a=> user.usrRole == 'ADMIN' || a.userId == userId);
+      await connect (); 
+
+      let user = await Users.findOne({_id:userId});      
+      let posts = await Blogs.find();
+      posts = posts.filter(a=> user.usrRole == 'ADMIN' || a.userId == userId);
+
       if (query){
         posts = posts.filter(a => a.blgName.toLowerCase().includes(query.toLowerCase()));
+        return new NextResponse (JSON.stringify({posts:posts}), {status: 200});
+      }else{
+        const totalItems = posts.length;
+        const totalPages = Math.ceil(totalItems / pageSize);
+        posts = posts.slice((page - 1) * pageSize, page * pageSize);
+        return new NextResponse (JSON.stringify({posts, totalItems, totalPages}), {status: 200});
       }
-      return new NextResponse (JSON.stringify(posts), {status: 200});
-
-  }catch(error){
-    return new NextResponse ("Erron while fetching data: " + error, {status: 500});
+   }catch(error){
+    return new NextResponse ("Error while fetching data: " + error, {status: 500});
   }
 };
 
@@ -46,7 +53,7 @@ export  const  POST = async (request) =>{
         const messages = Object.values(error.errors).map(val => val.message);
         return NextResponse.json({ success: false, message: messages }, {status:400});
       }else{
-        return new NextResponse ("Erron while saving data" + error, {status: 400});
+        return new NextResponse ("Error while saving data: " + error, {status: 400});
       }
     }
 }

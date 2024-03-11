@@ -24,8 +24,24 @@ const chapSchema = new mongoose.Schema ({
         sparse: true,
         unique: false        
     },
+    chapPdf:{
+        type: String,
+        sparse: true,
+        unique: false        
+    },
     topics: [topSchema]
 },{timestamps: true});
+
+const allowSchema = new mongoose.Schema ({    
+    usrId:{
+        type: String,
+        unique: false        
+    },
+    usrEmailId:{
+        type: String,
+        unique: false        
+    },
+ },{timestamps: true});
 
 const prodSchema = new mongoose.Schema ({    
     prodName:{
@@ -51,7 +67,15 @@ const prodSchema = new mongoose.Schema ({
         type: String,
         unique:false
     },
+    prodMeetLink:{
+        type: String,
+        unique: false
+    },
     prodAuth:{
+        type: String,
+        unique:false
+    },
+    prodCont:{
         type: String,
         unique:false
     },
@@ -87,6 +111,7 @@ const prodSchema = new mongoose.Schema ({
         type: String,
         unique:false
     },
+    allowAccess:[allowSchema],
     userId:{
         type: String,
         unique: false

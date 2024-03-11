@@ -20,6 +20,15 @@ const settingsSchema = new mongoose.Schema ({
         required: [true, 'Currency is required!'],
         unique: false
     },
+    brandTax:{
+        type: String,
+        required: [true, 'Tax rate is required!'],
+        unique: false
+    },
+    brandDisc:{
+        type: Number,
+        unique: false
+    },
     brandLogo:{
         type: String,
         unique: false

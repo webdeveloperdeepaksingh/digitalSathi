@@ -13,7 +13,7 @@ try
       return NextResponse.json({result:blog}, {status: 200});    
 
    }catch(error){
-      return new NextResponse ("Erron while retrieving data: " + error, {status: 500});
+      return new NextResponse ("Error while retrieving data: " + error, {status: 500});
    }
 }
 

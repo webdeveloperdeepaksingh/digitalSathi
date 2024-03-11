@@ -3,22 +3,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { FaEdit } from 'react-icons/fa';
 import { toast } from 'react-toastify';
+import { BASE_API_URL } from '../../../../../../utils/constants';
 import React, { useState, useEffect } from 'react'
-import { MdAddBox } from "react-icons/md";
 import { RiDeleteBin5Fill } from 'react-icons/ri';
-
+import Loading from '../../loading';
 
 export default function AddEbookChap({params}) {
 
   const router = useRouter();
   const [chap, setChap] = useState([]);
   const [fileData, setFileData] = useState(null); 
-  const [data, setData] = useState({chapName:'', pdfFile:''});
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState({chapName:'', chapPdf:''});
   const _id = params.EbookId;
 
   async function fetchEbookChap() {
     try {
-      const response = await fetch(`http://localhost:3000/api/ebooks/${_id}/getchapters`);
+      const response = await fetch(`${BASE_API_URL}/api/ebooks/${_id}/getchapters`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -26,6 +27,8 @@ export default function AddEbookChap({params}) {
       setChap(chapters.result);
      } catch (error) {
       console.error('Error:', error);
+    }finally{
+      setIsLoading(false);
     }
   }
   
@@ -44,19 +47,20 @@ export default function AddEbookChap({params}) {
      const formData = new FormData();
      formData.set('pdfFile', fileData)
      const date = Date.now(); 
-     data.pdfFile =`ebkPdf_${date}.${fileData.name.split('.').pop()}`;
-     formData.set('fileName', data.pdfFile);
-     const response = await fetch('http://localhost:3000/api/pdffiles', {
+     data.chapPdf =`ebkChapPdf_${date}.${fileData.name.split('.').pop()}`;
+     formData.set('fileName', data.chapPdf);
+     const response = await fetch(`${BASE_API_URL}/api/pdffiles`, {
         method: 'POST',        
          body: formData
     });
     
     console.log(response);  
-    toast('File uploaded successfully!', {
+    toast('File uploaded successfully!', 
+    {
       hideProgressBar: false,
-      autoClose: 2000,
+      autoClose: 1000,
       type: 'success'      
-      });
+    });
   }
   
   const handleChange = (e) => {
@@ -74,46 +78,50 @@ export default function AddEbookChap({params}) {
   e.preventDefault();
   try
   {
-    // if(chap==null){
-    //   chap=[];
-    // } 
-    const result = await fetch (`http://localhost:3000/api/ebooks/${_id}/addchapter`, 
+    
+    const result = await fetch (`${BASE_API_URL}/api/ebooks/${_id}/addchapter`, 
     {
       method:'POST',
-      body:JSON.stringify({chapName: data.chapName, pdfFile: data.pdfFile}),
+      body:JSON.stringify({chapName: data.chapName, chapPdf: data.chapPdf}),
     });
 
     const post = await result.json();
     console.log(post);
 
     data.chapName='';
-    data.pdfFile='';
+    data.chapPdf='';
     fetchEbookChap();
 
   }catch(error) {
       console.log(error);
     }
-}
+  }
+
+  if(isLoading){
+    return <div>
+      <Loading/>
+    </div>
+  }
 
   return (
     <div>
         <div className='relative w-full p-5 shadow-lg rounded-lg'>
-            <form className='p-9 m-5 border border-amber-600 max-w-[550px]' onSubmit={handleSubmit}>
+            <form className='p-9 m-5 border border-amber-500 rounded-md max-w-[550px]' onSubmit={handleSubmit}>
                 <div className='flex flex-col gap-3 mb-3'>
                     <div className='flex flex-col'>
                         <label className='font-bold'>CHAPTER:</label>
-                        <input type='text' name='chapName' value={data.chapName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='chapName' value={data.chapName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col mb-3'>
                         <label className='font-bold mb-2'>PDF File:</label>
                         <div className='flex items-center'>
-                            <input type='file' name='pdfFile' onChange={handleFileChange} className='w-full py-2 bg-white px-2 border rounded-md  focus:outline-amber-600'></input>
-                            <button type='button' onClick={handleFileUpload} className='py-3 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPLOAD</button>
+                            <input type='file' name='pdfFile' onChange={handleFileChange} className='w-full py-2 bg-white px-2 border rounded-md  focus:outline-amber-500'></input>
+                            <button type='button' onClick={handleFileUpload} className='py-3 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+                    <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
                 </div>
             </form>
             <h1 className='text-center text-2xl rounded-sm py-2 mb-1 mx-5 bg-gray-200'>Ebook Contents </h1>

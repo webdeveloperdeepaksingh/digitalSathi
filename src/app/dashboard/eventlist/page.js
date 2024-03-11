@@ -1,58 +1,88 @@
 'use client';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import { BASE_API_URL } from '../../../../utils/constants';
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Fill } from "react-icons/ri";
+import Loading from './loading';
+import { FaShareSquare } from "react-icons/fa";
+import Pagination from '@/components/Pagination/page';
 
 export default function EventList() {
 
+  const [isLoading, setIsLoading] = useState(true);
   const [event, setEvent] = useState([]);
   const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
   const [query, setQuery] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(()=>{
 
     let api = '';
     if(query != ''){
       //get courses as per query entered.
-      api = `http://localhost:3000/api/events?userId=${loggedInUser.result._id}&query=${query}`
+      api = `${BASE_API_URL}/api/events?userId=${loggedInUser.result._id}&query=${query}`
     }else{
-      //get all courses.
-      api = `http://localhost:3000/api/events?userId=${loggedInUser.result._id}`
+      let page=0;
+      if(totalPages === 0){
+        page = currentPage + 1;
+      }
+      else {
+        page = Math.min(currentPage + 1,  totalPages);
+      }
+      if(isNaN(page)){
+        page=1;
+      }
+      api = `${ BASE_API_URL }/api/events?userId=${loggedInUser.result._id}&pageNbr=${page}`
     }
     async function fetchData() {
-      const res = await fetch(api);
-      const eventList = await res.json();
-      setEvent(eventList);
-      console.log(eventList);
+    try 
+      {
+        const res = await fetch(api);
+        if(!res.ok){
+          throw new Error("Error fetching event data.");
+        }
+        const eventList = await res.json();
+        setEvent(eventList.eventList);
+        setTotalPages(eventList.totalPages);
+      } catch (error) {
+        console.error("Error fetching data.", error)
+      }finally{
+        setIsLoading(false);
+      }
     }
     fetchData();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[query])
+  },[query, currentPage])
 
   const handleSearch = (data) =>{
     setQuery(data);
     console.log(data);
   }
 
+  if(isLoading){
+    return <div><Loading/></div>
+  }
+
   return (
-    <div className="relative flex flex-col w-full shadow-lg rounded-lg">
+    <div className="relative flex flex-col w-full ">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' onKeyUp={(e) => handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-600' placeholder='Search event title here...'></input>
+          <input type='search' onKeyUp={(e) => handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-500' placeholder='Search event title here...'></input>
         </div>
         <div>
-          <Link href='/dashboard/event' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>ADD</Link>
+          <Link href='/dashboard/event' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</Link>
         </div>
       </div>
-      <table className="table-auto w-full text-left">
+      <table className="table-auto w-full text-left shadow-lg rounded-lg">
         <thead className='font-bold bg-gray-300'>
           <tr>
             <th className='p-4'>EVENT TITLE</th>
             <th className='p-4'>CATEGORY</th>
-            <th className='p-4'>PRICE</th>
-            <th className='p-4'>DATE</th>
+            <th className='p-4'>EVENT PRICE</th>
+            <th className='p-4'>EVENT DATE</th>
             <th className='p-4'>ACTION</th>
           </tr>
         </thead>
@@ -68,6 +98,11 @@ export default function EventList() {
               <td className='flex py-2 text-lg gap-6  px-4'>
                 <Link href={`/dashboard/event/${item._id}`}><FaEdit /></Link>
                 <Link href={`/dashboard/eventlist/${item._id}`}  ><RiDeleteBin5Fill /></Link>
+                {
+                  loggedInUser.result.usrRole === "ADMIN" ? 
+                  <Link href={`/dashboard/event/${item._id}/allowevent`} ><FaShareSquare/></Link>
+                  : null
+                }
               </td>
             </tr>
               )
@@ -75,6 +110,7 @@ export default function EventList() {
           }
         </tbody>
       </table>
+      <Pagination totalPages={totalPages} currentPage={currentPage} setCurrentPage={setCurrentPage} />
     </div>
   )
 }

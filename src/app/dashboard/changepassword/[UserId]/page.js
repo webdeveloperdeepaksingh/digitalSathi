@@ -3,6 +3,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { BASE_API_URL } from '../../../../../utils/constants';
 
 export default function ChangePassword({params}) {
 
@@ -48,11 +49,16 @@ export default function ChangePassword({params}) {
 
   try
   {
-    const result = await fetch (`http://localhost:3000/api/users/${_id}`, 
+    const result = await fetch (`${BASE_API_URL}/api/users/${_id}`, 
     {
       method:'PUT',
-      body:JSON.stringify({oldPass: data.oldPass, usrPass:data.usrPass, confPass:data.confPass, isPasswordChangeRequest: true}),
-    });
+      body:JSON.stringify
+      ({
+          oldPass: data.oldPass, 
+          usrPass:data.usrPass, 
+          confPass:data.confPass, 
+          isPasswordChangeRequest: true}),
+      });
 
       const post = await result.json();
       console.log(post);
@@ -69,7 +75,7 @@ export default function ChangePassword({params}) {
         toast('Password changed successfully!', 
         {
           hideProgressBar: false,
-          autoClose: 2000,
+          autoClose: 1000,
           type: 'success'
         });
       router.push(`/dashboard/changepassword/${_id}`);
@@ -81,24 +87,24 @@ export default function ChangePassword({params}) {
   return (
     <div>
       <div className='relative w-full bg-gray-100 rounded-lg shadow-lg p-9 '>
-        <div className='bg-white p-3 font-bold text-center text-3xl rounded-md border-2'>
-          <h1 className='uppercase'>Change Password</h1>
+        <div className='rounded-sm border-2'>
+          <h1 className='uppercase bg-amber-500 p-3 font-bold text-center text-white text-3xl'>Change Password</h1>
         </div>
         <form className='pt-3' onSubmit={handleSubmit}>
           <div className='flex flex-col mb-3 gap-2'>
             <label className='font-semibold uppercase'>Old Password:*</label>
-            <input type='password' name='oldPass' value={data?.oldPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='password' name='oldPass' value={data?.oldPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
             <label className='font-semibold uppercase'>New Password:*</label>
-            <input type='password'name='usrPass' value={data?.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='password'name='usrPass' value={data?.usrPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>
           <div className='flex flex-col mb-3 gap-2'>
             <label className='font-semibold uppercase'>Confirm Password:*</label>
-            <input type='password' name='confPass' value={data?.confPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-600'></input>
+            <input type='password' name='confPass' value={data?.confPass} onChange={handleChange} className='py-2 px-2 rounded-md border focus:outline-amber-500'></input>
           </div>  
           <div className='mb-3'>
-            <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+            <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
           </div>
           {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>

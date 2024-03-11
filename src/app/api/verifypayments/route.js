@@ -4,6 +4,7 @@ import shortid from "shortid";
 import crypto from "crypto";
 import Payments from "../../../../models/Payments";
 import connect from "../../../../server";
+import Participents from "../../../../models/Participents";
 
 const instance = new Razorpay(
   { key_id: process.env.RAZORPAY_API_KEY, 
@@ -14,7 +15,7 @@ export async function POST(req, res) {
 
 try 
 {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, prodType, custProducts, custName, custEmail, custPhone } = await req.json();
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature, amtToPay, custProducts, custName, custEmail, custPhone } = await req.json();
   const body = razorpay_order_id + "|" + razorpay_payment_id;
   
   console.log("id==", body);
@@ -29,8 +30,19 @@ try
   {
     console.log(Payments);
     await connect();
-    await Payments.create({ razorpay_order_id, razorpay_payment_id, razorpay_signature, prodType, custProducts, custName, custEmail, custPhone });
-    return NextResponse.json({ message: "success" },{ status: 200 });
+    await Payments.create({ razorpay_order_id, razorpay_payment_id, razorpay_signature, amtToPay, custProducts, custName, custEmail, custPhone });
+    
+    
+      for (const product of custProducts) 
+      {
+        const { prodType, prodName, prodValue, prodAuth, prodCont, prodDate, prodTime, userId } = product;
+        if(prodType === "events"){
+        const custData = new Participents({ prodName, prodValue, prodAuth, prodCont, userId, prodDate, prodTime, custName, custEmail, custPhone});
+        await custData.save();
+        }
+      } 
+
+    return NextResponse.json({message: "success" },{ status: 200 });
 
   } else {
       return NextResponse.json({ message: "failed"},{ status: 400});

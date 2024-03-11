@@ -11,7 +11,7 @@ const Buy = ({ makePayment }) => {
           makePayment({ productId: "example_ebook" });
         }}
         disabled={isLoading}
-        className={`bg-amber-600 text-white w-full text-xl text-center font-bold p-3 rounded-md  ${
+        className={`bg-amber-500 text-white w-full text-xl text-center font-bold p-3 rounded-md  ${
           isLoading ? "opacity-50 cursor-not-allowed" : ""
         }`}
       >

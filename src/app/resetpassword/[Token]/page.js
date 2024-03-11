@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
 import NavBar from '@/components/NavBar/page';
+import { BASE_API_URL } from '../../../../utils/constants';
 
 export default function ResetPassword({params}) {
 
@@ -39,7 +40,7 @@ const handleSubmit = async (e) => {
     
     try
     {
-        const result = await fetch ('http://localhost:3000/api/resetpassword', 
+        const result = await fetch (`${BASE_API_URL}/api/resetpassword`, 
         {
         method:'PATCH',
         headers:{
@@ -74,7 +75,7 @@ const handleSubmit = async (e) => {
     }
   return (
     <div>
-      <NavBar className='h-[90px]'/>
+      {/* <NavBar className='h-[105px]'/> */}
       <div className='flex flex-col h-screen w-auto mx-auto items-center justify-center px-9'>
         <div className="relative mx-auto text-center">
             <div className="mt-4 bg-white  rounded-lg text-left">

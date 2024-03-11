@@ -19,10 +19,10 @@ export const GET = async (request, {params}) => {
 export  const  POST = async (request) =>{ 
   try  
     {
-      const { brandTitle, brandTags, brandCurr, brandIntro } = await request.json(); 
+      const { brandTitle, brandTags, brandTax, brandCurr, brandIntro } = await request.json(); 
       await connect ();
 
-      const settings = new Settings({ brandTitle, brandTags, brandCurr, brandIntro });
+      const settings = new Settings({ brandTitle, brandTags, brandTax, brandCurr, brandIntro });
       const settingData = await settings.save();
       return NextResponse.json({result:settingData, success:true}, {status: 200});
 

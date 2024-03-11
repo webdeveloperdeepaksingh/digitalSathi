@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import Link from 'next/link';
+import { BASE_API_URL } from '../../../../../../../../utils/constants';
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
 import { useState, useEffect } from 'react';
@@ -15,7 +16,7 @@ export default function UpdateChapter({params}) {
 
   useEffect(() =>{
     async function fetchData() {
-      let chapData = await fetch(`http://localhost:3000/api/courses/${_id}/chapter/${params.ChapId}`);
+      let chapData = await fetch(`${BASE_API_URL}/api/courses/${_id}/chapter/${params.ChapId}`);
       chapData = await chapData.json();
       setData(chapData.result);
     }
@@ -38,7 +39,7 @@ export default function UpdateChapter({params}) {
   try
   {
     
-    const result = await fetch (`http://localhost:3000/api/courses/${_id}/chapter/${params.ChapId}`, 
+    const result = await fetch (`${BASE_API_URL}/api/courses/${_id}/chapter/${params.ChapId}`, 
     {
       method:'PUT',
       body:JSON.stringify({chapName: data.chapName}),
@@ -48,13 +49,12 @@ export default function UpdateChapter({params}) {
     console.log(post);
     router.push(`/dashboard/course/${_id}/addchapter`);
 
-    toast('Chapter renamed successfully!', {
-
+    toast('Chapter renamed...!', 
+    {
       hideProgressBar: false,
-      autoClose: 2000,
+      autoClose: 1000,
       type: 'success'
-
-      });
+    });
 
   }catch(error) {
       console.log(error);
@@ -68,10 +68,10 @@ export default function UpdateChapter({params}) {
                 <form className='flex flex-col' onSubmit={handleSubmit}>
                     <div className='flex flex-col mb-3'>
                         <label className='font-bold'>RENAME CHAPTER:</label>
-                        <input type='text' name='chapName' value={data.chapName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md w-[400px]  focus:outline-amber-600'></input>
+                        <input type='text' name='chapName' value={data.chapName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md w-[400px]  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex w-full gap-1'>
-                        <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+                        <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
                         <button type='button' className='py-2 px-3 rounded-sm bg-gray-600 hover:bg-gray-500 text-white font-bold'>
                             <Link href={`/dashboard/course/${params.CourseId}/addchapter`}>BACK</Link>
                         </button>

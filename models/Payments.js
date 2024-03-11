@@ -17,6 +17,26 @@ const prodSchema = new mongoose.Schema({
   prodValue:{
     type: Number,
     unique: false
+  },
+  prodAuth:{
+    type: String,
+    unique: false
+  },
+  prodCont:{
+    type: String,
+    unique: false
+  },
+  prodDate:{
+    type: String,
+    unique: false
+  },
+  prodTime:{
+    type: String,
+    unique: false
+  },
+  userId:{
+    type: String,
+    unique: false
   }
 })
 
@@ -35,8 +55,11 @@ const paySchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: false
-  },
-  custProducts:[prodSchema],  
+  }, 
+  amtToPay:{
+    type: Number,
+    unique: false
+  }, 
   custName:{
     type: String,
     unique: false
@@ -44,23 +67,12 @@ const paySchema = new mongoose.Schema({
   custEmail:{
     type: String,
     unique: false,
-    validate: {
-      validator: function(v) {
-        return /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v);
-      },
-      message: props => `${props.value} is not a valid email...!`
-    }
   },
   custPhone:{
     type: String,
     unique: false,
-    validate: {
-      validator: function(v) {
-        return /^\d{10}$/.test(v);
-      },
-      message: props => `${props.value} is not a valid phone number...!`
-    }
-  }
+  },
+  custProducts:[prodSchema],
 },{timestamps: true});
 
 const Payments = mongoose.models.Payments || mongoose.model('Payments', paySchema)

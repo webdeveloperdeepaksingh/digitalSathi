@@ -2,47 +2,58 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { IoIosArrowDown } from "react-icons/io";
-import logo from '../../../public/images/logo.png';
 import { IoIosPeople } from "react-icons/io";
 import { RiMoneyDollarBoxFill } from "react-icons/ri";
 import {BsArrowLeftShort, BsBook, BsCalendarEvent, BsQuestionSquare} from 'react-icons/bs';
 import {BiCategory} from 'react-icons/bi';
 import {AiOutlineHome} from 'react-icons/ai';
 import { GiSettingsKnobs } from "react-icons/gi";
+import { BASE_API_URL } from '../../../utils/constants';
 import {FaChalkboardTeacher, FaBlog, FaUserAlt } from 'react-icons/fa';
 import Image from 'next/image';
-import { FaCartPlus } from 'react-icons/fa6';
-import SideMenu from '@/components/SideMenu/page';
-import { useSelector } from 'react-redux';
 import Cookies from 'js-cookie';
-  
-export default function DashBoard({children}) {
+import Loading from './loading';  
+import SideProfile from '@/components/SideProfile/page';
 
- const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
- const cartItems = useSelector((store) => store.cart)
+
+export default function DashBoard({children}) {
+ const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"), usrRole:Cookies.get("loggedInUserRole")}};
+ const [isLoading, setIsLoading] = useState(true);
  const [showMenu, setShowMenu] = useState(false);
- const [profile, setProfile] = useState('');
- 
- 
- useEffect(()=>{
-    async function fetchProfile(){
-        const res = await fetch('http://localhost:3000/api/profile');
-        const profiles = await res.json();
-        const profileById = profiles.filter(profile => profile.userId === loggedInUser.result?._id);
-        setProfile(profileById[0]);
-    }
-    fetchProfile();
+ const [logo, setLogo] = useState('');
+ const currentRoute = usePathname();
+ const settId = "65c8e1dad3c601a36e0dd62f" 
+
+useEffect(()=>{
+    async function fetchSettings(){
+    try 
+    {
+        const res = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
+        if(!res.ok){
+            throw new Error("Error fetching settData.");
+        }
+        const logoImage = await res.json();
+        setLogo(logoImage.result);
+
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    } finally{
+        setIsLoading(false);
+    }  
+}
+fetchSettings();
 // eslint-disable-next-line react-hooks/exhaustive-deps
 },[]) 
 
- const handleShowMenu = () => {
+const handleShowMenu = () => {
     setShowMenu(!showMenu);
  }
 
-  let sideMenu = [
-    
-  ]
+  if(isLoading){
+    return<div><Loading/></div>
+  }
+
+  let sideMenu = []
 
   if(loggedInUser.result?.usrRole == "ADMIN"){
     sideMenu.push(
@@ -84,7 +95,7 @@ export default function DashBoard({children}) {
         {
             name: showMenu == false ? 'REVENUE' : '',
             url:'/dashboard/saleslist',
-            icon:<RiMoneyDollarBoxFill className='text-2xl' />
+            icon:<RiMoneyDollarBoxFill className='text-3xl' />
     
         },
         {
@@ -141,7 +152,6 @@ export default function DashBoard({children}) {
             name: showMenu == false ? 'REVENUE' : '',
             url:'/dashboard/saleslist',
             icon:<RiMoneyDollarBoxFill className='text-2xl' />
-    
         }
     );
   }
@@ -154,58 +164,47 @@ export default function DashBoard({children}) {
             icon:<AiOutlineHome/>
         },
         {
-            name: showMenu == false ? 'COURSE' : '',
-            url:'/dashboard/saleslist',
+            name: showMenu == false ? 'MY COURSES' : '',
+            url:'/dashboard/mycourses',
             icon:<FaChalkboardTeacher/>
-    
+        },
+        {
+            name: showMenu == false ? 'MY EBOOKS' : '',
+            url:'/dashboard/myebooks',
+            icon:<BsBook/>
+        },
+        {
+            name: showMenu == false ? 'MY EVENTS' : '',
+            url:'/dashboard/myevents',
+            icon:<BsCalendarEvent/>
         }
     );
   }
-
-  const [toggle, setToggle] = useState(false);
-  const currentRoute = usePathname();
-
-  const handleToggle = () => {
-        setToggle(!toggle)
-  }
   
   return (
-    <div className='p-0'>
+    <div className='p-0' suppressHydrationWarning>
         <div className='flex w-full'>
-            <div className={showMenu == false ? 'relative w-[80px] flex md:w-[250px] duration-500 flex-col h-screen bg-amber-600' : 'relative flex w-[80px] duration-500 flex-col h-screen bg-amber-600'}> 
-                <Image className='px-2 py-2' src={logo} alt='digitalSathi'  height={100} width={250} />
+            <div className={showMenu == false ? 'relative w-[80px] flex md:w-[250px] duration-500 flex-col h-screen bg-amber-500' : 'relative flex w-[80px] duration-500 flex-col h-screen bg-amber-500'}> 
+                <Image className='py-2' src={`/images/${logo.brandLogo}`} alt={logo.brandTitle}  height={100} width={250} />
                 <hr/>
-                <ul className='p-3'>
+                <ul className='my-3'>
                 {sideMenu.map((item, i) => {
                     return (
-                    <li key={i} className={ currentRoute === `${item.url}` ? 'group bg-amber-500 rounded-sm  flex items-center py-2 px-2 cursor-pointer' : 'group hover:bg-amber-500 rounded-sm flex items-center py-2 px-2 cursor-pointer'} >
-                        <Link href={item.url} className={ currentRoute === `${item.url}` ? 'text-black mr-2 text-2xl' : 'text-white group-hover:text-black mr-2 text-2xl'}>{item.icon}</Link>
-                        <Link href={item.url} className={currentRoute === `${item.url}` ? 'hidden font-bold md:block text-black' : 'hidden font-bold md:block text-white group-hover:text-black'}>{item.name}</Link>
-                    </li>
+                    <Link key={i} href={item.url} className={ currentRoute === `${item.url}` ? 'flex items-center gap-2 py-2 px-5 group bg-white  cursor-pointer' : 'flex items-center gap-2 py-2 px-5 group hover:bg-white  cursor-pointer'} >  
+                        <span className={ currentRoute === `${item.url}` ? 'text-black text-2xl ' : 'text-white group-hover:text-black  text-2xl'}>{item.icon}</span>
+                        <p  className={currentRoute === `${item.url}` ? 'hidden font-bold md:block text-black' : 'hidden font-bold md:block text-white group-hover:text-black'}>{item.name}</p>  
+                    </Link>
                     )
                 })
                 } 
                 </ul>
-                <span onClick={handleShowMenu} className={showMenu == false ? 'bg-white block duration-500  absolute left-[60px] md:left-[200px] top-[115px] border border-amber-600 cursor-pointer rounded-full w-[25px]' : 'bg-white rotate-180 duration-500  absolute left-[63px] top-[115px] border border-amber-600 cursor-pointer rounded-full w-[25px]'}>
+                <span onClick={handleShowMenu} className={showMenu === false ? 'bg-white block duration-500  absolute left-[60px] md:left-[200px] top-[120px] border border-amber-500 cursor-pointer rounded-full w-[25px]' : 'bg-white rotate-180 duration-500  absolute left-[63px] top-[115px] border border-amber-500 cursor-pointer rounded-full w-[25px]'}>
                     <BsArrowLeftShort className='text-black text-2xl'/>
                 </span>
             </div>
             <div className='w-full'>
-                <header className=' flex h-[100px] p-4 items-center w-full justify-end bg-white shadow-lg'>
-                    <div className='relative w-[auto]'>
-                        <div className='flex items-center p-3 font-bold rounded-md border border-solid border-amber-600'>
-                            <p className=''>Welcome {profile?.proName} !</p>
-                            <Image alt={profile?.proName} className='rounded-sm mx-2'  src={`/images/${profile?.proImage}`} width={65} height={65} />
-                            <div className=''>
-                                <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={handleToggle}><IoIosArrowDown /></button>
-                            </div>
-                        </div>
-                        <div className='absolute bottom-[-180px] right-4 z-100'>
-                            <SideMenu  isShown={toggle}/>
-                        </div>    
-                    </div>
-                </header>
-                <main className='p-5 w-full overflow-auto h-[620px]'>
+                <SideProfile/>
+                <main className='p-5 w-full overflow-auto h-[595px]'>
                     {children}
                 </main>  
             </div>

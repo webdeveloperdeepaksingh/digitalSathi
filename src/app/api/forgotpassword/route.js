@@ -22,7 +22,7 @@ export const PATCH = async (request) => {
     
             const tokenData = await Users.findByIdAndUpdate(filter, {pwdResetToken, pwdResetTokenExpires}, {runValidators: false});
             const resetUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}/resetpassword/${resetToken}`;  //creating a resetUrl to be sent to user.
-            const message = `We have received a password reset request. Please use the below link to reset your password.\n\n${resetUrl}\n\nThis reset link will be valid only for 10 minutes.`;
+            const message = `We have received a password reset request. Please use the below link to reset your password:<br><br><a href="${resetUrl}">${resetUrl}</a><br><br>This reset link will be valid only for 10 minutes.`;
 
             try {
                 await sendEmail({     //sending email to user for password reset link.

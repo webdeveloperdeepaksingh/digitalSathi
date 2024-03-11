@@ -10,7 +10,7 @@ const Success = () => {
 
   return (
     <>
-    <NavBar className='h-[90px]'/>
+    {/* <NavBar className='h-[105px]'/> */}
     <div className="flex flex-col h-screen items-center justify-center mt-auto mx-auto">
       <div className="bg-gray-100 border border-amber-600 w-auto px-4 py-3 rounded-lg shadow-xl relative" role="alert">
         <div className="flex flex-col items-center p-5">

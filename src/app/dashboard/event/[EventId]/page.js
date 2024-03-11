@@ -1,6 +1,7 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
-import { FaCloudUploadAlt } from 'react-icons/fa';
+import Loading from '../loading';
+import { BASE_API_URL } from '../../../../../utils/constants';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -17,14 +18,16 @@ export default function UpdateEvent({params}) {
     const [cat, setCat] = useState([]);
     const [image, setImage] = useState('');
     const [imageData, setImageData] = useState(null); 
+    const [isLoading, setIsLoading] = useState(true);
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}}; 
     const [errorMessage, setErrorMessage] = useState(''); 
+    const [oldFileName, setOldImageFile] = useState('');
     const [editorContent, setEditorContent] = useState('');
-    const [data, setData] = useState({prodName:'', prodTags:'',prodAuth:'', prodTax:'', prodDisct:'',  prodIntro:'', prodDesc:'', prodCat:'', prodPrice:'', prodDisc:'',  prodTime:'', prodDate:'', prodImage:'' })    
+    const [data, setData] = useState({prodName:'', prodTags:'', prodMeetLink:'', prodAuth:'', prodCont:'', prodTax:'', prodDisct:'',  prodIntro:'', prodDesc:'', prodCat:'', prodPrice:'', prodDisc:'',  prodTime:'', prodDate:'', prodImage:'' })    
     
     useEffect(() =>{
       async function fetchCat() {
-        let catdata = await fetch('http://localhost:3000/api/categories/?userId='+ loggedInUser.result._id);
+        let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=${loggedInUser.result._id}`);
         catdata = await catdata.json();
         setCat(catdata);
       }
@@ -33,19 +36,30 @@ export default function UpdateEvent({params}) {
     },[]);
 
     useEffect(() =>{
-        async function fetchData() {
-          const eventData = await fetch(`http://localhost:3000/api/events/${params.EventId}`);
-          const event = await eventData.json();
-          setData(event.result);
-          setEditorContent(event.result.prodDesc)
-          setImage(`/images/${event.result.prodImage}`) 
+    async function fetchData() {
+        try 
+        {
+            const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`);
+            if(!res.ok){
+                throw new Error("Error fetching event data.");
+            }
+            const event = await res.json();
+            setData(event.result);
+            setEditorContent(event.result.prodDesc)
+            setImage(`/images/${event.result.prodImage}`)
+            setOldImageFile(`/images/${event.result.prodImage}`)
+        } catch (error) {
+            console.error("Error fetching data: ", error);
+        } finally{
+            setIsLoading(false);
         }
-        fetchData();
+    }
+    fetchData();
     },[params.EventId]);
 
-    const showChooseFileBox = () =>{
-        inputRef.current.click();
-    };
+    if(isLoading){
+        return <div><Loading/></div>
+    }
 
     const handleImage = (e) => {
         setImage(URL.createObjectURL(e.target.files?.[0]));
@@ -53,23 +67,70 @@ export default function UpdateEvent({params}) {
         console.log(e.target.files?.[0]);
       };
     
-      const handleImageUpload = async (e) =>{
+    const handleImageUpload = async (e) => {
+        e.preventDefault();
         const formData = new FormData();
-        formData.set('image', imageData);             
-        data.prodImage=`evtImage_${params.EventId}.${imageData.name.split('.').pop()}`;
-        formData.set('fileName', data.prodImage);
-        const response = await fetch('http://localhost:3000/api/imagefiles', {
-            method: 'POST',        
-            body: formData
-        });
-        
-        console.log(response);  
-        toast('Image uploaded successfully!', {
-          hideProgressBar: false,
-          autoClose: 2000,
-          type: 'success'      
-        });
-    }
+        formData.append('image', imageData); // Use 'append' instead of 'set'
+        data.prodImage = `evtImage_${params.EventId}.${imageData.name.split('.').pop()}`;
+        formData.append('fileName', data.prodImage); // Use 'append' here as well
+     
+        try {
+            const response = await fetch(`${BASE_API_URL}/api/imagefiles`, {
+                method: 'POST',
+                body: formData,
+            });
+    
+            if (response.ok) {
+                console.log('Image uploaded successfully!');
+                toast('Image uploaded successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });        
+            } else {
+                console.error('Image upload failed:', response.status);
+                toast('Image upload failed!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                }); 
+            }
+        } catch (error) {
+            console.error('Error during image upload:', error);
+        }
+    };
+
+    const handleRemoveImage = async (e) => {
+    e.preventDefault();
+    try 
+        {
+            const imgName = data.prodImage;
+            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ imgName }), // Send the file name to delete
+            });
+    
+            const dataImg = await response.json();
+            if (response.ok) {
+                    toast('Image removed successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });        
+            } else {
+                    toast('Image remove failed!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                }); 
+            }
+        } catch (error) {
+            console.error('Error removing image:', error);
+        }
+    };
     
 
     const handleChange = (e) => {
@@ -114,19 +175,21 @@ export default function UpdateEvent({params}) {
 
     try
     {
-      const result = await fetch (`http://localhost:3000/api/events/${params.EventId}`, 
+      const result = await fetch (`${BASE_API_URL}/api/events/${params.EventId}`, 
       {
         method:'PUT',
         body:JSON.stringify(
             {
                 prodName:data.prodName, 
-                prodTags:data.prodTags,  
+                prodTags:data.prodTags, 
+                prodMeetLink: data.prodMeetLink, 
                 prodIntro:data.prodIntro,
                 prodTax:data.prodTax,
                 prodAuth: data.prodAuth,
                 prodDisct:data.prodDisct, 
                 prodDesc:data.prodDesc, 
                 prodCat:data.prodCat, 
+                prodCont:data.prodCont, 
                 prodPrice:data.prodPrice, 
                 prodDisc:data.prodDisc, 
                 prodImage: data.prodImage, 
@@ -161,22 +224,10 @@ export default function UpdateEvent({params}) {
       <div className='relative flex  bg-gray-100 justify-center  w-full p-6 shadow-lg rounded-lg'>
         <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
-                <div>
-                    <div className='relative flex flex-col group bg-white  h-[260px] max-w-[800px] border border-solid rounded-md'>
-                        <Image className='w-[100%] h-[100%]' alt='image' src={image} style={{ objectFit: 'cover' }} fill></Image>
-                        <div className='hidden group-hover:block mx-auto mt-auto cursor-pointer  opacity-50 text-gray-300  text-4xl'>
-                            <button type='button' onClick={showChooseFileBox} id='fileUpload'><FaCloudUploadAlt/></button>
-                        </div>
-                        <p className='text-sm mt-auto ml-auto  opacity-50'>Size:[260*800]</p>
-                    </div>
-                    <div className='flex flex-col'>
-                        <div className='hidden border border-solid'>
-                            <input type='file' id='fileUpload' ref={inputRef} accept='image/*' name='image' onChange={handleImage} ></input>
-                        </div>
-                        <div className='flex justify-center'>
-                            <button type='button' onClick={handleImageUpload} className='w-full mt-3 py-2 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
-                        </div>
-                    </div>
+                <div className='relative flex flex-col group bg-white h-auto w-full border border-solid rounded-md'>
+                    <Image alt={data.prodName} src={image} width={580} height={332} ></Image>
+                    <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[580*332]</p>
+                    <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                 </div>
                 <div className='flex flex-col gap-3'> 
                     <div className='flex flex-col'>
@@ -188,24 +239,58 @@ export default function UpdateEvent({params}) {
                         <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                     </div>
                     <div className='flex flex-col'>
-                        <label>Short Intro:</label>
-                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
+                        <label>Event Category:*</label>
+                        <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-600'>
+                            <option value='' className='text-center'>--- Choose Category ---</option>
+                            {
+                                cat.map((item) => {
+                                    return(
+                                        <option value={item.catName} key={item._id}>{item.catName}</option>
+                                    )
+                                })
+                            }
+                        </select>
+                    </div>
+                    <div className='flex flex-col'>
+                        <label>Upload Image:</label>
+                        <div className='flex gap-1 mt-2'>
+                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-600' ></input>
+                            <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label>Short Intro:</label>
+                <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Event Description:</label>
                 <TextEditor value={editorContent} handleEditorChange={handleEditorChange}/>
             </div>
+            <div className='flex flex-col mb-3'>
+                <label>Zoom Link:</label>
+                <input type='text' name='prodMeetLink' value={data.prodMeetLink} onChange={handleChange} className='py-2  px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+            </div>
             <div className='grid md:grid-cols-2 mb-3 gap-2'> 
-                    <div className='flex flex-col'>
-                        <label>Original Price:</label>
-                        <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Discounted Price:</label>
-                        <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
+                <div className='flex flex-col mb-3'>
+                    <label>Host Name:</label>
+                    <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2  px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                </div>
+                <div className='flex flex-col mb-3'>
+                    <label>Contact:</label>
+                    <input type='text' name='prodCont' value={data.prodCont} onChange={handleChange} className='py-2  px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                </div>
+            </div>
+            <div className='grid md:grid-cols-2 mb-3 gap-2'> 
+                <div className='flex flex-col'>
+                    <label>Original Price:</label>
+                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Discounted Price:</label>
+                    <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                </div>
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-2'> 
                 <div className='flex flex-col'>
@@ -225,25 +310,6 @@ export default function UpdateEvent({params}) {
                 <div className='flex flex-col'>
                     <label>Discount %:</label>
                     <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2  px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                </div>
-            </div>
-            <div className='grid md:grid-cols-2 mb-3 gap-2'> 
-                <div className='flex flex-col'>
-                    <label>Event Category:*</label>
-                    <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-600'>
-                    <option value='' className='text-center'>--- Choose Category ---</option>
-                        {
-                            cat.map((item) => {
-                                return(
-                                    <option value={item.catName} key={item._id}>{item.catName}</option>
-                                )
-                            })
-                        }
-                    </select>
-                </div>
-                <div className='flex flex-col'>
-                    <label>Contact Number:*</label>
-                    <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2  px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
                 </div>
             </div>
             <div className='mb-3'>

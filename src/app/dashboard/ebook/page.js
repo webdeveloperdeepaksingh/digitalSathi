@@ -1,11 +1,10 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
-import { FaCloudUploadAlt } from "react-icons/fa";
+import { BASE_API_URL } from '../../../../utils/constants';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
  
@@ -13,48 +12,20 @@ import React from 'react';
 export default function AddEbook() {
 
     const router = useRouter();
-    const [cat, setCat] = useState([]);
-    const [image, setImage] = useState('');
-    const [imageData, setImageData] = useState(null);  
+    const [cat, setCat] = useState([]);  
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"), usrRole:Cookies.get("loggedInUserRole")}};
     const [errorMessage, setErrorMessage] = useState(''); 
-    const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodType:'ebooks', prodTax:'', prodDisct:'', prodDesc:'', prodPrice:'', prodDisc:'', prodAuth:'', prodCat:'', prodImage:'', userId:''})    
+    const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodType:'', prodTax:'', prodDisct:'', prodDesc:'', prodPrice:'', prodDisc:'', prodAuth:'', prodCat:'', prodImage:'', userId:''})    
 
     useEffect(() =>{
         async function fetchData() {
-          let catdata = await fetch('http://localhost:3000/api/categories');
+          let catdata = await fetch(`${BASE_API_URL}/api/categories`);
           catdata = await catdata.json();
           setCat(catdata);
         }
         fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
       },[]);
-
-    const handleImage = (e) => {
-        setImage(URL.createObjectURL(e.target.files?.[0]));
-        setImageData(e.target.files?.[0])
-        console.log(e.target.files?.[0]);
-      };
-    
-      const handleImageUpload = async (e) =>{
-        e.preventDefault();
-         const formData = new FormData();
-         formData.set('image', imageData);  
-         const date = Date.now();      
-         data.prodImage = `ebkImage_${date}.${imageData.name.split('.').pop()}`;
-         formData.set('fileName', data.prodImage);
-         const response = await fetch('http://localhost:3000/api/imagefiles', {
-            method: 'POST',        
-            body: formData
-        });
-        
-        console.log(response);  
-        toast('Image uploaded successfully!', {
-          hideProgressBar: false,
-          autoClose: 2000,
-          type: 'success'      
-        });
-    }
   
       const handleChange = (e) => {
           const name = e.target.name;
@@ -95,7 +66,7 @@ export default function AddEbook() {
     }
     try
       {
-        const result = await fetch ('http://localhost:3000/api/ebooks', 
+        const result = await fetch (`${BASE_API_URL}/api/ebooks`, 
         {
           method:'POST',
           body:JSON.stringify(
@@ -103,15 +74,14 @@ export default function AddEbook() {
                 prodName:data.prodName,  
                 prodTags:data.prodTags, 
                 prodIntro:data.prodIntro,
-                prodType:data.prodType,
+                prodType:"ebooks",
                 prodTax:data.prodTax,
                 prodDisct:data.prodDisct, 
                 prodDesc:data.prodDesc, 
                 prodPrice:data.prodPrice, 
                 prodDisc:data.prodDisc, 
                 prodAuth:data.prodAuth, 
-                prodCat:data.prodCat, 
-                prodImage:data.prodImage, 
+                prodCat:data.prodCat,  
                 userId: loggedInUser.result._id
             }),
         });
@@ -126,13 +96,12 @@ export default function AddEbook() {
             setErrorMessage(post.message);
             }      
         }else
-        {toast('Ebook added successfully!', {
-
+        {toast('Ebook added successfully!', 
+            {
                 hideProgressBar: false,
-                autoClose: 2000,
+                autoClose: 1000,
                 type: 'success'
-
-                });
+            });
             router.push('/dashboard/ebooklist');
         }
         }catch(error) {
@@ -141,74 +110,59 @@ export default function AddEbook() {
     }
   return (
     <div>
-      <div className='relative flex  bg-gray-100  justify-center  w-full p-6 shadow-lg rounded-lg'>
+      <div className='relative flex  bg-gray-100  justify-center  w-full p-9 shadow-lg rounded-lg'>
         <form className='p-3 w-full'encType="multipart/form-data" onSubmit={handleSubmit}>
-            <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
-                <div>
-                    <div className='relative flex flex-col group bg-white  h-[918px] w-[583px] border border-solid rounded-md'>
-                        <Image  alt='image' src={image} width={583} height={918}></Image>
-                        <p className='absolute text-sm right-2 bottom-2'>Size:[583*918]</p>
-                    </div>
-                </div>
-                <div className='flex flex-col gap-3'> 
-                    <div className='flex flex-col'>
-                        <label>Title:*</label>
-                        <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Tags:</label>
-                        <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='hidden'>
-                        <label>Product Type:</label>
-                        <input type='text' name='prodType' value={data.prodType} onChange={handleChange}  className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Author:</label>
-                        <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Original Price:</label>
-                        <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Discounted Price:</label>
-                        <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Tax Rate:</label>
-                        <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Discount %:</label>
-                        <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Category:*</label>
-                        <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'>
-                            <option value='' className='text-center'>--- Choose Category ---</option>
-                            {
-                                cat.map((item) => {
-                                    return(
-                                        <option value={item.catName} key={item._id}>{item.catName}</option>
-                                    )
-                                })
-                            }
-                        </select>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Short Intro:</label>
-                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='4'></textarea>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Upload Image:</label>
-                        <div className='flex gap-1 mt-2'>
-                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-600' ></input>
-                            <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
-                        </div>
-                    </div>           
-                </div>    
+            <div className='flex flex-col mb-3'>
+                <label>Title:*</label>
+                <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
             </div>
+            <div className='grid md:grid-cols-3 w-full mb-3 gap-1'>
+                <div className='flex flex-col'>
+                    <label>Tags:</label>
+                    <input type='text' name='prodTags' value={data.prodTags} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Category:*</label>
+                    <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'>
+                        <option value='' className='text-center'>--- Choose Category ---</option>
+                        {
+                            cat.map((item) => {
+                                return(
+                                    <option value={item.catName} key={item._id}>{item.catName}</option>
+                                )
+                            })
+                        }
+                    </select>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Author:</label>
+                    <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+            </div>
+            <div className='grid md:grid-cols-2 w-full mb-3 gap-1'>
+                <div className='flex flex-col'>
+                    <label>Original Price:</label>
+                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Discounted Price:</label>
+                    <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+             </div> 
+             <div className='grid md:grid-cols-2 w-full mb-3 gap-1'>        
+                <div className='flex flex-col'>
+                    <label>Tax Rate %:</label>
+                    <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Discount %:</label>
+                    <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div> 
+            </div>   
+            <div className='flex flex-col mb-3'>
+                <label>Short Intro:</label>
+                <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='4'></textarea>
+            </div>     
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Ebook Description:</label>
                 <TextEditor value={data.prodDesc} handleEditorChange={handleEditorChange}  />

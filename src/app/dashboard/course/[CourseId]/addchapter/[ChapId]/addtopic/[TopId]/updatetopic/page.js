@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { toast } from "react-toastify";
 import { useRouter } from 'next/navigation';
+import { BASE_API_URL } from '../../../../../../../../../../utils/constants';
 import React, { useState, useEffect } from 'react';
 
 export default function UpdateTopic({params}) {
@@ -13,7 +14,7 @@ export default function UpdateTopic({params}) {
 
   useEffect(() =>{
     async function fetchTop(){
-      const response = await fetch(`http://localhost:3000/api/courses/${params.CourseId}/chapter/${_id}/topic/${params.TopId}`);
+      const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${_id}/topic/${params.TopId}`);
       const topData = await response.json();
       setData(topData.result);  
     }
@@ -43,27 +44,34 @@ export default function UpdateTopic({params}) {
      formData.set('pdfFile', fileData)
      data.pdfFile =`topPdf_${params.TopId}.${fileData.name.split('.').pop()}`;
      formData.set('fileName', data.pdfFile);
-     const response = await fetch('http://localhost:3000/api/pdffiles', {
+     const response = await fetch(`${BASE_API_URL}/api/pdffiles`, {
         method: 'POST',        
          body: formData
     });
     
     console.log(response);  
-    toast('File uploaded successfully!', {
+    toast('File uploaded successfully!', 
+    {
       hideProgressBar: false,
-      autoClose: 2000,
+      autoClose: 1000,
       type: 'success'      
-      });
+    });
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try
     {        
-    const result = await fetch (`http://localhost:3000/api/courses/${params.CourseId}/chapter/${_id}/topic/${params.TopId}`, 
+    const result = await fetch (`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${_id}/topic/${params.TopId}`, 
     {
-        method:'PUT',
-        body:JSON.stringify({topName:data.topName, videoUrl:data.videoUrl, pdfFile:data.pdfFile, chapId:data.chapId}),
+      method:'PUT',
+      body:JSON.stringify
+      ({
+        topName:data.topName, 
+        videoUrl:data.videoUrl, 
+        pdfFile:data.pdfFile, 
+        chapId:data.chapId
+      }),
     });
 
     const post = await result.json();
@@ -72,11 +80,9 @@ export default function UpdateTopic({params}) {
 
     toast('Topic updated successfully!', 
     {
-
       hideProgressBar: false,
-      autoClose: 2000,
+      autoClose: 1000,
       type: 'success'
-
     });
 
     }catch(error) {
@@ -92,19 +98,19 @@ export default function UpdateTopic({params}) {
                 <form className='flex flex-col' onSubmit={handleSubmit}>
                     <div className='flex flex-col mb-3'>
                         <label className=''>Topic Name:</label>
-                        <input type='text' name='topName' value={data.topName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='topName' value={data.topName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col mb-3'>
                         <label className=''>Video Url:</label>
-                        <input type='text' name='videoUrl' value={data.videoUrl} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
+                        <input type='text' name='videoUrl' value={data.videoUrl} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col mb-3'>
                         <label className=''>Choose file:</label>
-                        <input type='file' name='pdfFile' onChange={handleFileChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-                        <button type='button' onClick={handleFileUpload} className='w-full mt-3 py-2 px-2 rounded-sm bg-amber-600 hover:bg-amber-500 text-white text-md font-bold'>UPLOAD</button>
+                        <input type='file' name='pdfFile' onChange={handleFileChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                        <button type='button' onClick={handleFileUpload} className='w-full mt-3 py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white text-md font-bold'>UPLOAD</button>
                     </div>
                     <div className='flex w-full gap-1'>
-                        <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SAVE</button>
+                        <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
                         <button type='button' className='py-2 px-3 rounded-sm bg-gray-600 hover:bg-gray-500 text-white font-bold'>
                             <Link href={`/dashboard/course/${params.CourseId}/addchapter`}>BACK</Link>
                         </button>

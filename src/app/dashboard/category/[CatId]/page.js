@@ -2,23 +2,41 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from "react-toastify";
 import { useRouter } from 'next/navigation';
+import { BASE_API_URL } from '../../../../../utils/constants';
+import Loading from '../loading';
 
 
 export default function UpdateCategory({params}) {
 
   const router = useRouter();
   const [data, setData] = useState({catName:''})
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   
 
   useEffect(() =>{
     async function fetchData() {
-      let catdata = await fetch(`http://localhost:3000/api/categories/${params.CatId}`);
-      catdata = await catdata.json();
-      setData(catdata.result[0]);
+    try 
+      {
+        const res = await fetch(`${BASE_API_URL}/api/categories/${params.CatId}`);
+        if (!res.ok) {
+          throw new Error('Error fetching category data.');
+        }
+        const catdata = await res.json();
+        setData(catdata.result[0]);
+      } catch (error) {
+        console.error('Error fetching category data: ', error);
+      } finally {
+        setIsLoading(false); 
+      }
     }
     fetchData();
   },[params.CatId]);
+
+  if (isLoading) {
+    return <div><Loading/></div>; 
+  }
+
 
   const handleChange = (e) =>{
     const name = e.target.name;
@@ -47,7 +65,7 @@ export default function UpdateCategory({params}) {
   
     try
     {
-      const result = await fetch (`http://localhost:3000/api/categories/${params.CatId}`, 
+      const result = await fetch (`${BASE_API_URL}/api/categories/${params.CatId}`, 
       {
         method:'PUT',
         body:JSON.stringify({catName: data.catName }),
@@ -65,10 +83,10 @@ export default function UpdateCategory({params}) {
           }      
         }
         else{
-        toast('Category updated successfully!', 
+        toast('Category updated...!', 
           {
             hideProgressBar: false,
-            autoClose: 2000,
+            autoClose: 1000,
             type: 'success'
           });
           router.push('/dashboard/categorylist');
@@ -87,7 +105,7 @@ export default function UpdateCategory({params}) {
                 <input type='text' name='catName' value={data.catName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
             </div>
             <div className='mb-3'>
-                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>UPDATE</button>
+                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPDATE</button>
             </div>
             {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         </form>
