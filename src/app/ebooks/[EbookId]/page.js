@@ -4,18 +4,19 @@ import AddItemToCart from '@/components/AddItemToCart/page';
 import { GrDocumentNotes } from "react-icons/gr";
 import NavBar from '@/components/NavBar/page';
 import Footer from '@/components/Footer/page';
+import { BASE_API_URL } from '../../../../utils/constants';
 
 
 
 async function getEbookById(id){
-    const res = await fetch(`http://localhost:3000/api/ebooks/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
     const ebookById = await res.json();
     return ebookById;
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
   const id = params.EbookId
-  const res = await fetch(`http://localhost:3000/api/ebooks/${id}`);
+  const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
   const meta = await res.json();
   // const previousImages = (await parent).openGraph?.images || []
   return {

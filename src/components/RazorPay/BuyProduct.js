@@ -115,6 +115,7 @@ const BuyProduct = () => {
         });
         const res = await paymentData.json();
         console.log("response verify==", res);
+        
         if (res?.message === "success"){
           dispatch(clearCart()); // remove the cart items from local storage.
           router.push( `/paymentsuccess?paymentid=${response.razorpay_payment_id}` );

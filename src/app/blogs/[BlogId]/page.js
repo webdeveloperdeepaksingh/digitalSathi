@@ -2,16 +2,17 @@ import React from 'react';
 import Image from 'next/image';
 import Footer from '@/components/Footer/page';
 import NavBar from '@/components/NavBar/page';
+import { BASE_API_URL } from '../../../../utils/constants';
 
 async function getBlog(id){
-    const res = await fetch(`http://localhost:3000/api/blogs/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/blogs/${id}`);
     const blogById = await res.json();
     return blogById;
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
   const id = params.BlogId
-  const res = await fetch(`http://localhost:3000/api/blogs/${id}`);
+  const res = await fetch(`${BASE_API_URL}/api/blogs/${id}`);
   const meta = await res.json();
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || []

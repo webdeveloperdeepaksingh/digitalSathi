@@ -3,18 +3,18 @@ import Image from 'next/image';
 import AddItemToCart from '@/components/AddItemToCart/page';
 import Footer from '@/components/Footer/page';
 import NavBar from '@/components/NavBar/page';
-
+import { BASE_API_URL } from '../../../../utils/constants';
 
 
 async function getEventById(id){
-    const res = await fetch(`http://localhost:3000/api/events/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
     const eventById = await res.json();
     return eventById;
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
   const id = params.EventId
-  const res = await fetch(`http://localhost:3000/api/events/${id}`);
+  const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
   const meta = await res.json();
   // optionally access and extend (rather than replace) parent metadata
   const previousImages = (await parent).openGraph?.images || []

@@ -3,19 +3,19 @@ import Image from 'next/image';
 import Footer from '@/components/Footer/page';
 import { PiVideoBold } from "react-icons/pi";
 import NavBar from '@/components/NavBar/page';
+import { BASE_API_URL } from '../../../../utils/constants';
 import AddItemToCart from '@/components/AddItemToCart/page';
-import BuyItem from '@/components/BuyItem/page';
-import CustomerDetails from '@/components/CustomerDetails/page';
+
  
 async function getCourseById(id){
-    const res = await fetch(`http://localhost:3000/api/courses/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
     const courseById = await res.json();
     return courseById;
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
   const id = params.CourseId
-  const res = await fetch(`http://localhost:3000/api/courses/${id}`);
+  const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
   const meta = await res.json();
   // optionally access and extend (rather than replace) parent metadata
   // const previousImages = (await parent).openGraph?.images || []
