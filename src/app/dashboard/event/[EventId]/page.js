@@ -26,12 +26,17 @@ export default function UpdateEvent({params}) {
     const [data, setData] = useState({prodName:'', prodTags:'', prodMeetLink:'', prodAuth:'', prodCont:'', prodTax:'', prodDisct:'',  prodIntro:'', prodDesc:'', prodCat:'', prodPrice:'', prodDisc:'',  prodTime:'', prodDate:'', prodImage:'' })    
     
     useEffect(() =>{
-      async function fetchCat() {
+    async function fetchCat() {
+    try 
+    {
         let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=${loggedInUser.result._id}`);
         catdata = await catdata.json();
-        setCat(catdata);
-      }
-      fetchCat();
+        setCat(catdata);        
+    } catch (error) {
+        console.error("Error fetching cat data: ", error);
+    }
+    }
+    fetchCat();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 

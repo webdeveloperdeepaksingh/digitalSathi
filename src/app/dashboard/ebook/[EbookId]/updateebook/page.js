@@ -23,14 +23,19 @@ export default function UpdateEbook({params}) {
     const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'',  prodTax:'', prodDisct:'', prodDesc:'', prodPrice:'', prodDisc:'', prodAuth:'', prodCat:'', prodImage:''})    
 
     useEffect(() =>{
-        async function fetchData() {
-          let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=`+ loggedInUser.result._id);
-          catdata = await catdata.json();
-          setCat(catdata);
-        }
-        fetchData();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[]);
+    async function fetchData() {
+    try 
+    {
+        let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=${loggedInUser.result._id}`);
+        catdata = await catdata.json();
+        setCat(catdata);
+    } catch (error) {
+        console.error("Error fetching category data: ",  error);
+    }
+    }
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[]);
     
     useEffect(() =>{
     async function fetchData() {

@@ -24,9 +24,14 @@ export default function UpdateCourse({params}) {
 
     useEffect(() =>{
       async function fetchData() {
-      let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=`+ loggedInUser.result._id);
-      catdata = await catdata.json();
-      setCat(catdata);
+      try 
+        {
+            let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=`+ loggedInUser.result._id);
+            catdata = await catdata.json();
+            setCat(catdata);
+        } catch (error) {
+            console.error("Error fetching category data: ", error);
+        }
     }
       fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps

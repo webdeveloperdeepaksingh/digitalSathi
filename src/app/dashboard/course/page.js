@@ -19,15 +19,17 @@ export default function AddCourse() {
 
     useEffect(() =>{
       async function fetchData() {
-        let catdata = await fetch(`${BASE_API_URL}/api/categories`);
-        catdata = await catdata.json();
-        setCat(catdata);
+        try {
+            let catdata = await fetch(`${BASE_API_URL}/api/categories`);
+            catdata = await catdata.json();
+            setCat(catdata);
+        } catch (error) {
+            console.error("Error fetching category data: ", error);
+        }
       }
       fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
-
-    
 
     const handleChange = (e) => {
         const name = e.target.name;

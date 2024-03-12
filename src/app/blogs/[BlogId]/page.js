@@ -5,9 +5,14 @@ import NavBar from '@/components/NavBar/page';
 import { BASE_API_URL } from '../../../../utils/constants';
 
 async function getBlog(id){
+try 
+  {
     const res = await fetch(`${BASE_API_URL}/api/blogs/${id}`);
     const blogById = await res.json();
     return blogById;
+  } catch (error) {
+    console.error("Error fetching blgData: ", error);
+  } 
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {

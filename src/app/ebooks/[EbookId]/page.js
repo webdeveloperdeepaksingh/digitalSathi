@@ -6,26 +6,34 @@ import NavBar from '@/components/NavBar/page';
 import Footer from '@/components/Footer/page';
 import { BASE_API_URL } from '../../../../utils/constants';
 
-
-
 async function getEbookById(id){
+try 
+  {
     const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
     const ebookById = await res.json();
     return ebookById;
+  } catch (error) {
+    console.error("Error fetching ebook data: ", error);
+  }   
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
   const id = params.EbookId
-  const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
-  const meta = await res.json();
+  try 
+  {
+    const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
+    const meta = await res.json();
   // const previousImages = (await parent).openGraph?.images || []
-  return {
+    return {
     title: meta.result.prodName,
     description: meta.result.prodIntro,
     keywords: [meta.result.prodTags],
     // openGraph: {
     //   images: [`/${meta.result.prodImage}`, ...previousImages],
     // },
+  }
+  } catch (error) {
+    console.error("Error fetching ebookData: ", error);
   }
 }
 

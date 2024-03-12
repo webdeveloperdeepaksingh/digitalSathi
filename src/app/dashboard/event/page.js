@@ -18,12 +18,17 @@ export default function AddEvent() {
     const [data, setData] = useState({prodName:'', prodTags:'', prodMeetLink:'', prodType:'', prodIntro:'', prodDesc:'', prodTax:'', prodDisct:'', prodCat:'', prodPrice:'', prodDisc:'',  prodTime:'', prodDate:'', prodAuth:'',prodCont:'', })    
     
     useEffect(() =>{
-      async function fetchData() {
+    async function fetchData() {
+    try 
+    {
         let catdata = await fetch(`${BASE_API_URL}/api/categories`);
         catdata = await catdata.json();
         setCat(catdata);
-      }
-      fetchData();
+    } catch (error) {
+        console.error("Error fetchind cat data: ", error);
+    }
+    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
     },[]);
 

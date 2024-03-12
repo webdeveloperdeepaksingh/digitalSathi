@@ -7,24 +7,34 @@ import { BASE_API_URL } from '../../../../utils/constants';
 
 
 async function getEventById(id){
+try 
+  {
     const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
     const eventById = await res.json();
     return eventById;
+  } catch (error) {
+    console.error("Error fetching eventData: ", error);
+  }  
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  const id = params.EventId
-  const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
-  const meta = await res.json();
-  // optionally access and extend (rather than replace) parent metadata
-  const previousImages = (await parent).openGraph?.images || []
-  return {
-    title: meta.result.prodName,
-    description: meta.result.prodIntro,
-    keywords: [meta.result.prodTags],
-    openGraph: {
+try 
+  {
+    const id = params.EventId
+    const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
+    const meta = await res.json();
+    // optionally access and extend (rather than replace) parent metadata
+    const previousImages = (await parent).openGraph?.images || []
+    return {
+      title: meta.result.prodName,
+      description: meta.result.prodIntro,
+      keywords: [meta.result.prodTags],
+      openGraph: {
       images: [`/${meta.result.prodImage}`, ...previousImages],
     },
+  }
+  } catch (error) {
+    console.error("Error fetching eventData: ", error);
   }
 }
 

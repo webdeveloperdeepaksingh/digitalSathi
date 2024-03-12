@@ -16,9 +16,14 @@ export default function OnlineBlogs() {
 
   useEffect(()=>{
     async function fetchCatList(){
-      const res = await fetch(`${BASE_API_URL}/api/categories`);
-      const catList = await res.json();
-      setCatList(catList)
+    try 
+      {
+        const res = await fetch(`${BASE_API_URL}/api/categories`);
+        const catList = await res.json();
+        setCatList(catList)
+      } catch (error) {
+        console.error("Error fetching category data. :", error);
+      }
     }
     fetchCatList();
   },[])
