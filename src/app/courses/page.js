@@ -1,7 +1,6 @@
 'use client'
 import Footer from '@/components/Footer/page';
 import { BASE_API_URL } from '../../../utils/constants';
-import NavBar from '@/components/NavBar/page';
 import InnerBanner from '../../../public/images/inrbnr.jpg';
 import Link from 'next/link';
 import Image from 'next/image';

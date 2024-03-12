@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import Image from 'next/image';
 import React from 'react';
 import { BASE_API_URL } from "../../../../utils/constants";
 import TextEditor from '@/components/TinyMce/Editor';

@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react'
 import { BASE_API_URL } from '../../../../../../../utils/constants';
 import Loading from '../../../loading';
+
+
 export default function ReadChapter({params}) {
 
   const [isLoading, setIsLoading] = useState(true);

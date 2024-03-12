@@ -1,18 +1,15 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { BASE_API_URL } from '../../../../utils/constants';
 import { useRef } from 'react';
-import Image from 'next/image';
 import React from 'react';
 import Cookies from 'js-cookie';
 
 export default function AddBlog() {
 
-    const inputRef = useRef();
     const router = useRouter();
     const [cat, setCat] = useState([]);  
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"), usrRole:Cookies.get("loggedInUserRole")}};    
