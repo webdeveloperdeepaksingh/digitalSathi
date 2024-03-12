@@ -7,28 +7,28 @@ import Link from 'next/link';
 export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
-    const _id = "65c8e1dad3c601a36e0dd62f"
-    const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
-    const meta = await res.json();
-    // const previousImages = (await parent).openGraph?.images || []
-    return {
-      title: meta.result.brandTitle,
-      description: meta.result.brandIntro,
-      keywords: [meta.result.brandTags],
-      icons: {
-        icon: `/images/${meta.result.brandIcon}`, // Path to your favicon.ico
-      }    
-      // openGraph: {
-      //   images: [`/${meta.result.prodImage}`, ...previousImages], //helps sharing of webpages on social media.
-      // },
-    }
+      const _id = "65c8e1dad3c601a36e0dd62f";
+      const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
+      const meta = await res.json();
+      // const previousImages = (await parent).openGraph?.images || [];
+      return {
+          title: meta.result.brandTitle,
+          description: meta.result.brandIntro,
+          keywords: [meta.result.brandTags],
+          icons: {
+              icon: `/images/${meta.result.brandIcon}`, // Path to your favicon.ico
+          },
+          // openGraph: {
+          //     images: [`/${meta.result.prodImage}`, ...previousImages], // Helps sharing of webpages on social media.
+          // },
+      };
   } catch (error) {
-    console.error("Error fetching settData: ", error);
+      console.error("Error fetching settData: ", error);
   }
-  
 }
 
 export default function HomePage() {
+
   if(!BASE_API_URL){
     return null; //must be written to deploy successfully.
   }

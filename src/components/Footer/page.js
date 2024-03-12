@@ -2,6 +2,8 @@
 import React from 'react';
  
 export default function Footer() {
+
+  
   return (
     <div>
        <div className='grid md:grid-cols-4 w-full bg-amber-500 p-5 mt-16'>

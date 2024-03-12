@@ -12,6 +12,7 @@ function BuyProduct () {
 
   const router = useRouter();
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState(''); 
   const cartItems = useSelector((store) => store.cart);
   const [data, setData] = useState({custName:'', custEmail:'', custPhone:'', amtToPay:''})
@@ -27,6 +28,8 @@ function BuyProduct () {
         setTax(settingData.result);
       } catch (error) {
         console.error("Error fetching settData: ", error);
+      }finally{
+        setIsLoading(false);
       }
     }
     fetchSett();
@@ -138,6 +141,12 @@ function BuyProduct () {
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
   };
+}
+
+if(isLoading){
+  return <div>
+    <Loading/>
+  </div>
 }
 
   return (

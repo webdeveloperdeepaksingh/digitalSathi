@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import Razorpay from "razorpay";
-import shortid from "shortid";
 import crypto from "crypto";
 import Payments from "../../../../models/Payments";
 import connect from "../../../../server";
