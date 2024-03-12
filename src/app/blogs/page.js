@@ -1,7 +1,7 @@
 'use client';
 import Footer from '@/components/Footer/page';
-import NavBar from '@/components/NavBar/page';
 import InnerBanner from '../../../public/images/inrbnr.jpg';
+import { BASE_API_URL } from '../../../utils/constants';
 import Link from 'next/link';
 import Image from 'next/image';
 import Loading from './loading';
@@ -16,7 +16,7 @@ export default function OnlineBlogs() {
 
   useEffect(()=>{
     async function fetchCatList(){
-      const res = await fetch('http://localhost:3000/api/categories');
+      const res = await fetch(`${BASE_API_URL}/api/categories`);
       const catList = await res.json();
       setCatList(catList)
     }
@@ -27,9 +27,9 @@ export default function OnlineBlogs() {
     async function fetchBlogList(){
       let api = '';
       if(query != ''){
-        api = `http://localhost:3000/api/onlineblogs?query=${query}`
+        api = `${BASE_API_URL}/api/onlineblogs?query=${query}`
       }else{
-        api = 'http://localhost:3000/api/onlineblogs'
+        api = `${BASE_API_URL}/api/onlineblogs`
       }
       try 
       {

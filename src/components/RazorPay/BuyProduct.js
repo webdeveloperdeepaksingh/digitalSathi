@@ -8,7 +8,7 @@ import Loading from "./loading";
 import { clearCart } from "../../../redux/slices/cartSlice";
 
 
-const BuyProduct = () => {
+function BuyProduct () {
 
   const router = useRouter();
   const dispatch = useDispatch();

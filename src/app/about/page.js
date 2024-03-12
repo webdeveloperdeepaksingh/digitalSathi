@@ -1,6 +1,5 @@
 "use client";
 import Footer from '@/components/Footer/page';
-import NavBar from '@/components/NavBar/page';
 import Image from 'next/image';
 import InnerBanner from '../../../public/images/inrbnr.jpg';
 import React from 'react';

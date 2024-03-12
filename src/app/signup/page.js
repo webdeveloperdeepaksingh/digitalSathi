@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import {toast} from 'react-toastify';
-import NavBar from '@/components/NavBar/page';
 import Footer from '@/components/Footer/page';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -93,8 +92,7 @@ export default function SignUp() {
 
   return (
     <div>
-    {/* <NavBar/> */}
-    <title>DigitalSathi | Sign Up </title>
+     <title>DigitalSathi | Sign Up </title>
       <div className="relative flex min-h-screen text-gray-800 antialiased items-center justify-center overflow-hidden">
         <div className="absolute top-28 py-3 w-[80%] lg:w-[40%] mx-auto text-center">
           <div className="mt-4 bg-white  rounded-lg text-left">

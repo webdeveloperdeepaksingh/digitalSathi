@@ -1,7 +1,6 @@
 'use client';
 import { toast } from 'react-toastify';
 import React, { useState } from 'react';
-import NavBar from '@/components/NavBar/page';
 import { BASE_API_URL } from '../../../utils/constants';
 
 export default function ForgotPassword() {

@@ -1,5 +1,5 @@
 'use client';
-import NavBar from '@/components/NavBar/page'
+import { BASE_API_URL } from '../../../utils/constants';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import InnerBanner from '../../../public/images/inrbnr.jpg';
@@ -49,7 +49,7 @@ setErrorMessage(''); //Clear the previous error
     }
 try
 {
-  const result = await fetch ('http://localhost:3000/api/enquiries', 
+  const result = await fetch (`${BASE_API_URL}/api/enquiries`, 
   {
     method:'POST',
     body:JSON.stringify({eqrPerson:data.eqrPerson, eqrPhone:data.eqrPhone, eqrEmail:data.eqrEmail, eqrSub:data.eqrSub, eqrMsg:data.eqrMsg})

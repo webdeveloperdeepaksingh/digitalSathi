@@ -1,9 +1,6 @@
 'use client';
 import Footer from '@/components/Footer/page';
-import NavBar from '@/components/NavBar/page';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setIsLoggedIn } from '../../../redux/slices/userSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
@@ -15,7 +12,6 @@ export default function LoginPage() {
 
   const [data, setData] = useState({usrName:'', usrPass:'', usrEmail:''});
   const [errorMessage, setErrorMessage] = useState('');
-  const dispatch = useDispatch();
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -76,7 +72,6 @@ export default function LoginPage() {
         });
         Cookies.set("loggedInUserId", post.result.id);         
         Cookies.set("loggedInUserRole", post.result.role); 
-        dispatch(setIsLoggedIn({ isLoggedIn: true, user: post.result }));
         router.push('/dashboard/home');
       }
   }catch(error){

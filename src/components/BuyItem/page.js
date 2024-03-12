@@ -1,7 +1,5 @@
 "use client";
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../../redux/slices/cartSlice';
 import CustomerDetails from '../CustomerDetails/page';
 
 

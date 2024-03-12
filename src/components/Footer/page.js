@@ -1,6 +1,6 @@
+"use client";
 import React from 'react';
-import Link from 'next/link';
-
+ 
 export default function Footer() {
   return (
     <div>
@@ -11,15 +11,15 @@ export default function Footer() {
             </div>
             <div className='flex flex-col p-5 rounded-lg'>
                 <p className='font-bold text-white text-xl'>TERMS OF USE</p>
-                <Link href='/#' className='mt-2 mx-2 text-sm'>Privacy Policy</Link>
-                <Link href='/#' className=' mx-2 text-sm '>Refund Policy</Link>
-                <Link href='/#' className='mx-2 text-sm '>Donate Us</Link>
+                <a href='/#' className='mt-2 mx-2 text-sm'>Privacy Policy</a>
+                <a href='/#' className=' mx-2 text-sm '>Refund Policy</a>
+                <a href='/#' className='mx-2 text-sm '>Donate Us</a>
             </div>
             <div className='flex flex-col p-5 rounded-lg'>
                 <p className='font-bold text-white text-xl'>SOCIAL MEDIA</p>
-                <Link href='https://www.facebook.com' className='mt-2 mx-2 text-sm'>Facebook</Link>
-                <Link href='https://www.youtube.com' className=' mx-2 text-sm'>Youtube</Link>
-                <Link href='https://www.instagram.com' className=' mx-2 text-sm '>Instaram</Link>
+                <a href='https://www.facebook.com' className='mt-2 mx-2 text-sm'>Facebook</a>
+                <a href='https://www.youtube.com' className=' mx-2 text-sm'>Youtube</a>
+                <a href='https://www.instagram.com' className=' mx-2 text-sm '>Instaram</a>
             </div>
             <div className='flex flex-col p-5 rounded-lg'>
                 <p className='font-bold text-white text-xl'>CONTACT US</p>

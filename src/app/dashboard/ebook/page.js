@@ -5,10 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import Image from 'next/image';
 import React from 'react';
  
-
 export default function AddEbook() {
 
     const router = useRouter();

@@ -1,20 +1,17 @@
 'use client';
 import TextEditor from '@/components/TinyMce/Editor';
 import Loading from '../loading';
-import { FaCloudUploadAlt } from 'react-icons/fa';
 import { BASE_API_URL } from '../../../../../utils/constants';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
 
 
 export default function UpdateBlog({params}) {
 
-    const inputRef = useRef();
     const router = useRouter();
     const [cat, setCat] = useState([]);     
     const [image, setImage] = useState(''); 
@@ -65,10 +62,6 @@ export default function UpdateBlog({params}) {
     if (isLoading) {
         return <div><Loading/></div>; // Show loading state
       }    
-
-    const showChooseFileBox = () =>{
-        inputRef.current.click();
-    };
 
     const handleImage = (e) => {
         setImage(URL.createObjectURL(e.target.files?.[0]));        
@@ -218,6 +211,7 @@ export default function UpdateBlog({params}) {
         console.log(error);
       }
   }
+  
   return (
     <div>
       <div className='relative flex  bg-gray-100 justify-center w-full p-6 shadow-lg rounded-lg'>
