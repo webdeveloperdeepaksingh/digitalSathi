@@ -17,9 +17,9 @@ export default function Footer() {
             </div>
             <div className='flex flex-col p-5 rounded-lg'>
                 <p className='font-bold text-white text-xl'>SOCIAL MEDIA</p>
-                <a href='https://www.facebook.com' className='mt-2 mx-2 text-sm'>Facebook</a>
-                <a href='https://www.youtube.com' className=' mx-2 text-sm'>Youtube</a>
-                <a href='https://www.instagram.com' className=' mx-2 text-sm '>Instaram</a>
+                <a href='/#' className='mt-2 mx-2 text-sm'>Facebook</a>
+                <a href='/#' className=' mx-2 text-sm'>Youtube</a>
+                <a href='/#' className=' mx-2 text-sm '>Instaram</a>
             </div>
             <div className='flex flex-col p-5 rounded-lg'>
                 <p className='font-bold text-white text-xl'>CONTACT US</p>

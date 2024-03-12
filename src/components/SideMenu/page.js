@@ -23,12 +23,17 @@ export default function SideMenu({isShown}) {
 
    const router = useRouter();
    useEffect(()=>{
-        async function fetchProfile(){
+    async function fetchProfile(){
+    try 
+        {
             const res = await fetch(`${BASE_API_URL}/api/profile`);
             const profiles = await res.json();
             const profileById = profiles.filter(profile => profile.userId === loggedInUser.result?._id);
             setProfile(profileById[0]);
+        } catch (error) {
+            console.error("Error fetching profileData: ", error);
         }
+    }
         fetchProfile();
    // eslint-disable-next-line react-hooks/exhaustive-deps
    },[]) 

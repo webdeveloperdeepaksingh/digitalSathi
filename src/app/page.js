@@ -5,7 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  
+try 
+  {
     const _id = "65c8e1dad3c601a36e0dd62f"
     const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
     const meta = await res.json();
@@ -21,9 +22,13 @@ export async function generateMetadata({ params, searchParams }, parent) {
       //   images: [`/${meta.result.prodImage}`, ...previousImages], //helps sharing of webpages on social media.
       // },
     }
+  } catch (error) {
+    console.error("Error fetching settData: ", error);
   }
+  
+}
 
-export default function Home() {
+export default function HomePage() {
   if(!BASE_API_URL){
     return null; //must be written to deploy successfully.
   }

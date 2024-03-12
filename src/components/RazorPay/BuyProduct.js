@@ -20,9 +20,14 @@ function BuyProduct () {
 
   useEffect(() =>{
     async function fetchSett() {
-      const setting = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
-      const settingData = await setting.json();
-      setTax(settingData.result);
+    try 
+      {
+        const setting = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
+        const settingData = await setting.json();
+        setTax(settingData.result);
+      } catch (error) {
+        console.error("Error fetching settData: ", error);
+      }
     }
     fetchSett();
   },[settId])
