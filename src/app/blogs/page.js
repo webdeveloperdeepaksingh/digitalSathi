@@ -71,7 +71,7 @@ export default function OnlineBlogs() {
     <h1 className='text-center font-bold my-6 text-3xl '>ONLINE BLOGS</h1>
     <div className='flex flex-col gap-6'>
     <div className='flex flex-col px-12 max-w-[430px]'>
-        <select type='select' name='coCat'  onChange={handleChange} className='p-3 border-2 border-amber-600 font-bold focus:outline-amber-600 text-xl text-center rounded-md'>
+        <select type='select' name='coCat'  onChange={handleChange} className='p-3 border-2 border-amber-600 font-bold focus:outline-amber-500 text-xl text-center rounded-md'>
           <option value=''> --- Choose Category --- </option>
           {
             catList.map((cat) => {
