@@ -210,8 +210,11 @@ export default function UpdateCourse({params}) {
 
   return (
     <div>
-      <div className='relative flex  justify-center  bg-gray-100  w-full p-6 shadow-lg rounded-lg'>
-        <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
+      <div className='flex flex-col justify-center  bg-gray-100  w-full p-9 shadow-lg rounded-lg'>
+        <div className='px-3 py-3 text-center bg-white text-2xl font-bold rounded mb-3'>
+            <h1 className='uppercase'>Update Course</h1>
+        </div>
+        <form className='w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div className='relative flex flex-col group bg-white  h-auto w-full border border-solid rounded-md'>
                     <Image alt={data.prodName} src={image} width={580} height={332} ></Image>

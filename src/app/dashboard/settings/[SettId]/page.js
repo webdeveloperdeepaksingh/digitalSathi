@@ -200,9 +200,9 @@ export default function SettingsPage({params}) {
                 <input type='file' className='cursor-pointer w-full py-1 bg-white px-1 rounded-md border' onChange={(e)=>handleImage("fvIcon", e)}></input>
                 <button type='button' onClick={()=>handleImageUpload("fvIcon")} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
               </div>
-              <div className='relative flex flex-col border-2 w-[50px] h-[50px] p-2 bg-white rounded-md'>
+              <div className='relative flex flex-col border-2 w-[40px] h-auto p-2 mb-2 bg-white rounded-md'>
                 <Image alt="yes" src={imageFevIcon} className='rounded-sm'  width={20} height={20}/>
-                <span className='absolute text-xs opacity-50 right-1 top-12'>[20*20]</span>
+                <span className='absolute text-xs opacity-50 left-0 top-9'>[20*20]</span>
               </div>
             </div>
             <div className='flex flex-col'>
@@ -211,9 +211,9 @@ export default function SettingsPage({params}) {
                 <input type='file' className='cursor-pointer py-1 bg-white w-full px-1 rounded-md border' onChange={(e)=>handleImage("brdLogo", e)}></input>
                 <button type='button' onClick={()=>handleImageUpload("brdLogo")} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
               </div>
-              <div className='relative flex flex-col border-2 w-[255px] h-[105px] p-2 bg-white rounded-md'>
-                <Image alt="yes" src={imageBrandLogo} className='rounded-sm'  width={250} height={100}/>
-                <span className='text-xs opacity-50 p-1'>[Size: 250*100]</span>
+              <div className='relative flex flex-col border-2 w-[255px] h-[105px] mb-2 bg-white rounded-md'>
+                <Image alt="yes" src={imageBrandLogo} className='rounded-sm mb-1'  width={250} height={100}/>
+                <span className='text-xs opacity-50'>[Size: 250*100]</span>
               </div>
             </div>
           </div>

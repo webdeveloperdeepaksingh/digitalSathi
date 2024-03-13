@@ -214,8 +214,11 @@ export default function UpdateBlog({params}) {
   
   return (
     <div>
-      <div className='relative flex  bg-gray-100 justify-center w-full p-6 shadow-lg rounded-lg'>
-        <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
+      <div className='flex flex-col  bg-gray-100 justify-center w-full p-9 shadow-lg rounded-lg'>
+        <div className='px-3 py-3 text-center bg-white text-2xl font-bold rounded mb-3'>
+            <h1 className='uppercase'>Update Blog</h1>
+        </div>
+        <form className=' w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-1 w-full mb-3 gap-6'>
                 <div>
                     <div className='relative flex flex-col group bg-white  h-auto w-full border border-solid rounded-md mb-3'>

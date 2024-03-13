@@ -3,6 +3,10 @@ import { BsCashCoin } from "react-icons/bs";
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import SalesChart from "@/components/SalesChart/page";
+import RevenueCurrentMonth from "@/components/Revenue/page";
+import EventRegisteredCurrentMonth from "@/components/EventRegistered/page";
+import EnquiryCurrentMonth from "@/components/EnquiryMade/page";
+import SignupsCurrentMonth from "@/components/SignUps/page";
 
 export default function Home () {   
   
@@ -29,8 +33,8 @@ export default function Home () {
       (
         <div className='relative bg-gray-100 grid grid-cols-1 w-full text-center uppercase font-bold shadow-lg rounded-lg p-9'>
           <div className="bg-white p-9">
-            <h1 className='text-6xl text-amber-600'>Welcome</h1>
-            <h1 className='text-6xl text-amber-600'>to DigitalSathi</h1>
+            <h1 className='text-6xl text-amber-500'>Welcome</h1>
+            <h1 className='text-6xl text-amber-500'>to DigitalSathi</h1>
             <h1 className='text-6xl'>Online Learning Portal</h1>
           </div>
         </div>
@@ -43,7 +47,7 @@ export default function Home () {
                 <p className="font-bold text-xl text-black">Revenue:</p>
                 <div className="p-3 flex items-center justify-between divide-x gap-3">
                     <span className="text-4xl  text-black"><BsCashCoin/></span>
-                    <p className="text-amber-600 px-3">INR: </p>
+                    <p className="text-amber-500 px-3">INR: </p>
                 </div>
             </div>
             <div className='h-[200px] bg-white shadow-lg rounded-sm p-3'>
@@ -59,42 +63,26 @@ export default function Home () {
         loggedInUser.result?.usrRole === "ADMIN" ?
       (
         <div className='flex flex-col w-full h-auto p-9 bg-gray-100 border border-solid shadow-lg rounded-lg'>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 w-auto gap-9">
-              <div className=" bg-white rounded-lg shadow-lg">
-                <iframe  
-                  height={200}
-                  style={{position: 'relative',  width: '100%'}}
-                  src="https://charts.mongodb.com/charts-digitalsathi-kparf/embed/charts?id=65ddb677-396a-4b95-8b07-3c3011a35b19&maxDataAge=3600&theme=light&autoRefresh=true">
-                </iframe> 
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 w-full">
+              <div className="w-auto">
+                <RevenueCurrentMonth/> 
               </div>
-              <div className="bg-white rounded-lg shadow-lg">
-                <iframe 
-                  height={200}
-                  style={{position: 'relative',  width: '100%'}}
-                  src="https://charts.mongodb.com/charts-digitalsathi-kparf/embed/charts?id=65ddb46f-432f-405e-8aff-0d9cf07f31cc&maxDataAge=3600&theme=light&autoRefresh=true">
-                </iframe>
+              <div className="w-auto">
+                <EventRegisteredCurrentMonth/> 
               </div>
-              <div className="bg-white rounded-lg shadow-lg">
-                <iframe 
-                  height={200}
-                  style={{position: 'relative',  width: '100%'}}
-                  src="https://charts.mongodb.com/charts-digitalsathi-kparf/embed/charts?id=65ddb50f-432f-4390-8885-0d9cf081468f&maxDataAge=3600&theme=light&autoRefresh=true">
-                </iframe> 
+              <div className="w-auto">
+                <EnquiryCurrentMonth/>
               </div>
-              <div className="bg-white rounded-lg shadow-lg">
-                <iframe 
-                  height={200}
-                  style={{position: 'relative',  width: '100%'}}
-                  src="https://charts.mongodb.com/charts-digitalsathi-kparf/embed/charts?id=65ddb38a-4859-4b29-8c2c-8e9bcc4efde4&maxDataAge=3600&theme=light&autoRefresh=true">
-                </iframe>
+              <div className="w-auto">
+                <SignupsCurrentMonth/> 
               </div>
             </div>
             <div className="flex flex-col">
-              <div className="flex w-full  bg-white rounded-lg shadow-lg my-9">
+              <div className="flex w-auto  bg-white rounded-lg shadow-lg my-9">
                  <SalesChart/>
               </div>
               <form className="flex bg-white shadow-lg rounded-lg flex-col p-9">
-                <p className="text-lg text-amber-600 font-bold uppercase">Filter sales for a specific date range:</p>
+                <p className="text-lg text-amber-500 font-bold uppercase">Filter sales for a specific date range:</p>
                 <div className="grid md:grid-cols-2 gap-1 w-full my-3">
                   <div className="flex flex-col">
                     <label htmlFor="startDate">START DATE:</label>
@@ -107,7 +95,7 @@ export default function Home () {
                 </div>
                 {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
                 <div className="mt-3">
-                  <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>FILTER</button>
+                  <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>FILTER</button>
                 </div>
               </form>
           </div> 

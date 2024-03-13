@@ -79,10 +79,10 @@ export default function SalesList() {
       <div className="relative flex flex-col w-full ">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' onKeyUp={(e) => handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-500' placeholder='Search email id here...'></input>
+          <input type='search' onKeyUp={(e) => handleSearch(e.target.value)} className='py-2 px-3 max-w-[400px] focus:outline-amber-500' placeholder='Search email id...'></input>
         </div>
         <div>
-          <button className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</button>
+          <button className='py-3 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</button>
         </div>
       </div>
       <table className="table-auto w-full text-left shadow-lg rounded-lg">

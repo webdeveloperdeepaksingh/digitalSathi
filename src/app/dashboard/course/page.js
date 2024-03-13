@@ -116,8 +116,11 @@ export default function AddCourse() {
   }
   return (
     <div>
-      <div className='relative flex  justify-center  bg-gray-100  w-full p-9 shadow-lg rounded-lg'>
-        <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
+      <div className='flex flex-col  justify-center  bg-gray-100  w-full p-9 shadow-lg rounded-lg'>
+        <div className='px-3 py-3 text-center bg-white text-2xl font-bold rounded mb-3'>
+            <h1 className='uppercase'>Create Course</h1>
+        </div>
+        <form className='w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='flex flex-col mb-3'>
                 <label>Course Title:</label>
                 <input type='text' name='prodName' value={data.prodName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>

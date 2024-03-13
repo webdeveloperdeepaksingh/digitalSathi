@@ -110,8 +110,11 @@ export default function AddBlog() {
   
   return (
     <div>
-      <div className='relative flex  bg-gray-100 justify-center w-full p-9 shadow-lg rounded-lg'>
-        <form className='p-3 w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
+      <div className='flex flex-col  bg-gray-100 justify-center w-full p-9 shadow-lg rounded-lg'>
+        <div className='px-3 py-3 text-center bg-white text-2xl font-bold rounded mb-3'>
+            <h1 className='uppercase'>Create Blog</h1>
+        </div>
+        <form className='w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='flex flex-col mb-3'>
                 <label>Blog Title:</label>
                 <input type='text' name='blgName' value={data.blgName} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>

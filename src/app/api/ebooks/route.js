@@ -9,7 +9,7 @@ export const GET = async (request) => {
   try{
 
       const url = new URL(request.url);
-      const userId=url.searchParams.get('userId');
+      const userId = url.searchParams.get('userId');
       const query = url.searchParams.get('query');
       const page = url.searchParams.get('pageNbr');
       const pageSize = 20;

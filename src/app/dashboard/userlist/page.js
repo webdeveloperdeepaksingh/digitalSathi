@@ -70,10 +70,10 @@ export default function UserList() {
     <div className="relative flex flex-col w-full ">
       <div className='flex items-center justify-between mb-2'>
         <div className='border border-solid rounded-sm shadow-md'>
-          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='p-2 w-[350px] focus:outline-amber-500' placeholder='Search user name here...'></input>
+          <input type='search' onKeyUp={(e)=> handleSearch(e.target.value)} className='py-2 px-3 max-w-[400px] focus:outline-amber-500' placeholder='Search user name...'></input>
         </div>
         <div>
-          <Link href='/dashboard/user' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</Link>
+          <Link href='/dashboard/user' className='py-3 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>ADD</Link>
         </div>
       </div>
       <table className="table-auto w-full text-left shadow-lg rounded-lg">
@@ -97,7 +97,7 @@ export default function UserList() {
               <td className='py-2 px-4'>{item.usrEmail}</td>
               <td className='py-2 px-4'>{item.usrPhone}</td>
               <td className='py-2 px-4'>{item.usrRole}</td>
-              <td className='md:flex py-2 px-4 text-lg gap-3'>
+              <td className='flex py-2 px-4 text-lg gap-3'>
                 <Link href={`/dashboard/user/${item._id}`}><FaEdit /></Link>
                 <Link href={`/dashboard/userlist/${item._id}`}><RiDeleteBin5Fill /></Link>
               </td>
