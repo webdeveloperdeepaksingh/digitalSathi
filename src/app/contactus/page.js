@@ -70,46 +70,47 @@ try
       <div className='h-[88px]'></div>
       <title>DigitalSathi | Contact Us </title>
       <div className='w-full h-auto'>
-        <Image alt='innerBanner' src={InnerBanner} width={1540} height={400}></Image>
+        <Image alt='innerBanner' src={InnerBanner} width={1560} height={400}></Image>
       </div>
-      <div className='flex flex-col w-full p-9'>   
-        <div className='grid md:grid-cols-2 gap-3 w-full border border-solid rounded-md p-9'>
-          <div>
-            <form className='bg-gray-200 p-9' onSubmit={handleSubmit}>
-              <div className='flex flex-col mb-3'>
-                  <label className='font-bold'>Full Name:*</label>
-                  <input type='text' name='eqrPerson' value={data.eqrPerson} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-              </div>
-              <div className='flex flex-col mb-3'>
-                  <label className='font-bold'>Phone:*</label>
-                  <input type='text' name='eqrPhone' value={data.eqrPhone} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-              </div>
-              <div className='flex flex-col mb-3'>
-                  <label className='font-bold'>Email:*</label>
-                  <input type='text' name='eqrEmail' value={data.eqrEmail} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-              </div>
-              <div className='flex flex-col mb-3'>
-                  <label className='font-bold'>Subject:</label>
-                  <input type='text' name='eqrSub' value={data.eqrSub} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600'></input>
-              </div>
-              <div className='flex flex-col mb-3'>
-                  <label className='font-bold'>Message:</label>
-                  <textarea type='text' name='eqrMsg' value={data.eqrMsg} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-600' rows='8'></textarea>
-              </div>
-              <div className='mb-3' >
-                  <button type='submit' className='py-2 px-3 rounded-sm bg-amber-600 hover:bg-amber-500 text-white font-bold'>SUBMIT</button>
-              </div>
-              {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
-            </form>
-          </div>
-          <div className='bg-amber-600 p-5'>
-              <div className='bg-amber-500'>
+      <div className='flex flex-col w-auto p-9'>   
+        <div className='grid grid-cols-1 gap-2 border border-solid rounded-md p-9'>
+          <form className='bg-gray-200 p-9 w-auto' onSubmit={handleSubmit}>
+            <div className='flex flex-col mb-3'>
+                <label className='font-bold'>Full Name:*</label>
+                <input type='text' name='eqrPerson' value={data.eqrPerson} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label className='font-bold'>Phone:*</label>
+                <input type='text' name='eqrPhone' value={data.eqrPhone} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label className='font-bold'>Email:*</label>
+                <input type='text' name='eqrEmail' value={data.eqrEmail} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label className='font-bold'>Subject:</label>
+                <input type='text' name='eqrSub' value={data.eqrSub} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+            </div>
+            <div className='flex flex-col mb-3'>
+                <label className='font-bold'>Message:</label>
+                <textarea type='text' name='eqrMsg' value={data.eqrMsg} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='8'></textarea>
+            </div>
+            <div className='mb-3' >
+                <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-500 text-white font-bold'>SUBMIT</button>
+            </div>
+            {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
+          </form>
+          <div className='bg-amber-500 p-5 w-auto'>
+              <div className='bg-amber-400 rounded-md m-3'>
                 <h3 className='text-white text-2xl font-bold p-5 uppercase'>Get in touch with us...!</h3>
               </div>
               <div className='p-5'>
                 <p className='text-lg text-white font-bold mb-3'>Our Contact:</p>
                 <p>Call Us: 7605487925 / 6978547895</p>
-                <p>Email Us: info@digitalsathi.com / support@digitalsathi.com</p>
+                <div className='md:flex '>
+                  <div>Email Us: info@digitalsathi.com /</div>
+                  <div>support@digitalsathi.com</div>
+                </div>
               </div>
               <div className='p-5'>
                 <p className='text-lg text-white font-bold mb-3'>Our Address:</p>

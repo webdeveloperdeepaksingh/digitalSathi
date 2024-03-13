@@ -81,7 +81,7 @@ export default function OnlineEbooks() {
       <h1 className='text-center font-bold my-6 text-3xl '>EBOOKS</h1>
       <div className='flex flex-col gap-6'>
       <div className='flex flex-col px-12 max-w-[430px]'>
-          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-600 font-bold focus:outline-amber-600 text-xl text-center rounded-md'>
+          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-500 font-bold focus:outline-amber-500 text-xl text-center rounded-md'>
             <option value=''> --- Choose Category --- </option>
             {
               catList.map((cat) => {
@@ -96,12 +96,12 @@ export default function OnlineEbooks() {
         {
           ebookList.map((ebk) =>{
             return(
-              <div key={ebk._id} className='relative flex flex-col max-w-[350px] p-6 rounded-lg shadow-xl  hover:scale-110 duration-700'>
-                  <Image className='rounded-sm' alt={ebk.prodName} src={`/images/${ebk.prodImage}`} width={300} height={250}/>
-                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-600'>{ebk.prodName}</h3>
+              <div key={ebk._id} className='flex flex-col w-auto h-auto p-6 rounded-lg shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
+                  <Image className='rounded-sm h-[400px]' alt={ebk.prodName} src={`/images/${ebk.prodImage}`} width={300} height={400}/>
+                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{ebk.prodName}</h3>
                   <p className='text-justify py-2'>{ebk.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>
-                      <Link href={`/ebooks/${ebk._id}`} className='py-2 px-3 text-center rounded-sm text-white font-bold bg-amber-600 hover:bg-amber-500'>Learn More</Link>
+                      <Link href={`/ebooks/${ebk._id}`} className='py-2 px-3 text-center rounded-sm text-white font-bold bg-amber-500 hover:bg-amber-400'>Learn More</Link>
                       <button type='button' onClick={()=>handleAddToCart(ebk)} className='py-2 px-3 rounded-sm text-white font-bold bg-gray-600 hover:bg-gray-500'>Add to Cart</button>
                   </div>
               </div>

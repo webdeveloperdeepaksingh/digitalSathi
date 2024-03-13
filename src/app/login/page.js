@@ -81,33 +81,28 @@ export default function LoginPage() {
 
   return (
     <div >
-    {/* <NavBar/> */}
-        <title>DigitalSathi | Login </title>
-        <div className="relative flex flex-col w-auto mx-auto text-center h-screen items-center justify-center">
-           <div className="mt-4 bg-white  rounded-lg text-left w-[500px] px-9">
-            <div className="h-2 bg-amber-500 rounded-t-md"></div>
-            <form className="px-8 py-6 w-full shadow-2xl" onSubmit={handleSubmit}>
-                <div className='flex flex-col'>
-                    <label className="block font-semibold"> Username or Email </label>
-                    <input type="text" name='usrName' value={data.usrName} onChange={handleChange} placeholder="Email" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
-                </div>
-                <div className='flex flex-col'>
-                    <label className="block mt-3 font-semibold"> Password </label>
-                    <input type="password" name='usrPass' value={data.usrPass} onChange={handleChange} placeholder="Password" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
-                </div>
-                <div className="flex justify-between items-baseline mb-3">
-                    <button type="submit" className="mt-4 font-bold bg-gray-300 hover:bg-gray-200 text-black py-2 px-6 rounded-md">LOGIN</button>
-                    <Link href="/forgotpassword" className="text-sm hover:underline">Forgot Password?</Link>
-                </div>
-                {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
-                <div className='flex cursor-pointer justify-center mt-4 text-white hover:bg-amber-400 bg-amber-500 py-2 rounded-md'>
-                  <p>Not a member yet...?</p>
-                  <Link className='ml-2' href="/signup">Sign Up</Link>
-                </div>
-            </form>  
+      <title>DigitalSathi | Login </title>
+      <div className='flex w-auto px-9 h-screen justify-center items-center'>
+        <form className="flex flex-col w-[450px] p-9 mx-auto h-auto border-2 border-amber-500 shadow-xl rounded-lg" onSubmit={handleSubmit}>
+          <div className='flex flex-col'>
+              <label className="block font-semibold"> Username or Email </label>
+              <input type="text" name='usrName' value={data.usrName} onChange={handleChange} placeholder="Email" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
           </div>
-        </div>
-        <Footer/>
+          <div className='flex flex-col'>
+              <label className="block mt-3 font-semibold"> Password </label>
+              <input type="password" name='usrPass' value={data.usrPass} onChange={handleChange} placeholder="Password" className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+          </div>
+          <div className="md:flex md:justify-between md:items-baseline mb-3">
+              <button type="submit" className="my-4 font-bold bg-gray-300 hover:bg-gray-200 text-black py-2 px-6 rounded-md">LOGIN</button>
+              <div><Link href="/forgotpassword" className="text-sm hover:underline">Forgot Password?</Link></div>
+          </div>
+          {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
+          <div className='flex  cursor-pointer justify-center mt-4 px-3 text-white hover:bg-amber-400 bg-amber-500 py-2 rounded-md'>
+            <p>Not a member yet...?</p>
+            <Link className='ml-2' href="/signup">Sign Up</Link>
+          </div>
+      </form> 
       </div>
+    </div>
   )
 }

@@ -78,7 +78,7 @@ export default function OnlineCourses() {
       <h1 className='text-center font-bold my-6 text-3xl '>ONLINE COURSES</h1>
       <div className='flex flex-col gap-6'>
       <div className='flex flex-col px-12 max-w-[430px] '>
-          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-600 font-bold focus:outline-amber-600 text-xl text-center rounded-md'>
+          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-500 font-bold focus:outline-amber-500 text-xl text-center rounded-md'>
             <option value=''> --- Choose Category --- </option>
             {
               catList.map((cat) => {
@@ -93,12 +93,12 @@ export default function OnlineCourses() {
         {
           productList.map((prod) =>{
             return(
-              <div key={prod._id} className='relative flex flex-col max-w-[350px] p-6 rounded-md shadow-xl  hover:scale-110 duration-700'>
-                  <Image className='rounded-sm' alt={prod.prodName} src={`/images/${prod.prodImage}`} width={300} height={250}/>
-                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-600'>{prod.prodName}</h3>
+              <div key={prod._id} className='flex flex-col w-auto h-auto p-6 rounded-md shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
+                  <Image className='rounded-sm h-[150px]' alt={prod.prodName} src={`/images/${prod.prodImage}`} width={300} height={150}/>
+                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{prod.prodName}</h3>
                   <p className='text-justify py-2'>{prod.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>
-                      <Link href={`/courses/${prod._id}`} className='py-2 px-3 text-center rounded-sm text-white font-bold bg-amber-600 hover:bg-amber-500'>Learn More</Link>
+                      <Link href={`/courses/${prod._id}`} className='py-2 px-3 text-center rounded-sm text-white font-bold bg-amber-500 hover:bg-amber-400'>Learn More</Link>
                       <button type='button' onClick={()=>handleAddToCart(prod)} className='py-2 px-3 rounded-sm text-white font-bold bg-gray-600 hover:bg-gray-500'>Add to Cart</button>
                   </div>
               </div>

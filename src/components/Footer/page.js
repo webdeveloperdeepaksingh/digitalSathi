@@ -30,7 +30,7 @@ export default function Footer() {
                 <p className=' mx-2 text-sm'><span className='font-semibold'>Address:</span> Noida Extension, Noida - 201301 </p>
             </div>
        </div>
-       <div className='bg-white h-6 text-black text-center text-xs p-1 items-center justify-center font-semibold'>
+       <div className='bg-white h-6 text-black text-center text-xs py-1 px-9 items-center justify-center font-semibold'>
             <p>Copyright © 2024 DigitalSathi Academy. All Right Reserved.</p>
        </div>
     </div>

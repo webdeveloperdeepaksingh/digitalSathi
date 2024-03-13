@@ -81,7 +81,7 @@ export default function OnlineEvents() {
       <h1 className='text-center font-bold my-6 text-3xl '>UPCOMING EVENTS</h1>
       <div className='flex flex-col gap-6'>
       <div className='flex flex-col px-12 max-w-[430px]'>
-          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-600 font-bold focus:outline-amber-600 text-xl text-center rounded-md'>
+          <select type='select' name='prodCat'  onChange={handleChange} className='p-3 border-2 border-amber-500 font-bold focus:outline-amber-500 text-xl text-center rounded-md'>
             <option value=''> --- Choose Category --- </option>
             {
               catList.map((cat) => {
@@ -96,12 +96,12 @@ export default function OnlineEvents() {
         {
           eventList.map((evt) =>{
             return(
-              <div key={evt._id} className='relative flex flex-col max-w-[350px] shadow-xl p-6 rounded-md  hover:scale-110 duration-700'>
-                  <Image className='rounded-sm' alt={evt.prodName} src={`/images/${evt.prodImage}`} width={300} height={250}/>
-                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-600'>{evt.prodName}</h3>
+              <div key={evt._id} className='flex flex-col w-auto h-auto shadow-xl p-6 rounded-md  hover:scale-110 duration-700 border-2 border-amber-500'>
+                  <Image className='rounded-sm h-[150px]' alt={evt.prodName} src={`/images/${evt.prodImage}`} width={300} height={150}/>
+                  <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{evt.prodName}</h3>
                   <p className='text-justify py-2'>{evt.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>
-                      <Link href={`/events/${evt._id}`} className='text-center py-2 px-3 rounded-sm text-white font-bold bg-amber-600 hover:bg-amber-500'>Learn More</Link>
+                      <Link href={`/events/${evt._id}`} className='text-center py-2 px-3 rounded-sm text-white font-bold bg-amber-500 hover:bg-amber-400'>Learn More</Link>
                       <button type='button' onClick={()=>handleAddToCart(evt)} className='py-2 px-3 rounded-sm text-white font-bold bg-gray-600 hover:bg-gray-500'>Add to Cart</button>
                   </div>
               </div>

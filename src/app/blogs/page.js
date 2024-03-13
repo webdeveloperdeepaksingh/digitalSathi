@@ -82,16 +82,16 @@ export default function OnlineBlogs() {
           }
         </select>
       </div>
-      <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full px-12 mb-9'>
+      <div className='grid h-auto grid-cols-1 md:grid-cols-3 lg:grid-cols-4 px-12 gap-6'>
       {
         blogList.map((blg) =>{
           return(
-            <div key={blg._id} className='relative flex flex-col w-auto h-auto p-6 rounded-md shadow-xl  hover:scale-110 duration-700'>
-                <Image className='rounded-sm' alt={blg.blgName} src={`/images/${blg.blgImage}`} width={300} height={300}/>
-                <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-600'>{blg.blgName}</h3>
+            <div key={blg._id} className='flex flex-col w-auto h-auto p-6 rounded-md shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
+                <Image className='rounded-sm h-[150px]' alt={blg.blgName} src={`/images/${blg.blgImage}`} width={300} height={150} />
+                <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{blg.blgName}</h3>
                 <p className='text-justify py-2'>{blg.shortIntro}</p>
-                <div className='grid grid-cols-1  w-full gap-1'>
-                    <Link href={`/blogs/${blg._id}`} className='text-center py-2 px-3 rounded-sm text-white font-bold bg-amber-600 hover:bg-amber-500'>Learn More</Link>
+                <div className='grid grid-cols-1'>
+                    <Link href={`/blogs/${blg._id}`} className='text-center py-2 px-3 rounded-sm text-white font-bold bg-amber-500 hover:bg-amber-400'>Learn More</Link>
                 </div>
             </div>
           )

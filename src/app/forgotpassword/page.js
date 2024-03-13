@@ -67,23 +67,17 @@ export default function ForgotPassword() {
 
   return (
     <div>
-      {/* <NavBar className='h-[105px]'/> */}
-      <div className='flex flex-col h-screen w-auto mx-auto items-center justify-center px-9'>
-        <div className="relative mx-auto text-center">
-            <div className="mt-4 bg-white  rounded-lg text-left">
-                <div className="h-2 bg-amber-600 rounded-t-md"></div>
-                <form className="flex flex-col px-8 py-6 w-full shadow-2xl" onSubmit={handleSubmit}>
-                    <span className='text-center p-3 bg-gray-100 font-bold rounded-md mb-3'>PASSWORD RESET REQUEST</span>
-                    <div className='flex flex-col w-[360px] mb-3'>
-                        <label className="block font-semibold">Email Id: </label>
-                        <input type="email" name='usrEmail' value={pwd.usrEmail} onChange={handleChange} placeholder="Enter your registered email id." className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
-                    </div>
-                    {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
-                    <button type='submit' className='flex cursor-pointer justify-center my-3 text-white hover:bg-amber-500 bg-amber-600 py-2 rounded-md'>SUBMIT</button>
-                </form>  
-            </div>
-        </div>
-      </div>
+       <div className='flex w-auto h-screen justify-center items-center px-9'>
+          <form className="flex flex-col p-9 w-[360px] h-auto shadow-xl border-2 border-amber-500 rounded-lg" onSubmit={handleSubmit}>
+              <span className='text-center p-3 bg-gray-100 font-bold rounded-md mb-3'>PASSWORD RESET REQUEST</span>
+              <div className='flex flex-col mb-3'>
+                  <label className="block font-semibold">Email Id: </label>
+                  <input type="email" name='usrEmail' value={pwd.usrEmail} onChange={handleChange} placeholder="Enter your registered email id." className="border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+              </div>
+              {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
+              <button type='submit' className='flex cursor-pointer justify-center my-3 text-white hover:bg-amber-500 bg-amber-600 py-2 rounded-md'>SUBMIT</button>
+          </form> 
+       </div>
     </div>
   )
 }
