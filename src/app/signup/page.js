@@ -93,7 +93,7 @@ export default function SignUp() {
   return (
     <>
     <title>DigitalSathi | Sign Up </title>
-    <div className='flex w-auto px-9 py-24'>
+    <div className='flex w-auto px-9 py-28'>
       <form className="flex flex-col w-[600px] p-9 mx-auto h-auto border-2 border-amber-500 shadow-xl rounded-lg" onSubmit={handleSubmit}>
         <div className='flex flex-col '>
           <label className="block font-semibold"> Full Name:*</label>
