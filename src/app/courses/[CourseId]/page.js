@@ -35,8 +35,7 @@ export default async function CourseLandingPage({params, searchParams}) {
     return null; //must be written to deploy successfully.
   }
   const prod = await getCourseById(params.CourseId);
-  console.log(prod);
-
+ 
   return (
     <div>
       <div className='h-[105px]'><NavBar/></div>
@@ -92,7 +91,7 @@ export default async function CourseLandingPage({params, searchParams}) {
       </div>
       <div className='flex flex-col px-9'>
          <div className=''>
-             {prod.result.prodDesc}
+             <div dangerouslySetInnerHTML={{__html:prod.result.prodDesc}}></div> 
           </div>
         <div className='bg-gray-200 '>
             <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Contents</h1>
