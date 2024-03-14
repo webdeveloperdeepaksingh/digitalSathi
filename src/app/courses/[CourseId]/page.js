@@ -90,7 +90,10 @@ export default async function CourseLandingPage({params, searchParams}) {
           </div>
         </div>
       </div>
-      <div className='px-9'>
+      <div className='flex flex-col px-9'>
+         <div className=''>
+             {prod.result.prodDesc}
+          </div>
         <div className='bg-gray-200 '>
             <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Contents</h1>
         </div>
