@@ -10,6 +10,9 @@ async function getEventById(id){
 try 
   {
     const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching event data");
+    }
     const eventById = await res.json();
     return eventById;
   } catch (error) {
@@ -22,8 +25,10 @@ try
   {
     const id = params.EventId
     const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching event data");
+    }
     const meta = await res.json();
-    // optionally access and extend (rather than replace) parent metadata
     const previousImages = (await parent).openGraph?.images || []
     return {
       title: meta.result.prodName,
@@ -44,8 +49,7 @@ export default async function EventLandingPage({params}) {
     return null; //must be written to deploy successfully.
   }
   const evt = await getEventById(params.EventId);
-  console.log(evt);
-
+ 
   return (
     <div>
       <div className='h-[105px]'><NavBar/></div>
@@ -101,12 +105,14 @@ export default async function EventLandingPage({params}) {
           </div>
         </div>
       </div>
-      <div className='px-9'>
-        <div className='bg-gray-200 '>
-            <h1 className='p-3 text-3xl font-bold text-center uppercase'>About Event</h1>
-        </div>
-        <div className='text-justify p-6'>
-          <div dangerouslySetInnerHTML={{__html:evt.result.prodDesc}}></div>   
+      <div className='px-9 '>
+        <div className='flex flex-col p-9 border border-solid border-amber-500 rounded-lg'>
+          <div className='bg-gray-200 mb-3 rounded-md'>
+              <h1 className='p-3 text-3xl font-bold text-center uppercase'>About Event</h1>
+          </div>
+          <div className='text-left'>
+            <div dangerouslySetInnerHTML={{__html:evt.result.prodDesc}}></div>   
+          </div>
         </div>
       </div>
       <Footer/>

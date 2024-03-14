@@ -190,10 +190,7 @@ fetchData();
                 prodImage:data.prodImage, 
             }),
         });
-
         const post = await result.json();
-        console.log(post);
-
         setErrorMessage(''); //Clear the previous error
         if(post.success==false){
             if (Array.isArray(post.message)) {
@@ -203,13 +200,11 @@ fetchData();
             }      
         }else
         {toast('Ebook updated successfully!', {
-
-                hideProgressBar: false,
-                autoClose: 2000,
-                type: 'success'
-
-                });
-            router.push(`/dashboard/ebook/${params.EbookId}/addchapters`);
+            hideProgressBar: false,
+            autoClose: 1000,
+            type: 'success'
+        });
+        router.push(`/dashboard/ebook/${params.EbookId}/addchapters`);
         }
         }catch(error) {
           console.log(error);
@@ -224,8 +219,8 @@ fetchData();
         <form className='w-full'encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div>
-                    <div className='relative flex flex-col group  bg-white  h-[918px] w-[583px] border border-solid rounded-md'>
-                        <Image  alt='image' src={image} width={583} height={918}></Image>
+                    <div className='relative flex flex-col group  bg-white  h-auto w-auto border border-solid rounded-md'>
+                        <Image  alt='image' src={image} width={583} height={600}></Image>
                         <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[583*918]</p>
                         <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                     </div>

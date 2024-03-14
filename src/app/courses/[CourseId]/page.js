@@ -6,26 +6,41 @@ import NavBar from '@/components/NavBar/page';
 import { BASE_API_URL } from '../../../../utils/constants';
 import AddItemToCart from '@/components/AddItemToCart/page';
 
- 
 async function getCourseById(id){
+try 
+  {
     const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching course data");
+    }
     const courseById = await res.json();
     return courseById;
+  } catch (error) {
+    console.error("Error fetching course data: ", error);
+  }
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  const id = params.CourseId
-  const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
-  const meta = await res.json();
-  // optionally access and extend (rather than replace) parent metadata
-  // const previousImages = (await parent).openGraph?.images || []
-  return {
+try 
+  {
+    const id = params.CourseId
+    const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching course data");
+    }
+    const meta = await res.json();
+    // optionally access and extend (rather than replace) parent metadata
+    // const previousImages = (await parent).openGraph?.images || []
+    return {
     title: meta.result.prodName,
     description: meta.result.prodIntro,
     keywords: [meta.result.prodTags],
     // openGraph: {
     //   images: [`/${meta.result.prodImage}`, ...previousImages],
     // },
+  }
+  } catch (error) {
+    console.error("Error fetching course data: ", error);
   }
 }
 
@@ -34,23 +49,23 @@ export default async function CourseLandingPage({params, searchParams}) {
   if(!BASE_API_URL){
     return null; //must be written to deploy successfully.
   }
-  const prod = await getCourseById(params.CourseId);
-  console.log(prod);
 
+  const crs = await getCourseById(params.CourseId);
+ 
   return (
     <div>
-      <div className='h-[105px]'><NavBar/></div>
-      <div className='grid md:grid-cols-2 w-full p-9 gap-2 '>
-        <Image alt={prod.result.prodName} src={`/images/${prod.result.prodImage}`} width={700} height={400}/>
+      <div className='h-[90px]'></div>
+      <div className='grid md:grid-cols-2 w-full p-9 gap-2'>
+        <Image alt={crs.result.prodName} src={`/images/${crs.result.prodImage}`} width={750} height={400}/>
         <div className='relative h-auto'>
-          <h1 className='uppercase p-2 text-2xl font-bold bg-gray-200'>{prod.result.prodName}</h1>
-          <p className='text-justify p-2'>{prod.result.prodIntro}</p>
+          <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200'>{crs.result.prodName}</h1>
+          <p className='text-justify p-2'>{crs.result.prodIntro}</p>
           <div className='grid md:grid-cols-2 w-full px-2'>
             <div>
                 <p className='font-semibold uppercase'>COURSE VALIDITY</p>
             </div>
             <div>
-                <p>{prod.result.prodVal}</p>
+                <p>{crs.result.prodVal}</p>
             </div>
           </div>
           <div className='grid md:grid-cols-2 w-full px-2'>
@@ -58,7 +73,7 @@ export default async function CourseLandingPage({params, searchParams}) {
                 <p className='font-semibold uppercase'>COURSE INSTRUCTOR</p>
             </div>
             <div>
-                <p>{prod.result.prodAuth}</p>
+                <p>{crs.result.prodAuth}</p>
             </div>
           </div>
           <div className='grid md:grid-cols-2 w-full px-2'>
@@ -66,7 +81,7 @@ export default async function CourseLandingPage({params, searchParams}) {
                 <p className='font-semibold uppercase'>Original Price</p>
             </div>
             <div>
-                <p>{prod.result.prodPrice}</p>
+                <p>{crs.result.prodPrice}</p>
             </div>
           </div>
           <div className='grid md:grid-cols-2 w-full px-2'>
@@ -74,7 +89,7 @@ export default async function CourseLandingPage({params, searchParams}) {
                 <p className='font-semibold uppercase'>Discouted Price</p>
             </div>
             <div>
-                <p>{prod.result.prodDisc}</p>
+                <p>{crs.result.prodDisc}</p>
             </div>
           </div>
           <div className='grid md:grid-cols-2 w-full px-2'>
@@ -82,24 +97,32 @@ export default async function CourseLandingPage({params, searchParams}) {
                 <p className='font-semibold uppercase'>Course Category</p>
             </div>
             <div>
-                <p>{prod.result.prodCat}</p>
+                <p>{crs.result.prodCat}</p>
             </div>
           </div>
           <div className='grid grid-cols-1 w-full gap-1 mt-3'>
-              <AddItemToCart prodId={prod.result}/>
+              <AddItemToCart prodId={crs.result}/>
           </div>
         </div>
       </div>
-      <div className='px-9'>
-        <div className='bg-gray-200 '>
-            <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Contents</h1>
+      <div className='flex flex-col px-9'>
+        <div className='flex- flex-col w-full mx-auto h-auto p-9 mb-9 border border-solid border-amber-500 rounded-lg'>
+          <div className='bg-gray-200 rounded-md mb-6'>
+              <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Description</h1>
+          </div>
+          <div className='text-left p-6'>
+            <div dangerouslySetInnerHTML={{__html:crs.result.prodDesc}}></div>   
+          </div>
         </div>
-        <div className="w-full  mx-auto">
+        <div className="flex flex-col w-full mx-auto h-auto p-9 border border-solid border-amber-500 rounded-lg">
+          <div className='bg-gray-200 rounded-md mb-6'>
+              <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Contents</h1>
+          </div>
           {
-            prod.result.chapters.map((chapter, index) => 
+            crs.result.chapters.map((chapter, index) => 
             (
               <details key={index} className="border-b border-gray-200">
-                <summary className="px-4 py-2 hover:bg-gray-100 cursor-pointer uppercase">
+                <summary className="font-semibold px-4 py-2 hover:bg-gray-100 cursor-pointer uppercase">
                   {chapter.chapName}
                 </summary>
                 <div className="bg-white">

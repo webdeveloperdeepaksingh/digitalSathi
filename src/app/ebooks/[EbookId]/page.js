@@ -10,6 +10,9 @@ async function getEbookById(id){
 try 
   {
     const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching ebook data");
+    }
     const ebookById = await res.json();
     return ebookById;
   } catch (error) {
@@ -18,10 +21,13 @@ try
 }
 
 export async function generateMetadata({ params, searchParams }, parent) {
-  const id = params.EbookId
-  try 
+try 
   {
+    const id = params.EbookId
     const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
+    if(!res.ok){
+      throw new Error("Error fetching ebook data");
+    }
     const meta = await res.json();
   // const previousImages = (await parent).openGraph?.images || []
     return {
@@ -46,13 +52,11 @@ export default async function EbooksLandingPage({params}) {
 
   return (
     <div>
-      <div className='h-[105px]'><NavBar/></div>
-      <div className='grid md:grid-cols-2 w-full p-9 gap-1'>
-        <div className='relative w-full h-auto'>
-            <Image alt={ebk.result.prodName} src={`/images/${ebk.result.prodImage}`} width={700} height={900} />
-        </div>
-        <div className='relative'  >
-          <h1 className='uppercase p-2 text-2xl font-bold bg-gray-200'>{ebk.result.prodName}</h1>
+      <div className='h-[90px]'><NavBar/></div>
+      <div className='md:flex w-full p-9 gap-9'>
+        <div className='mb-9 md:mb-0'><Image alt={ebk.result.prodName} src={`/images/${ebk.result.prodImage}`} width={583} height={600} /></div>
+        <div className='w-full p-9 border border-solid border-amber-500 rounded-md'>
+          <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200 rounded-md'>{ebk.result.prodName}</h1>
           <p className='text-justify p-2'>{ebk.result.prodIntro}</p>
           <div className='grid md:grid-cols-2 w-full px-2'>
             <div>
@@ -86,16 +90,22 @@ export default async function EbooksLandingPage({params}) {
                 <p>{ebk.result.prodCat}</p>
             </div>
           </div>
-          <div className='grid grid-cols-1 w-full gap-1 mt-3'>
+          <div className='grid grid-cols-1 w-full gap-1 my-3'>
             <AddItemToCart prodId={ebk.result}/>
+          </div>
+          <div className='bg-gray-200 rounded-md'>
+            <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200 rounded-md'>Ebook Description</h1>
+          </div>
+          <div className='text-left p-6'>
+            <div dangerouslySetInnerHTML={{__html:ebk.result.prodDesc}}></div>   
           </div>
         </div>
       </div>
-      <div className='px-9'>
-        <div className='bg-gray-200 '>
-            <h1 className='p-3 text-3xl font-bold text-center uppercase'>Ebook Contents</h1>
-        </div>
-        <div className="w-full  mx-auto">
+      <div className='flex flex-col px-9 '>
+        <div className="flex flex-col p-9 border border-solid border-amber-500 rounded-lg w-full mx-auto">
+          <div className='bg-gray-200 mb-3'>
+              <h1 className='p-3 text-3xl font-bold text-center uppercase'>Ebook Contents</h1>
+          </div>
           {
             ebk.result.chapters.map((chapter, index) => 
             (

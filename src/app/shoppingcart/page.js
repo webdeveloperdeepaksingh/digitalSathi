@@ -82,12 +82,17 @@ export default function ShoppingCart() {
                 <button type='button' onClick={()=> handleDelete(item)} className='cursor-pointer hover:bg-white bg-gray-100 absolute right-3 top-3 font-bold text-lg'><RxCross2/></button>
                 <Image alt={item.prodName} src={`/images/${item.prodImage}`} width={150} height={50} />
                 <div className='flex flex-col px-2 w-auto'>
-                  <h1 className='text-lg uppercase font-bold'>{item.prodName}</h1>
-                  <p className='hidden   md:block  text-justify'>{item.prodIntro}</p>
-                  <div className='md:flex w-auto gap-1 mt-2'>
-                      <p className='text-sm py-1 px-2 w-auto rounded-sm bg-amber-500 text-white'><span className='font-bold mr-3'>Validity:</span>{item.prodVal}</p>
-                      <p className='text-sm py-1 px-2  w-auto rounded-sm bg-gray-400 text-white'><span className='font-bold mr-3'>Price:</span>{item.prodDisc}</p>
-                      <p className='text-sm py-1 px-2  w-auto rounded-sm bg-green-500 text-white'><span className='font-bold mr-3'>Author/Instructor:</span>{item.prodAuth}</p>
+                  <h1 className='text-lg text-amber-500 uppercase font-bold'>{item.prodName}</h1>
+                  <div className='flex flex-col w-auto'>
+                      <div className='text-sm'>
+                         Validity: {item.prodVal}
+                      </div>
+                      <div className='text-sm'>
+                         Price: {item.prodDisc}
+                      </div>
+                      <div className='text-sm'>
+                         Author/Instructor: {item.prodAuth}
+                      </div>
                   </div>
                 </div>
               </div>
