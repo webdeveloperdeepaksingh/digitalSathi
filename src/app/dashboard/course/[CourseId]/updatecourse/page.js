@@ -249,7 +249,7 @@ export default function UpdateCourse({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
-                <TextEditor value={editorContent} handleEditorChange={handleEditorChange}  />
+                <TextEditor value={data.prodDesc} handleEditorChange={handleEditorChange}  />
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>

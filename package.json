@@ -29,6 +29,7 @@
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.3",
     "next": "^14.1.0",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.8",
     "nodemon": "^3.0.2",
     "parcel": "^2.12.0",
