@@ -7,7 +7,7 @@ import { BASE_API_URL } from '../../../../utils/constants';
 async function getBlog(id){
 try 
   {
-    const res = await fetch(`${BASE_API_URL}/api/blogs/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/blogs/${id}`, { cache: 'no-store' });
     if(!res.ok){
       throw new Error("Error fetching blog data.");
     }

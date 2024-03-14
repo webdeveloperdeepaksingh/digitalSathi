@@ -9,7 +9,7 @@ import { BASE_API_URL } from '../../../../utils/constants';
 async function getEventById(id){
 try 
   {
-    const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/events/${id}`, { cache: 'no-store' });
     if(!res.ok){
       throw new Error("Error fetching event data");
     }
