@@ -221,7 +221,7 @@ fetchData();
                 <div>
                     <div className='relative flex flex-col group  bg-white  h-auto w-auto border border-solid rounded-md'>
                         <Image  alt='image' src={image} width={583} height={600}></Image>
-                        <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[583*918]</p>
+                        <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[583*600]</p>
                         <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                     </div>
                 </div>
@@ -239,22 +239,6 @@ fetchData();
                         <input type='text' name='prodAuth' value={data.prodAuth} onChange={handleChange} className='py-2 font-bold px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                     </div>
                     <div className='flex flex-col'>
-                        <label>Original Price:</label>
-                        <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Discounted Price:</label>
-                        <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Tax Rate:</label>
-                        <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
-                    </div>
-                    <div className='flex flex-col'>
-                        <label>Discount %:</label>
-                        <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
-                    </div>
-                    <div className='flex flex-col'>
                         <label>Category:*</label>
                         <select type='select' name='prodCat' value={data.prodCat} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'>
                             <option value='' className='text-center'>--- Choose Category ---</option>
@@ -269,7 +253,7 @@ fetchData();
                     </div>
                     <div className='flex flex-col'>
                         <label>Short Intro:</label>
-                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='4'></textarea>
+                        <textarea type='text' name='prodIntro' value={data.prodIntro} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500' rows='5'></textarea>
                     </div>
                     <div className='flex flex-col'>
                         <label>Upload Image:</label>
@@ -283,6 +267,26 @@ fetchData();
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Ebook Description:</label>
                 <TextEditor value={editorContent} handleEditorChange={handleEditorChange}  />
+            </div>
+            <div className='grid md:grid-cols-2 gap-1 mb-3'>
+                <div className='flex flex-col'>
+                    <label>Original Price:</label>
+                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Discounted Price:</label>
+                    <input type='text' name='prodDisc' value={data.prodDisc} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+            </div>
+            <div className='grid md:grid-cols-2 gap-1 mb-3'>
+                <div className='flex flex-col'>
+                    <label>Tax Rate:</label>
+                    <input type='number' name='prodTax' value={data.prodTax} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
+                <div className='flex flex-col'>
+                    <label>Discount %:</label>
+                    <input type='number' name='prodDisct' value={data.prodDisct} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                </div>
             </div>
             <div className='my-3'>
                 <button type='submit' className='py-2 px-3 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>SAVE</button>
