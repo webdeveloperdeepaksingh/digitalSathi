@@ -46,7 +46,7 @@ export default function UpdateCourse({params}) {
             }
             const course = await res.json();
             setData(course.result);
-            setEditorContent(course.result.prodDesc);
+            // setEditorContent(course.result.prodDesc);
             setImage(`/images/${course.result.prodImage}`);
          } catch (error) {
             console.error("Error fetching data: ", error);
@@ -55,7 +55,7 @@ export default function UpdateCourse({params}) {
         }
     }
     fetchData();
-    },[params.CourseId, editorContent]);
+    },[params.CourseId]);
     
     if(isLoading){
         return <div><Loading/></div>
@@ -249,7 +249,7 @@ export default function UpdateCourse({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
-                <TextEditor name='prodDesc' value={editorContent} handleEditorChange={handleEditorChange}   />
+                <TextEditor name='prodDesc' value={data.prodDesc} handleEditorChange={handleEditorChange}   />
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
