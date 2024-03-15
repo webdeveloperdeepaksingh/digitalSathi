@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import { BASE_API_URL } from '../../../../utils/constants';
-import { useRef } from 'react';
 import React from 'react';
 import Cookies from 'js-cookie';
 

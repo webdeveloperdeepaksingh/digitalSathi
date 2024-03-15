@@ -2,7 +2,6 @@
 import { useRef } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 
-
 export default function TextEditor({handleEditorChange, value}) {
 
   const editorRef = useRef(null);
@@ -28,8 +27,4 @@ export default function TextEditor({handleEditorChange, value}) {
    </>
   );
 }
-
-
-
-
 

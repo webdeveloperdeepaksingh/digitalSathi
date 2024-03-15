@@ -21,7 +21,6 @@ export default function UpdateCourse({params}) {
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodAuth:'', prodTax:'', prodDisct:'', prodDesc:'', prodPrice:'', prodDisc:'', prodVal:'', prodCat:'', prodImage:''})    
     
-
     useEffect(() =>{
       async function fetchData() {
       try 
@@ -147,6 +146,7 @@ export default function UpdateCourse({params}) {
         setEditorContent(newContent);
         console.log(editorContent);
       }
+
     const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage(''); //Clear the previous error
@@ -249,12 +249,12 @@ export default function UpdateCourse({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
-                <TextEditor value={data.prodDesc} handleEditorChange={handleEditorChange}  />
+                <TextEditor name='prodDesc' value={editorContent} handleEditorChange={handleEditorChange}   />
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Original Price:</label>
-                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                    <input type='text' name='prodPrice' value={data.prodPrice} handleEditorChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Discounted Price:</label>
