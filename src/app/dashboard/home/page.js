@@ -42,21 +42,13 @@ export default function Home () {
         loggedInUser.result?.usrRole === "INSTRUCTOR" ? 
       (
         <div className='flex flex-col w-full h-auto p-9 bg-gray-100 border border-solid shadow-lg rounded-lg' >
-          <div className='relative grid grid-cols-1 md:grid-cols-2  w-full gap-9'>
-            <div className='h-[200px] bg-white shadow-lg rounded-sm p-3'>
-                <p className="font-bold text-xl text-black">Revenue:</p>
-                <div className="p-3 flex items-center justify-between divide-x gap-3">
-                    <span className="text-4xl  text-black"><BsCashCoin/></span>
-                    <p className="text-amber-500 px-3">INR: </p>
-                </div>
-            </div>
-            <div className='h-[200px] bg-white shadow-lg rounded-sm p-3'>
-                <p className="font-bold text-xl text-white">Subscribers:</p>
-                <div className="p-3 flex items-center justify-between divide-x gap-3">
-                    <span className="text-4xl  text-white"><BsCashCoin/></span>
-                    <p className="text-white px-3">INR: 68,729</p>
-                </div>
-            </div>
+          <div className='grid grid-cols-1 md:grid-cols-2  w-full gap-9'>
+              <div className="w-full">
+                <RevenueCurrentMonth/> 
+              </div>
+              <div className="w-full">
+                <EventRegisteredCurrentMonth/> 
+              </div>
           </div>
         </div>
       ): 

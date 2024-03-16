@@ -39,7 +39,7 @@ export default function RevenueCurrentMonth() {
 
   return (
     <div>
-       <div className='flex max-w-[290px] h-auto justify-center shadow-lg rounded-md p-5 bg-white'>
+       <div className={`${loggedInUser.result.usrRole === "INSTRUCTOR" ? 'flex max-w-[600px] h-auto justify-center shadow-lg rounded-md p-5 bg-white' : 'flex max-w-[290px] h-auto justify-center shadow-lg rounded-md p-5 bg-white'}`}>
             <div className='flex flex-col'>
                 <div className='flex flex-col text-center'>
                     <p className='text-lg font-bold'>REVENUE</p>
