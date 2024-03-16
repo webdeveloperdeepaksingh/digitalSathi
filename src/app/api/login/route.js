@@ -22,13 +22,13 @@ export  const  POST = async (request, response, next) =>{
         userByName.usrPass = null; // stopping password to get sent in response.
 
         const response = NextResponse.json({result:{id:userByName._id, role:userByName.usrRole}, success:true, token:token}, {status: 200});
-        // response.cookies.set({          
-        //   name: 'token',
-        //   value: token,
-        //   maxAge: process.env.LOGIN_EXPIRES,
-        //   httpOnly: true, // This prevents scripts from accessing
-        //   sameSite: 'strict', // This does not allow other sites to access
-        // });        
+        response.cookies.set({          
+          name: 'token',
+          value: token,
+          maxAge: process.env.LOGIN_EXPIRES,
+          httpOnly: true, // This prevents scripts from accessing
+          sameSite: 'strict', // This does not allow other sites to access
+        });        
         return response;
 
       }catch(error){
