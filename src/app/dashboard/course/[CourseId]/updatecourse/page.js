@@ -40,7 +40,7 @@ export default function UpdateCourse({params}) {
     async function fetchData() {  
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}`);
+            const res = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}`, {cache:'no-store'});
             if(!res.ok){
                 throw new Error("Error fetching course data.");
             }
@@ -56,7 +56,7 @@ export default function UpdateCourse({params}) {
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[editorContent, params.CourseId]);
+    },[editorContent, params.CourseId, image]);
     
     if(isLoading){
         return <div><Loading/></div>
