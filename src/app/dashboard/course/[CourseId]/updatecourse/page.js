@@ -105,15 +105,10 @@ export default function UpdateCourse({params}) {
     e.preventDefault();
     try 
         {
-            const imgName = data.prodImage;
-            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ imgName }), // Send the file name to delete
-            });
-    
+             const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/removeimage`, 
+             {
+                method: 'DELETE',  
+             });
             const dataImg = await response.json();
             if (response.ok) {
                  toast('Image removed successfully!', {
