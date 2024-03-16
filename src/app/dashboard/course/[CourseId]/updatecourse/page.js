@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import React from 'react';
-import TextEditor from '@/components/TinyMce/Editor';
 import Cookies from 'js-cookie';
 import { BASE_API_URL } from "../../../../../../utils/constants";
 import Loading from "../../loading";
-
+import TextEditor from '@/components/TinyMce/Editor';
+ 
 export default function UpdateCourse({params}) {
    
     const router = useRouter();
@@ -38,7 +38,7 @@ export default function UpdateCourse({params}) {
 
     useEffect(() =>{
     async function fetchData() {  
-        try 
+    try 
         {
             const res = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}`);
             if(!res.ok){
@@ -55,7 +55,8 @@ export default function UpdateCourse({params}) {
         }
     }
     fetchData();
-    },[params.CourseId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[editorContent, params.CourseId]);
     
     if(isLoading){
         return <div><Loading/></div>
@@ -142,10 +143,11 @@ export default function UpdateCourse({params}) {
         }
       }); 
     }
+
     const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
-        console.log(editorContent);
-      }
+        console.log( newContent);
+    }
 
     const handleSubmit = async (e) => {
     e.preventDefault();
@@ -210,6 +212,7 @@ export default function UpdateCourse({params}) {
 
   return (
     <div>
+       
       <div className='flex flex-col justify-center  bg-gray-100  w-full p-9 shadow-lg rounded-lg'>
         <div className='px-3 py-3 text-center bg-white text-2xl font-bold rounded mb-3'>
             <h1 className='uppercase'>Update Course</h1>
@@ -250,7 +253,7 @@ export default function UpdateCourse({params}) {
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
                 <TextEditor name='prodDesc' value={editorContent} handleEditorChange={handleEditorChange}   />
-            </div>
+             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Original Price:</label>
