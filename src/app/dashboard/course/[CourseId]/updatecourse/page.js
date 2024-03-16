@@ -55,7 +55,7 @@ export default function UpdateCourse({params}) {
         }
     }
     fetchData();
-    },[params.CourseId]);
+    },[]);
     
     if(isLoading){
         return <div><Loading/></div>
