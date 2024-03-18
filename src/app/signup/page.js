@@ -80,7 +80,7 @@ export default function SignUp() {
     else{
         toast('Signed up successfully...!', {
         hideProgressBar: false,
-        autoClose: 1500,
+        autoClose: 1000,
         type: 'success'
       });
       router.push('/login');
@@ -93,24 +93,24 @@ export default function SignUp() {
   return (
     <>
     <title>DigitalSathi | Sign Up </title>
-    <div className='flex w-auto px-9 py-32'>
-      <form className="flex flex-col w-[600px] p-9 mx-auto h-auto border-2 border-amber-500 shadow-xl rounded-lg" onSubmit={handleSubmit}>
+    <div className='flex max-w-[600px] mx-auto h-auto px-9 py-32'>
+      <form className="flex flex-col  p-9  border-2 border-amber-500 shadow-xl rounded-lg" onSubmit={handleSubmit}>
         <div className='flex flex-col '>
           <label className="block font-semibold"> Full Name:*</label>
-          <input type="text" name='usrName' value={data.usrName} onChange={handleChange} placeholder="Deepak Singh" className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+          <input type="text" name='usrName' value={data.usrName} onChange={handleChange} placeholder="Deepak Singh" className="mb-3 border w-full h-5 px-3 py-5 mt-2  focus:outline-amber-500  rounded-md"/>
         </div>
         <div className='flex flex-col'>
           <label className="block font-semibold"> Email Id:*</label>
-          <input type="text" name='usrEmail' value={data.usrEmail} onChange={handleChange} placeholder="deepaksingh@gmail.com" className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+          <input type="text" name='usrEmail' value={data.usrEmail} onChange={handleChange} placeholder="deepaksingh@gmail.com" className="mb-3 border w-full h-5 px-3 py-5 mt-2  focus:outline-amber-500  rounded-md"/>
         </div>
-        <div className='flex gap-1'>
-          <div className='w-[50%]'>
-              <label className="block font-semibold"> Phone:*</label>
-              <input type="text" name='usrPhone' value={data.usrPhone} onChange={handleChange} placeholder="with country code e.g.+91" className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-1 mb-3'>
+          <div className='flex flex-col'>
+              <label className="block font-semibold mb-2"> Phone:*</label>
+              <input type="text" name='usrPhone' value={data.usrPhone} onChange={handleChange} placeholder="with country code e.g.+91" className="border-2 px-3 py-3 focus:outline-amber-500  rounded-md"/>
           </div>
-          <div className='w-[50%]'>
-              <label className="font-semibold"> Join As:*</label>
-              <select type='select' name='usrRole' value={data.usrRole} onChange={handleChange} className="text-black mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md">
+          <div className='flex flex-col'>
+              <label className="font-semibold mb-2"> Join As:*</label>
+              <select type='select' name='usrRole' value={data.usrRole} onChange={handleChange} className="border-2 focus:outline-amber-500 px-3 py-3  rounded-md" >
                   <option value='' className='text-center'>--- Select Role ---</option>
                   <option value="STUDENT">STUDENT</option>
                   <option value="INSTRUCTOR">INSTRUCTOR</option>
@@ -118,12 +118,12 @@ export default function SignUp() {
           </div>
         </div>
         <div className='flex flex-col'>
-          <label className="block font-semibold">Create Password:* </label>
-          <input type="password" name='usrPass' value={data.usrPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+          <label className="block font-semibold mb-2">Create Password:* </label>
+          <input type="password" name='usrPass' value={data.usrPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 focus:outline-amber-500 rounded-md"/>
         </div>
         <div className='flex flex-col'>
-          <label className="block font-semibold">Confirm Password:* </label>
-          <input type="password" name='confPass' value={data.confPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 mt-2 hover:outline-none focus:outline-none focus:ring-amber-500 focus:ring-1 rounded-md"/>
+          <label className="block font-semibold mb-2">Confirm Password:* </label>
+          <input type="password" name='confPass' value={data.confPass} onChange={handleChange} placeholder="min 8 alpha-numeric + special char." className="mb-3 border w-full h-5 px-3 py-5 focus:outline-amber-500 rounded-md"/>
         </div>
         {errorMessage && <p className='text-red-600 italic '>{errorMessage}</p>}
         <div className="flex justify-between items-baseline">

@@ -14,6 +14,7 @@ import Cookies from 'js-cookie';
 export default function SideMenu({isShown}) {
 
    const [profile, setProfile] = useState('');
+ 
    const loggedInUser = {
     result:
     {

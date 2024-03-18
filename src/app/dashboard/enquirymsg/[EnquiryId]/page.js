@@ -57,7 +57,7 @@ if(isLoading){
             </div>
             <div className='flex flex-col mb-2 gap-1'>
                 <label className='uppercase font-semibold'>Enquiry Message:</label>
-                <textarea type='email' name='eqrEmail' value={data.eqrEmail}className='py-2 px-2 mt-1 border rounded-md  focus:outline-amber-500' rows={8} ></textarea>
+                <textarea type='text' name='eqrMsg' value={data.eqrMsg} className='p-5 mt-1 border rounded-md  focus:outline-amber-500' rows={8} ></textarea>
             </div>
         </form>
        </div>

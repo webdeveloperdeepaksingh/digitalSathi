@@ -2,7 +2,6 @@
 import Loading from './loading';
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { RiLiveFill } from "react-icons/ri";
 import { BASE_API_URL } from '../../../../utils/constants';
  
 export default function MyEvent() {
@@ -65,7 +64,7 @@ export default function MyEvent() {
             <th className='p-4'>CONTACT</th>
             <th className='p-4'>EVENT DATE</th>
             <th className='p-4'>EVENT TIME</th>
-            <th className='p-4'>ZOOM LINK</th>
+            <th className='p-4'>MEETING</th>
           </tr>
         </thead>
         <tbody className='divide-y'>
@@ -78,13 +77,29 @@ export default function MyEvent() {
               <td className='py-2 px-4'>{item.prodAuth}</td>
               <td className='py-2 px-4'>{item.prodDate}</td>
               <td className='py-2 px-4'>{item.prodTime}</td>
-              <td className='flex py-2 text-lg gap-6  px-4'>
-                <button type='button'>
-                  <a href={item.prodMeetLink} target="_blank" rel="noopener noreferrer"><RiLiveFill/></a>
-                </button>
+              <td className='flex px-4'>
+                {item.prodMeetLink ? (
+                  <button type='button'>
+                    <a
+                      href={item?.prodMeetLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className='text-sm font-bold py-2 px-3 bg-amber-500 hover:bg-amber-400 text-white rounded-sm'
+                    >
+                      JOIN
+                    </a>
+                  </button>
+                ) : (
+                  <button
+                    type='button'
+                    className='text-sm font-bold py-1 px-2 bg-gray-500 hover:bg-gray-400 text-white rounded-sm'
+                  >
+                    NO MEET
+                  </button>
+                )}
               </td>
             </tr>
-            )
+          )
         })
         }
         </tbody>

@@ -13,11 +13,7 @@ export default function SideProfile() {
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"), usrRole:Cookies.get("loggedInUserRole")}};
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
-    const [toggle, setToggle] = useState(false);
-
-    const handleToggle = () => {
-        setToggle(!toggle);
-    }
+    const [toggle, setToggle] = useState(false); 
 
     useEffect(()=>{
         async function fetchProfile(){
@@ -55,11 +51,11 @@ export default function SideProfile() {
                 <p className=''>Welcome {profile?.proName} !</p>
                 <Image alt={profile?.proName} className='rounded-sm mx-2'  src={`/images/${profile?.proImage}`} width={65} height={65} />
                 <div className=''>
-                    <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={handleToggle}><IoIosArrowDown /></button>
+                    <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={() =>setToggle(!toggle)}><IoIosArrowDown /></button>
                 </div>
             </div>
-            <div className='absolute bottom-[-180px] right-4 z-100'>
-                <SideMenu  isShown={toggle}/>
+            <div className='absolute bottom-[-190px] right-4 z-100'>
+                <SideMenu  isShown={toggle} />      
             </div>    
         </div>
     </header>

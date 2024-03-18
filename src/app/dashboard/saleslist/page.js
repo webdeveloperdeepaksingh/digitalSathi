@@ -88,13 +88,13 @@ export default function SalesList() {
       <table className="table-auto w-full text-left shadow-lg rounded-lg">
         <thead className='font-bold bg-gray-300'>
           <tr>
-            <th className='p-4'>CUSTOMER</th>
+            <th className='p-4 w-[300px]'>CUSTOMER NAME</th>
             <th className='p-4'>PAYMENT ID</th>
             <th className='p-4'>INVOICE [&#8377;]</th>
             <th className='p-4'>EMAIL ID</th>
             <th className='p-4'>PHONE NO.</th>
             <th className='p-4'>TRANS DATE</th>
-            <th className='p-4'>ACTION</th>
+            <th className='p-4'>STATUS</th>
           </tr>
         </thead>
         <tbody className='divide-y'>
@@ -102,15 +102,15 @@ export default function SalesList() {
             sales.map((item, index)=> {
             return(
             <>
-            <tr  key={index}  className='hover:bg-gray-100'>
+            <tr  key={index}  className='hover:bg-gray-100' onClick={() => handleToggle(index)} >
               <td className='py-1 pl-4'>{item.custName}</td>
               <td className='py-1 pl-4'>{item.razorpay_payment_id}</td>
               <td className='py-1 pl-4'>{(item.amtToPay).toLocaleString()}</td>
               <td className='py-1 pl-4'>{item.custEmail}</td>
               <td className='py-1 pl-4'>{item.custPhone}</td>
               <td className='py-1 pl-4'>{new Date(item.createdAt).toLocaleString()}</td>
-              <td className='py-1 pl-4'>
-                <button type='button' onClick={() => handleToggle(index)} ><RiArrowDownSLine className={toggle === index ? "text-2xl  duration-500" : "text-2xl rotate-180  duration-500"} /></button>
+              <td className='py-1 pl-8'>
+                  <RiArrowDownSLine className={toggle === index ? "text-2xl  duration-500" : "text-2xl rotate-180  duration-500"} />
               </td>
             </tr>
             {

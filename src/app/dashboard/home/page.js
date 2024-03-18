@@ -1,5 +1,4 @@
 "use client";
-import { BsCashCoin } from "react-icons/bs";
 import Cookies from 'js-cookie';
 import React, { useState } from 'react';
 import SalesChart from "@/components/SalesChart/page";
