@@ -6,7 +6,7 @@ import connect from "../../../../../server";
 
 export const GET = async (request, {params}) => {
 try 
-      {
+   {
       await connect ();
       const ebook = await Products.findById(params.EbookId);
 
@@ -17,7 +17,7 @@ try
 
       }catch(error){
             return new NextResponse ("Erron while retrieving data: " + error, {status: 500});
-      }
+   }
 }
 
 export const PUT = async (request, {params}) =>{

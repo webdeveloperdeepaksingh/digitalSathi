@@ -47,8 +47,7 @@ export default function UpdateCourse({params}) {
             const course = await res.json();
             setData(course.result);
             setEditorContent(course.result.prodDesc);
-            // setImage(`/images/${course.result.prodImage}`);
-         } catch (error) {
+          } catch (error) {
             console.error("Error fetching data: ", error);
         }finally{
             setIsLoading(false);
@@ -56,7 +55,7 @@ export default function UpdateCourse({params}) {
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[editorContent, params.CourseId, image]); 
+    },[editorContent, params.CourseId, imageData]); 
 
     const handleImageChange = async (imgData) => {
         const imgFile = imgData;

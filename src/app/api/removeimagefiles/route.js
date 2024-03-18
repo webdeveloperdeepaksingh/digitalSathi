@@ -20,12 +20,8 @@ try
         invalidate: true,
         resource_type: "image"
     });
-
-    if (result.result === 'ok') {
-        return NextResponse.json({ message: 'Image removed successfully', success: true }, { status: 200 });
-    } else {
-        return NextResponse.json({ message: 'Error removing image', success: false });
-    }
+    
+    return NextResponse.json({ message: 'Image removed successfully', success: true }, { status: 200 });
 
 } catch (error) {
     return NextResponse.json({ message: 'Error removing image', success: false });

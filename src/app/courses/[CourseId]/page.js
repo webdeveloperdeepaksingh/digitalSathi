@@ -57,7 +57,7 @@ export default async function CourseLandingPage({params}) {
     <div>
       <div className='h-[90px]'></div>
       <div className='grid md:grid-cols-2 w-full p-9 gap-2'>
-        <Image alt={crs.result.prodName} src={`/images/${crs.result.prodImage}`} width={750} height={400}/>
+        <Image alt={crs.result.prodName} src={crs.result.prodImage} width={750} height={400}/>
         <div className='relative h-auto'>
           <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200'>{crs.result.prodName}</h1>
           <p className='text-justify p-2'>{crs.result.prodIntro}</p>
