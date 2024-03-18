@@ -94,7 +94,7 @@ export default function OnlineCourses() {
           productList.map((prod) =>{
             return(
               <div key={prod._id} className='flex flex-col w-auto h-auto p-6 rounded-md shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
-                  <Image className='rounded-sm h-[150px]' alt={prod.prodName} src={`/images/${prod.prodImage}`} width={300} height={150}/>
+                  <Image className='rounded-sm h-[150px]' alt={prod.prodName} src={prod.prodImage} width={300} height={150}/>
                   <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{prod.prodName}</h3>
                   <p className='text-justify py-2'>{prod.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>
