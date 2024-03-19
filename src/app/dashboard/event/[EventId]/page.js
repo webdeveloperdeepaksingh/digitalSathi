@@ -205,7 +205,7 @@ export default function UpdateEvent({params}) {
                 prodTax:data.prodTax,
                 prodAuth: data.prodAuth,
                 prodDisct:data.prodDisct, 
-                prodDesc:data.prodDesc, 
+                prodDesc:editorContent, 
                 prodCat:data.prodCat, 
                 prodCont:data.prodCont, 
                 prodPrice:data.prodPrice, 

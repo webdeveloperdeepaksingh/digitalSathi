@@ -25,7 +25,7 @@ export default function SideProfile() {
         async function fetchProfile(){
         try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/profile`);
+            const res = await fetch(`${BASE_API_URL}/api/profile` , {cache:'no-store'});
             if(!res.ok){
                 throw new Error("Error fetching profile data.");
             }
@@ -55,7 +55,7 @@ export default function SideProfile() {
         <div className='relative w-[auto]'>
             <div className='flex w-auto h-auto items-center p-3 font-bold rounded-md border border-solid border-amber-500'>
                 <p className=''>Welcome {profile?.proName} !</p>
-                <Image alt={profile?.proName} className='rounded-sm mx-2'  src={`/images/${profile?.proImage}`} width={65} height={65} />
+                <Image alt={profile?.proName} className='rounded-sm mx-2'  src={profile?.proImage} width={65} height={65} />
                 <div className=''>
                     <button className={ toggle == true ? 'rotate-180 duration-500' : 'duration-500'}  onClick={() =>setToggle(!toggle)}><IoIosArrowDown /></button>
                 </div>

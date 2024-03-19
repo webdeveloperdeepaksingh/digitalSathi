@@ -200,7 +200,7 @@ export default function UpdateEbook({params}) {
                 prodIntro:data.prodIntro,
                 prodTax:data.prodTax,
                 prodDisct:data.prodDisct, 
-                prodDesc:data.prodDesc, 
+                prodDesc:editorContent, 
                 prodPrice:data.prodPrice, 
                 prodDisc:data.prodDisc, 
                 prodAuth:data.prodAuth, 

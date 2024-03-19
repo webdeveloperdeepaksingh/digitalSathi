@@ -18,17 +18,17 @@ export default function OnlineEvents() {
   const [query, setQuery] = useState('');
 
   useEffect(()=>{
-    async function fetchCatList(){
-    try 
-      {
-        const res = await fetch(`${BASE_API_URL}/api/categories`);
-        const catList = await res.json();
-        setCatList(catList)
-      } catch (error) {
-        console.error("Error fetching category data. :", error);
-      }
+  async function fetchCatList(){
+  try 
+    {
+      const res = await fetch(`${BASE_API_URL}/api/categories`);
+      const catList = await res.json();
+      setCatList(catList)
+    } catch (error) {
+      console.error("Error fetching category data. :", error);
     }
-    fetchCatList();
+  }
+  fetchCatList();
   },[])
 
   useEffect(()=>{
@@ -41,7 +41,7 @@ export default function OnlineEvents() {
       }
       try 
       {
-        const res = await fetch(api);
+        const res = await fetch(api , {cache:'no-store'});
         if(!res.ok){
             throw new Error("Error fetching event data.");
         }

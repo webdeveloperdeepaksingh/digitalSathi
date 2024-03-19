@@ -26,7 +26,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
     const id = params.CourseId
-    const res = await fetch(`${BASE_API_URL}/api/courses/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/courses/${id}` , {cache:'no-store'});
     if(!res.ok){
       throw new Error("Error fetching course data");
     }

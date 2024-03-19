@@ -24,7 +24,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
     const id = params.EventId
-    const res = await fetch(`${BASE_API_URL}/api/events/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/events/${id}` , {cache:'no-store'});
     if(!res.ok){
       throw new Error("Error fetching event data");
     }

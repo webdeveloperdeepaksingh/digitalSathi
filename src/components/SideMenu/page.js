@@ -27,7 +27,7 @@ export default function SideMenu({isShown}) {
     async function fetchProfile(){
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/profile`);
+            const res = await fetch(`${BASE_API_URL}/api/profile` , {cache:'no-store'});
             const profiles = await res.json();
             const profileById = profiles.filter(profile => profile.userId === loggedInUser.result?._id);
             setProfile(profileById[0]);

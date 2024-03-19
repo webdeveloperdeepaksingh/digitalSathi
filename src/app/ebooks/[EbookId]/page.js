@@ -24,7 +24,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
     const id = params.EbookId
-    const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}`);
+    const res = await fetch(`${BASE_API_URL}/api/ebooks/${id}` , {cache:'no-store'});
     if(!res.ok){
       throw new Error("Error fetching ebook data");
     }
