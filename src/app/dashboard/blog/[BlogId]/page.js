@@ -15,6 +15,7 @@ export default function UpdateBlog({params}) {
     const router = useRouter();
     const [cat, setCat] = useState([]);     
     const [image, setImage] = useState(''); 
+    const [imageBlobLink, setImageBlobLink] = useState(''); 
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [errorMessage, setErrorMessage] = useState(''); 
     const [editorContent, setEditorContent] = useState('');
@@ -41,7 +42,7 @@ export default function UpdateBlog({params}) {
     async function fetchData() {
     try 
         {
-            const response = await fetch(`${ BASE_API_URL }/api/blogs/${params.BlogId}`);
+            const response = await fetch(`${ BASE_API_URL }/api/blogs/${params.BlogId}`, {cache:'no-store'});
             if (!response.ok) {
                 throw new Error('Error fetching blog data');
             }
@@ -61,7 +62,10 @@ export default function UpdateBlog({params}) {
       }    
 
     const handleImageChange = async (imgFile) => {
-        setImage(imgFile);
+        if(imgFile){
+            setImage(imgFile);
+            setImageBlobLink(URL.createObjectURL(imgFile));
+        }
     }
 
     const handleImageUpload = async (e) => {
@@ -112,8 +116,8 @@ export default function UpdateBlog({params}) {
         }   
     };
 
-    const handleRemoveImage = async (imageUrl) => {
-         
+    const handleRemoveImage = async (imageUrl) => {   
+    if(imageUrl){
         const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
         const filename = parts.pop();  //and get the last part
         try 
@@ -144,6 +148,7 @@ export default function UpdateBlog({params}) {
             }      
         } catch (error) {
             console.error('Error deleting image:', error);
+        }
         }
     };
 
@@ -235,7 +240,7 @@ export default function UpdateBlog({params}) {
             <div className='grid md:grid-cols-1 w-full mb-3 gap-6'>
                 <div>
                     <div className='relative flex flex-col group bg-white  h-auto w-full border border-solid rounded-md mb-3'>
-                        <Image  alt='image' src={data.blgImage} height={400} width={1500}></Image>
+                        <Image  alt='image' src={data.blgImage ? data.blgImage : imageBlobLink } height={400} width={1500}></Image>
                         <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[400*1500]</p>
                         <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                     </div>

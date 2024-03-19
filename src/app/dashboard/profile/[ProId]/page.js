@@ -12,6 +12,7 @@ export default function Profile({params}) {
 
   const [data, setData] = useState({proName:'', proFather:'', proDob:'', proJob:'', proQual:'', shortIntro:'', proAbout:'', proCloc:'', proPloc:'', proAdd:'', proId:'', proImage:''})
   const [editorContent, setEditorContent] = useState('');
+  const [imageBlobLink, setImageBlobLink] = useState(''); 
   const [isLoading, setIsLoading] = useState(true);
   const [fileData, setFileData] = useState(null);
   const [image, setImage] = useState(''); 
@@ -21,7 +22,7 @@ export default function Profile({params}) {
   async function fetchData() {
   try 
     {
-      const res = await fetch(`${BASE_API_URL}/api/profile/${params.ProId}`);
+      const res = await fetch(`${BASE_API_URL}/api/profile/${params.ProId}`,{cache:'no-store'});
       if(!res.ok){
         throw new Error("Error fetching profile data.");
       }
@@ -37,7 +38,10 @@ export default function Profile({params}) {
   },[params.ProId, image])
 
   const handleImageChange = async (imgFile) => {
-    setImage(imgFile);
+    if(imgFile){
+      setImage(imgFile);
+      setImageBlobLink(URL.createObjectURL(imgFile));
+    } 
   }
 
   const handleImageUpload = async (e) => {
@@ -90,8 +94,9 @@ export default function Profile({params}) {
 
 const handleRemoveImage = async (imageUrl) => {
      
-    const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
-    const filename = parts.pop();  //and get the last part
+  if(imageUrl){
+      const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
+      const filename = parts.pop();  //and get the last part
     try 
     {
         const public_id = filename.split('.')[0]; // Split the filename by periods ('.') and get the first part
@@ -121,6 +126,7 @@ const handleRemoveImage = async (imageUrl) => {
     } catch (error) {
         console.error('Error deleting image:', error);
     }
+  }
 };
 
   const handleChange = (e) => {
@@ -231,7 +237,7 @@ const handleRemoveImage = async (imageUrl) => {
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
               <div className='relative flex flex-col'>
                 <div className='p-3 flex flex-col group bg-white h-auto w-full  border-2 rounded-md'>
-                  <Image  alt='image' src={data.proImage} width={600} height={504} className='rounded-sm' ></Image>
+                  <Image  alt='image' src={data.proImage ? data.proImage : imageBlobLink} width={600} height={504} className='rounded-sm' ></Image>
                   <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[600*504]</p>
                   <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                 </div>

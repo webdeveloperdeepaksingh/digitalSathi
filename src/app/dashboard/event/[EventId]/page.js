@@ -15,6 +15,7 @@ export default function UpdateEvent({params}) {
     const router = useRouter();
     const [cat, setCat] = useState([]);
     const [image, setImage] = useState('');
+    const [imageBlobLink, setImageBlobLink] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}}; 
     const [errorMessage, setErrorMessage] = useState(''); 
@@ -40,7 +41,7 @@ export default function UpdateEvent({params}) {
     async function fetchData() {
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`);
+            const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`, {cache:'no-store'});
             if(!res.ok){
                 throw new Error("Error fetching event data.");
             }
@@ -60,59 +61,61 @@ export default function UpdateEvent({params}) {
     }
 
     const handleImageChange = async (imgFile) => {
-        setImage(imgFile);
+        if(imgFile){
+            setImage(imgFile);
+            setImageBlobLink(URL.createObjectURL(imgFile));
+        }
     }
 
     const handleImageUpload = async (e) => {
     e.preventDefault();
-
-        const formData = new FormData();
-        if (!image) {
-            alert('No image selected.');
-        }else if (!image.type.startsWith('image/')) {
-            alert('Only image files (JPEG, JPG, PNG ) are allowed.');
-        }else if(image.size > 50000){   //in bytes
-            alert('Image size exceeds the maximum allowed limit of 50KB.');
-        }else{
-            formData.append('file', image);
-            formData.append('upload_preset', 'image_upload');
-            formData.append('cloud_name', 'dlnjktcii');
-            
-            fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
-                method: 'POST',
-                body: formData
-            })
-            .then((res) => res.json())
-            .then((formData) => {
-                data.prodImage = formData.secure_url;
-                if(formData.secure_url){
-                    toast('Image uploaded successfully!', {
-                        hideProgressBar: false,
-                        autoClose: 1000,
-                        type: 'success'      
-                    });
-                }
-                else{
-                    toast('Image upload failed...!', {
-                        hideProgressBar: false,
-                        autoClose: 1000,
-                        type: 'error'      
-                    });
-                }
-            })
-            .catch((err) => {
-                console.error('Error uploading image:', err);
+    const formData = new FormData();
+    if (!image) {
+        alert('No image selected.');
+    }else if (!image.type.startsWith('image/')) {
+        alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+    }else if(image.size > 50000){   //in bytes
+        alert('Image size exceeds the maximum allowed limit of 50KB.');
+    }else{
+        formData.append('file', image);
+        formData.append('upload_preset', 'image_upload');
+        formData.append('cloud_name', 'dlnjktcii');
+        
+        fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then((res) => res.json())
+        .then((formData) => {
+            data.prodImage = formData.secure_url;
+            if(formData.secure_url){
+                toast('Image uploaded successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });
+            }
+            else{
                 toast('Image upload failed...!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'error'      
                 });
+            }
+        })
+        .catch((err) => {
+            console.error('Error uploading image:', err);
+            toast('Image upload failed...!', {
+                hideProgressBar: false,
+                autoClose: 1000,
+                type: 'error'      
             });
-        }   
+        });
+    }   
     };
 
-    const handleRemoveImage = async (imageUrl) => {
-         
+    const handleRemoveImage = async (imageUrl) => {   
+    if(imageUrl){
         const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
         const filename = parts.pop();  //and get the last part
         try 
@@ -143,6 +146,7 @@ export default function UpdateEvent({params}) {
             }      
         } catch (error) {
             console.error('Error deleting image:', error);
+        }
         }
     };
     
@@ -242,7 +246,7 @@ export default function UpdateEvent({params}) {
         <form className='w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div className='relative flex flex-col group bg-white h-auto w-full border border-solid rounded-md'>
-                    <Image alt={data.prodName} src={data.prodImage} width={580} height={332} ></Image>
+                    <Image alt={data.prodName} src={data.prodImage ? data.prodImage : imageBlobLink} width={580} height={332} ></Image>
                     <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[580*332]</p>
                     <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                 </div>

@@ -11,25 +11,21 @@ export default function SettingsPage({params}) {
   const [data, setData] = useState({brandTitle:'', brandTags:'', brandTax:'', brandDisc:'', brandCurr:'', brandIntro:'', brandLogo:'', brandIcon:''})
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const [imageFevIcon, setImageFevIcon] = useState(''); 
-  const [imageBrandLogo, setImageBrandLogo] = useState(''); 
   const [fevIcon, setFevIcon] = useState('');
   const [brandLogo, setBrandLogo] = useState('');
   const router = useRouter();
 
   useEffect(() =>{
-    async function fetchData() {
-    try 
-      {
-        const res = await fetch(`${BASE_API_URL}/api/settings/${params.SettId}`);
-        if(!res.ok){
-          throw new Error("Error fetching settData,");
-        }
-        const settingData = await res.json();
-        setData(settingData.result);
-        setImageFevIcon(`/images/${settingData.result.brandIcon}`);
-        setImageBrandLogo(`/images/${settingData.result.brandLogo}`);
-      } catch (error) {
+  async function fetchData() {
+  try 
+    {
+      const res = await fetch(`${BASE_API_URL}/api/settings/${params.SettId}`, {cache: "no-store"});
+      if(!res.ok){
+        throw new Error("Error fetching settData,");
+      }
+      const settingData = await res.json();
+      setData(settingData.result);
+    } catch (error) {
         console.error("Error fetching data.", error);
       }finally{
         setIsLoading(false);
@@ -51,48 +47,136 @@ export default function SettingsPage({params}) {
   }); 
   }
 
-  const handleImage = (icons, e) => {
-    if(icons === "fvIcon"){
-      setImageFevIcon(URL.createObjectURL(e.target.files?.[0]));
-      setFevIcon(e.target.files?.[0]);
-    }
-    else{
-      setImageBrandLogo(URL.createObjectURL(e.target.files?.[0]));    
-      setBrandLogo(e.target.files?.[0]);
-    }
-    
-    console.log(e.target.files?.[0]);
-  };
+  const handleFevIconUpload = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    if (!fevIcon) {
+        alert('No image selected.');
+    }else if (!fevIcon.type.startsWith('image/')) {
+        alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+    }else if(fevIcon.size > 50000 ){   //in bytes
+        alert('Image size exceeds the maximum allowed limit of 50KB.');
+    }else{
+        formData.append('file', fevIcon );
+        formData.append('upload_preset', 'image_upload');
+        formData.append('cloud_name', 'dlnjktcii');
+        
+        fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
+            method: 'POST',
+            body: formData
+        })
+        .then((res) => res.json())
+        .then((formData) => {
+          data.brandIcon = formData.secure_url;      
+          if(formData.secure_url){
+              toast('Image uploaded successfully!', {
+                  hideProgressBar: false,
+                  autoClose: 1000,
+                  type: 'success'      
+              });
+          }
+          else{
+              toast('Image upload failed...!', {
+                  hideProgressBar: false,
+                  autoClose: 1000,
+                  type: 'error'      
+              });
+            }
+        })
+        .catch((err) => {
+            console.error('Error uploading image:', err);
+            toast('Image upload failed...!', {
+                hideProgressBar: false,
+                autoClose: 1000,
+                type: 'error'      
+            });
+        });
+      }   
+    };
 
-  const handleImageUpload = async (doc) =>{
-    let fileName="";
-     const formData = new FormData();
-     
-    if(doc === "fvIcon"){      
-      fileName = `${doc}_${params.SettId}.${fevIcon.name.split('.').pop()}`; 
-      formData.set('image', fevIcon); 
-      formData.set('fileName', fileName);
-      data.brandIcon = fileName
-    }else{      
-      fileName = `${doc}_${params.SettId}.${brandLogo.name.split('.').pop()}`; 
-      formData.set('image', brandLogo); 
-      formData.set('fileName', fileName);
-      data.brandLogo = fileName;
-    }
-     
-     const response = await fetch(`${BASE_API_URL}/api/imagefiles`, {
-        method: 'POST',        
-        body: formData
-    });
-    
-    console.log(response);  
-    toast('Image uploaded successfully!', 
-    {
-      hideProgressBar: false,
-      autoClose: 1000,
-      type: 'success'      
-    });
-}
+    const handleBrandLogoUpload = async (e) => {
+      e.preventDefault();
+      const formData = new FormData();
+      if (!brandLogo) {
+          alert('No image selected.');
+      }else if (!brandLogo.type.startsWith('image/')) {
+          alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+      }else if(brandLogo.size > 50000 ){   //in bytes
+          alert('Image size exceeds the maximum allowed limit of 50KB.');
+      }else{
+          formData.append('file', brandLogo );
+          formData.append('upload_preset', 'image_upload');
+          formData.append('cloud_name', 'dlnjktcii');
+          
+          fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
+              method: 'POST',
+              body: formData
+          })
+          .then((res) => res.json())
+          .then((formData) => {
+            data.brandLogo = formData.secure_url;      
+            if(formData.secure_url){
+                toast('Image uploaded successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });
+            }
+            else{
+                toast('Image upload failed...!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                });
+              }
+          })
+          .catch((err) => {
+              console.error('Error uploading image:', err);
+              toast('Image upload failed...!', {
+                  hideProgressBar: false,
+                  autoClose: 1000,
+                  type: 'error'      
+              });
+          });
+        }   
+      };
+
+    const handleRemoveImage = async (imageUrl) => {
+         
+      if(imageUrl){
+        const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
+        const filename = parts.pop();  //and get the last part
+        try 
+        {
+            const public_id = filename.split('.')[0]; // Split the filename by periods ('.') and get the first part
+            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, 
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ public_id }), // Send the file name to delete
+            });
+
+            const result = await response.json();
+            if(result.success === true){
+                toast('Image removed successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });
+            }else{
+                toast('Image remove failed...!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                });
+            }      
+        } catch (error) {
+            console.error('Error deleting image:', error);
+        }
+      }
+    };
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -197,23 +281,31 @@ export default function SettingsPage({params}) {
             <div className='flex flex-col'>
               <label className='font-semibold uppercase'>Fevicon:</label>
               <div className='flex gap-1 mb-2'>
-                <input type='file' className='cursor-pointer w-full py-1 bg-white px-1 rounded-md border' onChange={(e)=>handleImage("fvIcon", e)}></input>
-                <button type='button' onClick={()=>handleImageUpload("fvIcon")} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
+                <input type='file' className='cursor-pointer w-full py-1 bg-white px-1 rounded-md border' onChange={(e)=>setFevIcon(e.target.files[0])}></input>
+                <button type='button' onClick={handleFevIconUpload} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
               </div>
-              <div className='relative flex flex-col border-2 w-[40px] h-auto p-2 mb-2 bg-white rounded-md'>
-                <Image alt="yes" src={imageFevIcon} className='rounded-sm'  width={20} height={20}/>
-                <span className='absolute text-xs opacity-50 left-0 top-9'>[20*20]</span>
+              <div className='relative flex flex-col border-2 w-[40px] h-[40px] bg-white rounded-md'>
+                  <div className='flex flex-col'>
+                      <div className='w-[20px] h-[20px] mb-4'>
+                        <Image alt="yes" src={data.brandIcon} className='rounded-sm'  width={20} height={20}/>
+                      </div>
+                      <div className='ml-0'>
+                        <button type='button' onClick={()=>handleRemoveImage(data.brandIcon)} className=' bg-gray-700 hover:bg-gray-600 font-bold px-2 py-1 text-xs text-white  left-0 bottom-0'>REMOVE</button>
+                      </div>
+                  </div>
+                  <span className='absolute text-xs opacity-50 left-0 top-6'>[20*20]</span>
               </div>
             </div>
             <div className='flex flex-col'>
               <label className='font-semibold uppercase'>Brand Logo:</label>
               <div className='flex  gap-1 mb-2'>
-                <input type='file' className='cursor-pointer py-1 bg-white w-full px-1 rounded-md border' onChange={(e)=>handleImage("brdLogo", e)}></input>
-                <button type='button' onClick={()=>handleImageUpload("brdLogo")} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
+                <input type='file' className='cursor-pointer py-1 bg-white w-full px-1 rounded-md border' onChange={(e)=>setBrandLogo(e.target.files[0])}></input>
+                <button type='button' onClick={handleBrandLogoUpload} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
               </div>
-              <div className='relative flex flex-col border-2 w-[255px] h-[105px] mb-2 bg-white rounded-md'>
-                <Image alt="yes" src={imageBrandLogo} className='rounded-sm mb-1'  width={250} height={100}/>
+              <div className='relative flex flex-col border-2 w-[275px] h-[105px] mb-2 bg-white rounded-md'> 
+                <Image alt="yes" src={data.brandLogo} className='rounded-sm mb-1'  width={250} height={100}/>
                 <span className='text-xs opacity-50'>[Size: 250*100]</span>
+                <button type='button' onClick={()=>handleRemoveImage(data.brandLogo)} className=' bg-gray-700 hover:bg-gray-600 text-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
               </div>
             </div>
           </div>
