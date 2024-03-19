@@ -54,7 +54,7 @@ export default async function EbooksLandingPage({params}) {
     <div>
       <div className='h-[90px]'><NavBar/></div>
       <div className='md:flex w-full p-9 gap-9'>
-        <Image className='mb-9 md:mb-0' alt={ebk.result.prodName} src={`/images/${ebk.result.prodImage}`} width={583} height={600} />
+        <Image className='mb-9 md:mb-0' alt={ebk.result.prodName} src={ebk.result.prodImage} width={583} height={600} />
         <div className='w-full p-9 border border-solid border-amber-500 rounded-md'>
           <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200 rounded-md'>{ebk.result.prodName}</h1>
           <p className='text-justify p-2'>{ebk.result.prodIntro}</p>

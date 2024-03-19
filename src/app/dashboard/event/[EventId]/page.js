@@ -6,22 +6,18 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
-import { useRef } from 'react';
 import Image from 'next/image';
 import React from 'react';
  
 
 export default function UpdateEvent({params}) {
 
-    const inputRef = useRef();
     const router = useRouter();
     const [cat, setCat] = useState([]);
     const [image, setImage] = useState('');
-    const [imageData, setImageData] = useState(null); 
     const [isLoading, setIsLoading] = useState(true);
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}}; 
     const [errorMessage, setErrorMessage] = useState(''); 
-    const [oldFileName, setOldImageFile] = useState('');
     const [editorContent, setEditorContent] = useState('');
     const [data, setData] = useState({prodName:'', prodTags:'', prodMeetLink:'', prodAuth:'', prodCont:'', prodTax:'', prodDisct:'',  prodIntro:'', prodDesc:'', prodCat:'', prodPrice:'', prodDisc:'',  prodTime:'', prodDate:'', prodImage:'' })    
     
@@ -42,7 +38,7 @@ export default function UpdateEvent({params}) {
 
     useEffect(() =>{
     async function fetchData() {
-        try 
+    try 
         {
             const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`);
             if(!res.ok){
@@ -50,9 +46,6 @@ export default function UpdateEvent({params}) {
             }
             const event = await res.json();
             setData(event.result);
-            setEditorContent(event.result.prodDesc)
-            setImage(`/images/${event.result.prodImage}`)
-            setOldImageFile(`/images/${event.result.prodImage}`)
         } catch (error) {
             console.error("Error fetching data: ", error);
         } finally{
@@ -60,80 +53,96 @@ export default function UpdateEvent({params}) {
         }
     }
     fetchData();
-    },[params.EventId]);
+    },[params.EventId, image]);
 
     if(isLoading){
         return <div><Loading/></div>
     }
 
-    const handleImage = (e) => {
-        setImage(URL.createObjectURL(e.target.files?.[0]));
-        setImageData(e.target.files?.[0])
-        console.log(e.target.files?.[0]);
-      };
-    
+    const handleImageChange = async (imgFile) => {
+        setImage(imgFile);
+    }
+
     const handleImageUpload = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
+
         const formData = new FormData();
-        formData.append('image', imageData); // Use 'append' instead of 'set'
-        data.prodImage = `evtImage_${params.EventId}.${imageData.name.split('.').pop()}`;
-        formData.append('fileName', data.prodImage); // Use 'append' here as well
-     
-        try {
-            const response = await fetch(`${BASE_API_URL}/api/imagefiles`, {
+        if (!image) {
+            alert('No image selected.');
+        }else if (!image.type.startsWith('image/')) {
+            alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+        }else if(image.size > 50000){   //in bytes
+            alert('Image size exceeds the maximum allowed limit of 50KB.');
+        }else{
+            formData.append('file', image);
+            formData.append('upload_preset', 'image_upload');
+            formData.append('cloud_name', 'dlnjktcii');
+            
+            fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
                 method: 'POST',
-                body: formData,
-            });
-    
-            if (response.ok) {
-                console.log('Image uploaded successfully!');
-                toast('Image uploaded successfully!', {
-                    hideProgressBar: false,
-                    autoClose: 1000,
-                    type: 'success'      
-                });        
-            } else {
-                console.error('Image upload failed:', response.status);
-                toast('Image upload failed!', {
+                body: formData
+            })
+            .then((res) => res.json())
+            .then((formData) => {
+                data.prodImage = formData.secure_url;
+                if(formData.secure_url){
+                    toast('Image uploaded successfully!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'success'      
+                    });
+                }
+                else{
+                    toast('Image upload failed...!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'error'      
+                    });
+                }
+            })
+            .catch((err) => {
+                console.error('Error uploading image:', err);
+                toast('Image upload failed...!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'error'      
-                }); 
-            }
-        } catch (error) {
-            console.error('Error during image upload:', error);
-        }
+                });
+            });
+        }   
     };
 
-    const handleRemoveImage = async (e) => {
-    e.preventDefault();
-    try 
+    const handleRemoveImage = async (imageUrl) => {
+         
+        const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
+        const filename = parts.pop();  //and get the last part
+        try 
         {
-            const imgName = data.prodImage;
-            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, {
+            const public_id = filename.split('.')[0]; // Split the filename by periods ('.') and get the first part
+            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, 
+            {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ imgName }), // Send the file name to delete
+                body: JSON.stringify({ public_id }), // Send the file name to delete
             });
-    
-            const dataImg = await response.json();
-            if (response.ok) {
-                    toast('Image removed successfully!', {
+
+            const result = await response.json();
+            if(result.success === true){
+                toast('Image removed successfully!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'success'      
-                });        
-            } else {
-                    toast('Image remove failed!', {
+                });
+            }else{
+                toast('Image remove failed...!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'error'      
-                }); 
-            }
+                });
+            }      
         } catch (error) {
-            console.error('Error removing image:', error);
+            console.error('Error deleting image:', error);
         }
     };
     
@@ -233,7 +242,7 @@ export default function UpdateEvent({params}) {
         <form className='w-full' encType="multipart/form-data" onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div className='relative flex flex-col group bg-white h-auto w-full border border-solid rounded-md'>
-                    <Image alt={data.prodName} src={image} width={580} height={332} ></Image>
+                    <Image alt={data.prodName} src={data.prodImage} width={580} height={332} ></Image>
                     <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[580*332]</p>
                     <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                 </div>
@@ -262,7 +271,7 @@ export default function UpdateEvent({params}) {
                     <div className='flex flex-col'>
                         <label>Upload Image:</label>
                         <div className='flex gap-1 mt-2'>
-                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-600' ></input>
+                            <input type='file'  accept='image/*' name='image' onChange={(e)=>handleImageChange(e.target.files[0])} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-600' ></input>
                             <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-600 text-md font-bold border border-solid border-amber-600'>UPLOAD</button>
                         </div>
                     </div>
@@ -274,7 +283,7 @@ export default function UpdateEvent({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Event Description:</label>
-                <TextEditor value={editorContent} handleEditorChange={handleEditorChange}/>
+                <TextEditor value={editorContent} handleEditorChange={handleEditorChange} initialValue={data.prodDesc}/>
             </div>
             <div className='flex flex-col mb-3'>
                 <label>Zoom Link:</label>

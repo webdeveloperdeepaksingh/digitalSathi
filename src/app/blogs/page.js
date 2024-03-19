@@ -87,7 +87,7 @@ export default function OnlineBlogs() {
         blogList.map((blg) =>{
           return(
             <div key={blg._id} className='flex flex-col w-auto h-auto p-6 rounded-md shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
-                <Image className='rounded-sm h-[150px]' alt={blg.blgName} src={`/images/${blg.blgImage}`} width={300} height={150} />
+                <Image className='rounded-sm h-[150px]' alt={blg.blgName} src={blg.blgImage} width={300} height={150} />
                 <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{blg.blgName}</h3>
                 <p className='text-justify py-2'>{blg.shortIntro}</p>
                 <div className='grid grid-cols-1'>

@@ -10,7 +10,13 @@ import React from 'react';
 
 export default function SideProfile() {
 
-    const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"), usrRole:Cookies.get("loggedInUserRole")}};
+    const loggedInUser = {
+        result:{
+                _id:Cookies.get("loggedInUserId"), 
+                usrRole:Cookies.get("loggedInUserRole")
+            }
+        };
+        
     const [isLoading, setIsLoading] = useState(true);
     const [profile, setProfile] = useState('');
     const [toggle, setToggle] = useState(false); 
@@ -47,7 +53,7 @@ export default function SideProfile() {
     <div>
       <header className=' flex h-[100px] p-4 items-center w-full justify-end bg-white shadow-lg'>
         <div className='relative w-[auto]'>
-            <div className='flex items-center p-3 font-bold rounded-md border border-solid border-amber-500'>
+            <div className='flex w-auto h-auto items-center p-3 font-bold rounded-md border border-solid border-amber-500'>
                 <p className=''>Welcome {profile?.proName} !</p>
                 <Image alt={profile?.proName} className='rounded-sm mx-2'  src={`/images/${profile?.proImage}`} width={65} height={65} />
                 <div className=''>

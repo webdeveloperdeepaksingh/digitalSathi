@@ -55,7 +55,7 @@ export default async function EventLandingPage({params}) {
       <div className='h-[105px]'><NavBar/></div>
       <div className='grid md:grid-cols-2 w-full p-9 gap-1'>
         <div className='relative w-full h-auto'>
-            <Image alt={evt.result.prodName} src={`/images/${evt.result.prodImage}`} width={700}  height={400}/>
+            <Image alt={evt.result.prodName} src={evt.result.prodImage} width={700}  height={400}/>
         </div>
         <div className='relative h-auto'  >
           <h1 className='uppercase p-2 text-2xl font-bold bg-gray-200'>{evt.result.prodName}</h1>

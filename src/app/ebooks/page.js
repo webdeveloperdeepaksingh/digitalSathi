@@ -97,7 +97,7 @@ export default function OnlineEbooks() {
           ebookList.map((ebk) =>{
             return(
               <div key={ebk._id} className='flex flex-col w-auto h-auto p-6 rounded-lg shadow-xl  hover:scale-110 duration-700 border-2 border-amber-500'>
-                  <Image className='rounded-sm h-[400px]' alt={ebk.prodName} src={`/images/${ebk.prodImage}`} width={300} height={400}/>
+                  <Image className='rounded-sm h-[400px]' alt={ebk.prodName} src={ebk.prodImage} width={300} height={400}/>
                   <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{ebk.prodName}</h3>
                   <p className='text-justify py-2'>{ebk.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>

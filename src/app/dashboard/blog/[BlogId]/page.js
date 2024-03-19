@@ -15,7 +15,6 @@ export default function UpdateBlog({params}) {
     const router = useRouter();
     const [cat, setCat] = useState([]);     
     const [image, setImage] = useState(''); 
-    const [imageData, setImageData] = useState(null); 
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [errorMessage, setErrorMessage] = useState(''); 
     const [editorContent, setEditorContent] = useState('');
@@ -39,8 +38,8 @@ export default function UpdateBlog({params}) {
       }, []);
 
     useEffect(() =>{
-        async function fetchData() {
-        try 
+    async function fetchData() {
+    try 
         {
             const response = await fetch(`${ BASE_API_URL }/api/blogs/${params.BlogId}`);
             if (!response.ok) {
@@ -48,89 +47,103 @@ export default function UpdateBlog({params}) {
             }
             const blgData = await response.json();                    
             setData(blgData.result);   
-            setEditorContent(blgData.result.blgDesc);   
-            setImage(`/images/${blgData.result.blgImage}`);
          } catch (error) {
             console.error('Error fetching data:', error);
         }finally {
             setIsLoading(false); // Mark loading as complete
-          }               
+        }               
     }
     fetchData();        
-    },[params.BlogId]);
+    },[params.BlogId, image]);
 
     if (isLoading) {
         return <div><Loading/></div>; // Show loading state
       }    
 
-    const handleImage = (e) => {
-        setImage(URL.createObjectURL(e.target.files?.[0]));        
-        setImageData(e.target.files?.[0])
-        console.log(e.target.files?.[0]);
-      };
-    
-      const handleImageUpload = async (e) => {
+    const handleImageChange = async (imgFile) => {
+        setImage(imgFile);
+    }
+
+    const handleImageUpload = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('image', imageData); // Use 'append' instead of 'set'
-        data.blgImage = `blgImage_${params.BlogId}.${imageData.name.split('.').pop()}`;
-        formData.append('fileName', data.blgImage); // Use 'append' here as well
-     
-        try {
-            const response = await fetch(`${BASE_API_URL}/api/imagefiles`, {
+
+        if (!image) {
+            alert('No image selected.');
+        }else if (!image.type.startsWith('image/')) {
+            alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+        }else if(image.size > 100000){   //in bytes
+            alert('Image size exceeds the maximum allowed limit of 100KB.');
+        }else{
+            formData.append('file', image);
+            formData.append('upload_preset', 'image_upload');
+            formData.append('cloud_name', 'dlnjktcii');
+            
+            fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
                 method: 'POST',
-                body: formData,
-            });
-    
-            if (response.ok) {
-                console.log('Image uploaded successfully!');
-                toast('Image uploaded successfully!', {
-                    hideProgressBar: false,
-                    autoClose: 1000,
-                    type: 'success'      
-                });        
-            } else {
-                console.error('Image upload failed:', response.status);
-                toast('Image upload failed!', {
+                body: formData
+            })
+            .then((res) => res.json())
+            .then((formData) => {
+                data.blgImage = formData.secure_url;
+                if(formData.secure_url){
+                    toast('Image uploaded successfully!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'success'      
+                    });
+                }
+                else{
+                    toast('Image upload failed...!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'error'      
+                    });
+                }
+            })
+            .catch((err) => {
+                console.error('Error uploading image:', err);
+                toast('Image upload failed...!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'error'      
-                }); 
-            }
-        } catch (error) {
-            console.error('Error during image upload:', error);
-        }
+                });
+            });
+        }   
     };
 
-    const handleRemoveImage = async (e) => {
-    e.preventDefault();
-    try 
+    const handleRemoveImage = async (imageUrl) => {
+         
+        const parts = imageUrl.split('/'); // Split the URL by slashes ('/')
+        const filename = parts.pop();  //and get the last part
+        try 
         {
-            const imgName = data.blgImage;
-            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, {
+            const public_id = filename.split('.')[0]; // Split the filename by periods ('.') and get the first part
+            const response = await fetch(`${BASE_API_URL}/api/removeimagefiles`, 
+            {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ imgName }), // Send the file name to delete
+                body: JSON.stringify({ public_id }), // Send the file name to delete
             });
-    
-            const dataImg = await response.json();
-            if (response.ok) {
-                    toast('Image removed successfully!', {
+
+            const result = await response.json();
+            if(result.success === true){
+                toast('Image removed successfully!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'success'      
-                });        
-            } else {
-                    toast('Image remove failed!', {
+                });
+            }else{
+                toast('Image remove failed...!', {
                     hideProgressBar: false,
                     autoClose: 1000,
                     type: 'error'      
-                }); 
-            }
+                });
+            }      
         } catch (error) {
-            console.error('Error removing image:', error);
+            console.error('Error deleting image:', error);
         }
     };
 
@@ -222,14 +235,14 @@ export default function UpdateBlog({params}) {
             <div className='grid md:grid-cols-1 w-full mb-3 gap-6'>
                 <div>
                     <div className='relative flex flex-col group bg-white  h-auto w-full border border-solid rounded-md mb-3'>
-                        <Image  alt='image' src={image} height={400} width={1500}></Image>
+                        <Image  alt='image' src={data.blgImage} height={400} width={1500}></Image>
                         <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[400*1500]</p>
                         <button type='button' onClick={handleRemoveImage} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                     </div>
                     <div className='flex flex-col'>
                         <label>Upload Image:</label>
                         <div className='flex gap-1 mt-2'>
-                            <input type='file'  accept='image/*' name='image' onChange={handleImage} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-500' ></input>
+                            <input type='file'  accept='image/*' name='image' onChange={(e)=>handleImageChange(e.target.files[0])} className='w-full py-2 px-2 border rounded-md bg-white focus:outline-amber-500' ></input>
                             <button type='button' onClick={handleImageUpload} className='py-1 px-2 rounded-md bg-white hover:bg-gray-50 text-amber-500 text-md font-bold border border-solid border-amber-500'>UPLOAD</button>
                         </div>
                     </div> 
@@ -251,7 +264,7 @@ export default function UpdateBlog({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-3'>Blog Description:</label>
-                <TextEditor value={data.blgDesc} handleEditorChange={handleEditorChange}/>
+                <TextEditor initialValue={data.blgDesc} value={editorContent} handleEditorChange={handleEditorChange}/>
             </div>
             <div className='grid md:grid-cols-2 mb-3 gap-2'> 
                 <div className='flex flex-col'>

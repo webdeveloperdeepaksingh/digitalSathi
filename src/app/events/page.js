@@ -97,7 +97,7 @@ export default function OnlineEvents() {
           eventList.map((evt) =>{
             return(
               <div key={evt._id} className='flex flex-col w-auto h-auto shadow-xl p-6 rounded-md  hover:scale-110 duration-700 border-2 border-amber-500'>
-                  <Image className='rounded-sm h-[150px]' alt={evt.prodName} src={`/images/${evt.prodImage}`} width={300} height={150}/>
+                  <Image className='rounded-sm h-[150px]' alt={evt.prodName} src={evt.prodImage} width={300} height={150}/>
                   <h3 className='py-2 text-xl uppercase font-bold border-b-2 border-amber-500'>{evt.prodName}</h3>
                   <p className='text-justify py-2'>{evt.prodIntro}</p>
                   <div className='grid grid-cols-1 md:grid-cols-2 w-full gap-1'>

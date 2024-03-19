@@ -1,7 +1,7 @@
 'use client';
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import React from 'react';
 import Cookies from 'js-cookie';
@@ -15,15 +15,14 @@ export default function UpdateCourse({params}) {
     const [isLoading, setIsLoading] = useState(true);
     const [cat, setCat] = useState([]); 
     const [image, setImage] = useState('');
-    const [imageData, setImageData] = useState(''); 
     const [errorMessage, setErrorMessage] = useState('');
     const [editorContent, setEditorContent] = useState('');
     const loggedInUser = {result:{_id:Cookies.get("loggedInUserId"),usrRole:Cookies.get("loggedInUserRole")}};
     const [data, setData] = useState({prodName:'', prodTags:'', prodIntro:'', prodAuth:'', prodTax:'', prodDisct:'', prodDesc:'', prodPrice:'', prodDisc:'', prodVal:'', prodCat:'', prodImage:''})    
     
     useEffect(() =>{
-      async function fetchData() {
-      try 
+    async function fetchData() {
+    try 
         {
             let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=`+ loggedInUser.result._id);
             catdata = await catdata.json();
@@ -46,8 +45,7 @@ export default function UpdateCourse({params}) {
             }
             const course = await res.json();
             setData(course.result);
-            setEditorContent(course.result.prodDesc);
-          } catch (error) {
+        } catch (error) {
             console.error("Error fetching data: ", error);
         }finally{
             setIsLoading(false);
@@ -55,27 +53,24 @@ export default function UpdateCourse({params}) {
     }
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[editorContent, params.CourseId, imageData]); 
+    },[params.CourseId, image]); 
 
-    const handleImageChange = async (imgData) => {
-        const imgFile = imgData;
-        const imageUrl = URL.createObjectURL(imgFile);
-        setImage(imageUrl);
-        setImageData(imgFile);
+    const handleImageChange = async (imgFile) => {
+        setImage(imgFile);
     }
 
     const handleImageUpload = async (e) => {
         e.preventDefault();
         const formData = new FormData();
 
-        if (!imageData) {
+        if (!image) {
             alert('No image selected.');
-        }else if (!imageData.type.startsWith('image/')) {
+        }else if (!image.type.startsWith('image/')) {
             alert('Only image files (JPEG, JPG, PNG ) are allowed.');
-        }else if(imageData.size > 1 * 1024 * 1024){
-            alert('Image size exceeds the maximum allowed limit.');
+        }else if(image.size > 50000){   //in bytes
+            alert('Image size exceeds the maximum allowed limit of 50KB.');
         }else{
-            formData.append('file', imageData);
+            formData.append('file', image);
             formData.append('upload_preset', 'image_upload');
             formData.append('cloud_name', 'dlnjktcii');
             
@@ -86,11 +81,20 @@ export default function UpdateCourse({params}) {
             .then((res) => res.json())
             .then((formData) => {
                 data.prodImage = formData.secure_url;
-                toast('Image uploaded successfully!', {
-                    hideProgressBar: false,
-                    autoClose: 1000,
-                    type: 'success'      
-                });
+                if(formData.secure_url){
+                    toast('Image uploaded successfully!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'success'      
+                    });
+                }
+                else{
+                    toast('Image upload failed...!', {
+                        hideProgressBar: false,
+                        autoClose: 1000,
+                        type: 'error'      
+                    });
+                }
             })
             .catch((err) => {
                 console.error('Error uploading image:', err);
@@ -120,19 +124,21 @@ export default function UpdateCourse({params}) {
             });
 
             const result = await response.json();
-            console.log('Image deleted successfully:', result);
-            toast('Image removed successfully!', {
-                hideProgressBar: false,
-                autoClose: 1000,
-                type: 'success'      
-            });
+            if(result.success === true){
+                toast('Image removed successfully!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'success'      
+                });
+            }else{
+                toast('Image remove failed...!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                });
+            }      
         } catch (error) {
             console.error('Error deleting image:', error);
-            toast('Image remove failed...!', {
-                hideProgressBar: false,
-                autoClose: 1000,
-                type: 'error'      
-            });
         }
     };
     
@@ -227,7 +233,7 @@ export default function UpdateCourse({params}) {
         <form action="" className='w-full' encType="multipart/form-data"  onSubmit={handleSubmit}>
             <div className='grid md:grid-cols-2 w-full mb-3 gap-6'>
                 <div className='relative flex flex-col group bg-white  h-auto w-full border border-solid rounded-md'>
-                    <Image  alt={data.prodName} src={data.prodImage ? data.prodImage : image}  width={580} height={332} priority ></Image> 
+                    <Image  alt={data.prodName} src={data.prodImage}  width={580} height={332} priority ></Image> 
                     <p className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs right-0 top-0'>Size:[580*332]</p>
                     <button type='button' onClick={()=>handleRemoveImage(data.prodImage)} className='absolute hidden group-hover:block bg-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
                 </div>    
@@ -259,12 +265,12 @@ export default function UpdateCourse({params}) {
             </div>
             <div className='flex flex-col mb-3'>
                 <label className='mb-2'>Course Description:</label>
-                <TextEditor name='prodDesc' value={editorContent} handleEditorChange={handleEditorChange}   />
+                <TextEditor name='prodDesc' value={editorContent} handleEditorChange={handleEditorChange} initialValue={data.prodDesc}   />
              </div>
             <div className='grid md:grid-cols-2 mb-3 gap-3'> 
                 <div className='flex flex-col'>
                     <label>Original Price:</label>
-                    <input type='text' name='prodPrice' value={data.prodPrice} handleEditorChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                    <input type='text' name='prodPrice' value={data.prodPrice} onChange={handleChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                 </div>
                 <div className='flex flex-col'>
                     <label>Discounted Price:</label>

@@ -53,7 +53,7 @@ export default async function BlogLandingPage({params}) {
     <div>
       <div className='h-[86px]'><NavBar/></div>
       <div className='relative w-full h-auto'>
-          <Image alt={blg.result.blgName} src={`/images/${blg.result.blgImage}`} width={1520} height={400}/>
+          <Image alt={blg.result.blgName} src={blg.result.blgImage} width={1520} height={400}/>
       </div>
       <div className='flex flex-col w-full p-9'>
         <div className='flex flex-col'>
