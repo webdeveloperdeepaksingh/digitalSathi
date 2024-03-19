@@ -25,10 +25,10 @@ export default function DashBoard({children}) {
  const settId = "65c8e1dad3c601a36e0dd62f" 
 
 useEffect(()=>{
-    async function fetchSettings(){
+async function fetchSettings(){
     try 
     {
-        const res = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
+        const res = await fetch(`${BASE_API_URL}/api/settings/${settId}`, {cache: "no-store"});
         if(!res.ok){
             throw new Error("Error fetching settData.");
         }
@@ -43,7 +43,7 @@ useEffect(()=>{
 }
 fetchSettings();
 // eslint-disable-next-line react-hooks/exhaustive-deps
-},[]) 
+},[settId, logo]) 
 
 const handleShowMenu = () => {
     setShowMenu(!showMenu);
@@ -185,7 +185,7 @@ const handleShowMenu = () => {
     <div className='p-0' suppressHydrationWarning>
         <div className='flex w-full'>
             <div className={showMenu == false ? 'relative w-[80px] flex md:w-[250px] duration-500 flex-col h-screen bg-amber-500' : 'relative flex w-[80px] duration-500 flex-col h-screen bg-amber-500'}> 
-                <Image className='py-2' src={`/images/${logo.brandLogo}`} alt={logo.brandTitle}  height={100} width={250} />
+                <Image className='py-2' src={logo.brandLogo} alt={logo.brandTitle}  height={100} width={250} />
                 <hr/>
                 <ul className='my-3'>
                 {sideMenu.map((item, i) => {
