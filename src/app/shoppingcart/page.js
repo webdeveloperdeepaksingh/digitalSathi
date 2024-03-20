@@ -80,7 +80,7 @@ export default function ShoppingCart() {
             return(
               <div key={item._id} className='relative flex max-w-[980px] p-3 h-auto bg-gray-100 mb-2 rounded-md shadow-md '>
                 <button type='button' onClick={()=> handleDelete(item)} className='cursor-pointer hover:bg-white bg-gray-100 absolute right-3 top-3 font-bold text-lg'><RxCross2/></button>
-                <Image alt={item.prodName} src={`/images/${item.prodImage}`} width={150} height={50} />
+                <Image alt={item.prodName} src={item.prodImage} width={150} height={50} />
                 <div className='flex flex-col px-2 w-auto'>
                   <h1 className='text-lg text-amber-500 uppercase font-bold'>{item.prodName}</h1>
                   <div className='flex flex-col w-auto'>

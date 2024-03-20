@@ -16,9 +16,14 @@ export default function UpdateEbookChap({params}) {
 
   useEffect(() =>{
     async function fetchData() {
-      let chapData = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}/addchapter/${params.ChapId}/updatechapter`);
-      chapData = await chapData.json();
-      setData(chapData.result);
+    try 
+      {
+        let chapData = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}/addchapter/${params.ChapId}/updatechapter`, {cache: "no-store"});
+        chapData = await chapData.json();
+        setData(chapData.result);
+      } catch (error) {
+        console.error("Error fetching chapData: ", error);
+      }
     }
     fetchData();
   },[params.EbookId, params.ChapId]);

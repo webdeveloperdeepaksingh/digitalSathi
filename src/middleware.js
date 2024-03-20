@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export function middleware(request){
 
-    const authToken = request.cookies.get('token')?.value;
+    const authToken = request.cookies.get('token').value;
     const noAccessPath = request.nextUrl.pathname.startsWith('/dashboard');
 
     if(noAccessPath){

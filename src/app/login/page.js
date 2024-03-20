@@ -65,7 +65,8 @@ export default function LoginPage() {
         setErrorMessage(post.message);
         }      
       }else{        
-        toast('Logged in successfully...!', {
+        toast('Logged in successfully...!', 
+        {
           hideProgressBar: false,
           autoClose: 1000,
           type: 'success'
