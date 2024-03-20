@@ -286,26 +286,28 @@ export default function SettingsPage({params}) {
               </div>
               <div className='relative flex flex-col border-2 w-[40px] h-[40px] bg-white rounded-md'>
                   <div className='flex flex-col'>
-                      <div className='w-[20px] h-[20px] mb-4'>
-                        <Image alt="yes" src={data.brandIcon} className='rounded-sm'  width={20} height={20}/>
+                      <div className='w-[40px] h-[40px] mb-4 p-2'>
+                        <Image alt="yes" src={data.brandIcon} className='rounded-sm'  width={40} height={40}/>
                       </div>
-                      <div className='ml-0'>
-                        <button type='button' onClick={()=>handleRemoveImage(data.brandIcon)} className=' bg-gray-700 hover:bg-gray-600 font-bold px-2 py-1 text-xs text-white  left-0 bottom-0'>REMOVE</button>
+                      <div className='absolute h-2 -right-5 top-0'>
+                        <button type='button' onClick={()=>handleRemoveImage(data.brandIcon)} className=' bg-gray-700 hover:bg-gray-600 text-white font-bold px-1 py-1 text-xs '>X</button>
                       </div>
                   </div>
-                  <span className='absolute text-xs opacity-50 left-0 top-6'>[20*20]</span>
+                  <span className='absolute text-xs opacity-50 -left-0 top-10'>[20*20]</span>
               </div>
             </div>
-            <div className='flex flex-col'>
+            <div className='flex flex-col mt-3'>
               <label className='font-semibold uppercase'>Brand Logo:</label>
               <div className='flex  gap-1 mb-2'>
                 <input type='file' className='cursor-pointer py-1 bg-white w-full px-1 rounded-md border' onChange={(e)=>setBrandLogo(e.target.files[0])}></input>
                 <button type='button' onClick={handleBrandLogoUpload} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
               </div>
-              <div className='relative flex flex-col border-2 w-[275px] h-[105px] mb-2 bg-white rounded-md'> 
+              <div className='relative flex flex-col border-2 w-[260px] h-[105px] mb-3 bg-white rounded-md'> 
                 <Image alt="yes" src={data.brandLogo} className='rounded-sm mb-1'  width={250} height={100}/>
                 <span className='text-xs opacity-50'>[Size: 250*100]</span>
-                <button type='button' onClick={()=>handleRemoveImage(data.brandLogo)} className=' bg-gray-700 hover:bg-gray-600 text-white font-bold px-2 py-1 text-xs  left-0 bottom-0'>REMOVE</button>
+                <div className='absolute h-2 right-1 top-1'>
+                  <button type='button' onClick={()=>handleRemoveImage(data.brandLogo)} className=' bg-gray-700 hover:bg-gray-600 text-white font-bold px-1 py-1 text-xs '>X</button>
+                </div>
               </div>
             </div>
           </div>

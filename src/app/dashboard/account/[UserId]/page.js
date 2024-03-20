@@ -17,7 +17,7 @@ export default function UpdateUser({params}) {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await fetch(`${BASE_API_URL}/api/users/${_id}`);
+        const res = await fetch(`${BASE_API_URL}/api/users/${_id}`, {cache: "no-store"});
         if (!res.ok) {
           throw new Error('Error fetching user data.');
         }

@@ -19,9 +19,9 @@ export default function ListOfChapters({params}) {
     async function getEbookById(){
     try 
       {
-        const res = await fetch(`${BASE_API_URL}/api/ebooks/${_id}`);
+        const res = await fetch(`${BASE_API_URL}/api/ebooks/${_id}`, {cache: "no-store"});
         if(!res.ok){
-          throw new Error("Error fetching ebook data.")
+          throw new Error("Error fetching ebook data.");
         }
         const ebookData = await res.json();
         setEbookById(ebookData.result);
@@ -44,7 +44,7 @@ export default function ListOfChapters({params}) {
     async function fetchEbookChap() {
     try 
       {
-        const res = await fetch(api);
+        const res = await fetch(api, {cache: "no-store"});
         if(!res.ok){
           throw new Error("Error fetching chapter data.")
         }

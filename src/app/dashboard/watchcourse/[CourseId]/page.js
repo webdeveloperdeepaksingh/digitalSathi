@@ -15,29 +15,29 @@ const [chap, setChap] = useState([]);
 const [toggle, setToggle] = useState(false);
 
 const handleWatch=(chapId, topId)=>{
-    async function fetchTop(){
-    try 
-        {
-            const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${chapId}/topic/${topId}`);
-            if(!response){
-                throw new Error("Error fetching topics.");
-            }
-            const topData = await response.json();
-            setTop(topData.result);
-        } catch (error) {
-            console.error("Error fetchig data: ", error);
-        }finally{
-            setIsLoading(false);
+async function fetchTop(){
+try 
+    {
+        const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${chapId}/topic/${topId}`, {cache: "no-store"});
+        if(!response){
+            throw new Error("Error fetching topics.");
         }
-        }
-        fetchTop();
+        const topData = await response.json();
+        setTop(topData.result);
+    } catch (error) {
+        console.error("Error fetchig data: ", error);
+    }finally{
+        setIsLoading(false);
     }
+    }
+    fetchTop();
+}
 
 useEffect(() =>{  
 async function fetchChap() {
     try 
     {
-        const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter`);
+        const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter`, {cache: "no-store"});
         if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
         }

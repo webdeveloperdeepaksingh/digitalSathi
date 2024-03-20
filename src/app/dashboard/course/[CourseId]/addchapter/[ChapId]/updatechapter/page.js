@@ -16,7 +16,7 @@ export default function UpdateChapter({params}) {
 
   useEffect(() =>{
     async function fetchData() {
-      let chapData = await fetch(`${BASE_API_URL}/api/courses/${_id}/chapter/${params.ChapId}`);
+      let chapData = await fetch(`${BASE_API_URL}/api/courses/${_id}/chapter/${params.ChapId}`, {cache: "no-store"});
       chapData = await chapData.json();
       setData(chapData.result);
     }

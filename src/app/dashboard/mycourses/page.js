@@ -26,7 +26,7 @@ export default function MyCourses() {
     async function fetchData() {
     try 
     {
-      const res = await fetch(api);
+      const res = await fetch(api, {cache: "no-store"});
       if(!res.ok){
         throw new Error('Error fetching course data');
       }

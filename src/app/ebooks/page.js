@@ -21,7 +21,7 @@ export default function OnlineEbooks() {
     async function fetchCatList(){
     try 
       {
-        const res = await fetch(`${BASE_API_URL}/api/categories`);
+        const res = await fetch(`${BASE_API_URL}/api/categories`, {cache: "no-store"});
         const catList = await res.json();
         setCatList(catList)
       } catch (error) {

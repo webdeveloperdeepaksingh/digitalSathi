@@ -14,7 +14,7 @@ export default function ReadChapter({params}) {
     async function fetchEbookChap() {
     try 
       {
-        const res = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}/getchapters/${_id}`);
+        const res = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}/getchapters/${_id}` , {cache: "no-store"});
         if (!res.ok) {
           throw new Error("Error fetching chapter data.")
         }

@@ -11,10 +11,10 @@ export default function EnquiryMsg({params}) {
   const [data, setData] = useState({eqrPerson:'', eqrSub:'', eqrEmail:'', eqrMsg:'', eqrPhone:''})
 
   useEffect(()=>{
-    async function fetchData(){
-    try 
+  async function fetchData(){
+  try 
     {
-        const res = await fetch(`${ BASE_API_URL }/api/enquiries/${params.EnquiryId}`);
+        const res = await fetch(`${ BASE_API_URL }/api/enquiries/${params.EnquiryId}` , {cache: "no-store"});
         if(!res.ok){
             throw new Error("Error fetching enquiry messages.")
         }

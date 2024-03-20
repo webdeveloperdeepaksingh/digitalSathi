@@ -15,9 +15,14 @@ export default function AddTopic({params}) {
 
   useEffect(() =>{
     async function fetchTopList(){
-      const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${params.ChapId}`);
-      const topData = await response.json();
-      setTopList(topData);  
+    try 
+      {
+        const response = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}/chapter/${params.ChapId}`, {cache: "no-store"});
+        const topData = await response.json();
+        setTopList(topData);
+      } catch (error) {
+        console.error("Error fetching topList: ", error);
+      }  
     }
     fetchTopList();
    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,33 +39,61 @@ export default function AddTopic({params}) {
   }); 
 }
 
-  const handleFileChange = (e) => {
-    setFileData(e.target.files?.[0])
-    console.log(e.target.files?.[0]);
+const handleFileChange = (pdfNote) => {
+  if(pdfNote){
+    setFileData(pdfNote);
+  } 
+};
+
+  const handleFileUpload = async (e) => {
+  e.preventDefault();
+  const formData = new FormData();
+
+  if (!fileData) {
+      alert('No file selected.');
+  }else if (!fileData.type.startsWith('image/')) {
+      alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+  }else if(fileData.size > 10485760){   //in bytes
+      alert('Image size exceeds the maximum allowed limit of 10MB.');
+  }else{
+      formData.append('file', fileData);
+      formData.append('upload_preset', 'pdf_upload');
+      formData.append('cloud_name', 'dlnjktcii');
+      
+      fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
+          method: 'POST',
+          body: formData
+      })
+      .then((res) => res.json())
+      .then((formData) => {
+          data.pdfFile = formData.secure_url;
+          if(formData.secure_url){
+              toast('File uploaded successfully!', {
+                  hideProgressBar: false,
+                  autoClose: 1000,
+                  type: 'success'      
+              });
+          }
+          else{
+              toast('File upload failed...!', {
+                  hideProgressBar: false,
+                  autoClose: 1000,
+                  type: 'error'      
+              });
+          }
+      })
+      .catch((err) => {
+          console.error('Error uploading file:', err);
+          toast('File upload failed...!', {
+              hideProgressBar: false,
+              autoClose: 1000,
+              type: 'error'      
+          });
+      });
+    }   
   };
 
-  const handleFileUpload = async (e) =>{
-    e.preventDefault();
-     const formData = new FormData();
-     formData.set('pdfFile', fileData)
-     const date = Date.now(); 
-     data.pdfFile =`topPdf_${date}.${fileData.name.split('.').pop()}`;
-     formData.set('fileName', data.pdfFile);
-     const response = await fetch(`${BASE_API_URL}/api/pdffiles`, {
-        method: 'POST',        
-         body: formData
-    });
-    
-    console.log(response);  
-    toast('File uploaded successfully!', 
-    {
-      hideProgressBar: false,
-      autoClose: 1000,
-      type: 'success'      
-    });
-  }
-
-  const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
     e.preventDefault();
     try
     {        
@@ -108,7 +141,7 @@ export default function AddTopic({params}) {
                     </div>
                     <div className='flex flex-col mb-3'>
                         <label className=''>Choose file:</label>
-                        <input type='file' name='pdfFile' onChange={handleFileChange} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
+                        <input type='file' name='pdfFile' onChange={(e)=>handleFileChange(e.target.files[0])} className='py-2 px-2 mt-2 border rounded-md  focus:outline-amber-500'></input>
                         <button type='button' onClick={handleFileUpload} className='w-full mt-3 py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white text-md font-bold'>UPLOAD</button>
                     </div>
                     <div className='flex w-full gap-1'>

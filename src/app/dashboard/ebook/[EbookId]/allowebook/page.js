@@ -24,7 +24,7 @@ export default function AllowEbook({params}) {
     async function fetchData() {  
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}`);
+            const res = await fetch(`${BASE_API_URL}/api/ebooks/${params.EbookId}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching ebook data.");
             }
@@ -53,7 +53,7 @@ export default function AllowEbook({params}) {
         async function fetchUserEmailId() {  
         try 
             {
-                const res = await fetch(api);
+                const res = await fetch(api , {cache: "no-store"});
                 if(!res.ok){
                     throw new Error("Error fetching user email data.");
                 }

@@ -20,7 +20,7 @@ export default function AddCourse() {
     useEffect(() =>{
       async function fetchData() {
         try {
-            let catdata = await fetch(`${BASE_API_URL}/api/categories`);
+            let catdata = await fetch(`${BASE_API_URL}/api/categories` , {cache: "no-store"});
             catdata = await catdata.json();
             setCat(catdata);
         } catch (error) {

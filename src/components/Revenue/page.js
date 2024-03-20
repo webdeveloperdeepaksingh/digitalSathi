@@ -15,7 +15,7 @@ export default function RevenueCurrentMonth() {
     async function fetchRevenue(){
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/revenue?userId=${loggedInUser.result._id}`);
+            const res = await fetch(`${BASE_API_URL}/api/revenue?userId=${loggedInUser.result._id}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching revenue.");
             }

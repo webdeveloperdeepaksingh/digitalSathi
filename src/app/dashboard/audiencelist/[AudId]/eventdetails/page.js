@@ -12,7 +12,7 @@ export default function EventDetails({params}) {
     async function fetchEventDetails(){
         try 
         {
-            const res = await fetch(`${ BASE_API_URL }/api/audience/${params.AudId}`)
+            const res = await fetch(`${ BASE_API_URL }/api/audience/${params.AudId}`, {cache: "no-store"})
             if(!res.ok){
                 throw new Error("Error fetching aud data.");
             }

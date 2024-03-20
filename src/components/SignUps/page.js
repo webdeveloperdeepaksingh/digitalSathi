@@ -14,7 +14,7 @@ export default function SignupsCurrentMonth() {
     async function fetchSignupCount(){
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/signupcount?userId=${loggedInUser.result._id}`);
+            const res = await fetch(`${BASE_API_URL}/api/signupcount?userId=${loggedInUser.result._id}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching signup counts.");
             }

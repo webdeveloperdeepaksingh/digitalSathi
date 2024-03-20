@@ -24,7 +24,7 @@ export default function AllowEvent({params}) {
     async function fetchData() {  
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`);
+            const res = await fetch(`${BASE_API_URL}/api/events/${params.EventId}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching event data.");
             }
@@ -53,7 +53,7 @@ export default function AllowEvent({params}) {
         async function fetchUserEmailId() {  
         try 
             {
-                const res = await fetch(api);
+                const res = await fetch(api, {cache: "no-store"});
                 if(!res.ok){
                     throw new Error("Error fetching user email data.");
                 }

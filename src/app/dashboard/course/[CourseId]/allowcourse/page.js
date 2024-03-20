@@ -24,7 +24,7 @@ export default function AllowCourse({params}) {
     async function fetchData() {  
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}`);
+            const res = await fetch(`${BASE_API_URL}/api/courses/${params.CourseId}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching course data.");
             }
@@ -54,7 +54,7 @@ export default function AllowCourse({params}) {
         async function fetchUserEmailId() {  
         try 
         {
-            const res = await fetch(api);
+            const res = await fetch(api , {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching user email data.");
             }

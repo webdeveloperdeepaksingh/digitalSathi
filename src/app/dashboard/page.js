@@ -43,7 +43,7 @@ async function fetchSettings(){
 }
 fetchSettings();
 // eslint-disable-next-line react-hooks/exhaustive-deps
-},[settId, logo]) 
+},[]) 
 
 const handleShowMenu = () => {
     setShowMenu(!showMenu);

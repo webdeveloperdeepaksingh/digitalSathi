@@ -39,7 +39,7 @@ export default function BlogList() {
     async function fetchData() {
     try 
     {
-      const res = await fetch(api);
+      const res = await fetch(api , {cache: "no-store"});
       if (!res.ok) {
         throw new Error('Error fetching blog data');
       }

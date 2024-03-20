@@ -26,7 +26,7 @@ export default function UpdateEvent({params}) {
     async function fetchCat() {
     try 
     {
-        let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=${loggedInUser.result._id}`);
+        let catdata = await fetch(`${BASE_API_URL}/api/categories/?userId=${loggedInUser.result._id}` , {cache: "no-store"});
         catdata = await catdata.json();
         setCat(catdata);        
     } catch (error) {

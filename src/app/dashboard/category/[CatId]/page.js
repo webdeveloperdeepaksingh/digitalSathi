@@ -18,7 +18,7 @@ export default function UpdateCategory({params}) {
     async function fetchData() {
     try 
       {
-        const res = await fetch(`${BASE_API_URL}/api/categories/${params.CatId}`);
+        const res = await fetch(`${BASE_API_URL}/api/categories/${params.CatId}`, {cache: "no-store"});
         if (!res.ok) {
           throw new Error('Error fetching category data.');
         }

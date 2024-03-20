@@ -14,7 +14,7 @@ export default function EnquiryCurrentMonth() {
     async function fetchEnquiryCount(){
     try 
         {
-            const res = await fetch(`${BASE_API_URL}/api/enquirycount?userId=${loggedInUser.result._id}`);
+            const res = await fetch(`${BASE_API_URL}/api/enquirycount?userId=${loggedInUser.result._id}`, {cache: "no-store"});
             if(!res.ok){
                 throw new Error("Error fetching enquiry counts.");
             }

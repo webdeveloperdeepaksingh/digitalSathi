@@ -23,7 +23,7 @@ function BuyProduct () {
     async function fetchSett() {
     try 
       {
-        const setting = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
+        const setting = await fetch(`${BASE_API_URL}/api/settings/${settId}`, {cache: "no-store"});
         const settingData = await setting.json();
         setTax(settingData.result);
       } catch (error) {

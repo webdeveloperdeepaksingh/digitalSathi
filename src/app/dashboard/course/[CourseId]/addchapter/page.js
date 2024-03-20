@@ -30,7 +30,7 @@ export default function AddChapter({params}) {
   async function fetchChap() {
   try 
     {
-      const response = await fetch(`${BASE_API_URL}/api/courses/${_id}/chapter`);
+      const response = await fetch(`${BASE_API_URL}/api/courses/${_id}/chapter`, {cache: "no-store"});
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }

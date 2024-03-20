@@ -42,7 +42,7 @@ export default function ShoppingCart() {
     async function fetchSett() {
     try 
       {
-        const res = await fetch(`${BASE_API_URL}/api/settings/${settId}`);
+        const res = await fetch(`${BASE_API_URL}/api/settings/${settId}`, {cache: "no-store"});
         if(!res.ok){
             throw new Error("Error fetching settData.");
         }

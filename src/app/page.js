@@ -8,7 +8,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
       const _id = "65c8e1dad3c601a36e0dd62f";
-      const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
+      const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`, {cache: "no-store"});
       const meta = await res.json();
       // const previousImages = (await parent).openGraph?.images || [];
       return {
@@ -16,7 +16,7 @@ try
           description: meta.result.brandIntro,
           keywords: [meta.result.brandTags],
           icons: {
-              icon: `/images/${meta.result.brandIcon}`, // Path to your favicon.ico
+              icon: meta.result.brandIcon, // Path to your favicon.ico
           },
           // openGraph: {
           //     images: [`/${meta.result.prodImage}`, ...previousImages], // Helps sharing of webpages on social media.

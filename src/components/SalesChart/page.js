@@ -27,22 +27,22 @@ export default function SalesChart() {
 
   useEffect(()=>{
     async function fetchSalesData(){
-        try 
-            {
-                const res = await fetch(`${BASE_API_URL}/api/sales?userId=${loggedInUser.result._id}`);
-                if(!res.ok){
-                    throw new Error("Error fetching sales data.");
-                }
-                const salesData = await res.json();
-                setSalesData(salesData);
-                console.log(salesData);
-            } catch (error) {
-                console.error("Error fetching sales data: ", error);
-            }finally {
-                setIsLoading(false);
+    try 
+        {
+            const res = await fetch(`${BASE_API_URL}/api/sales?userId=${loggedInUser.result._id}`, {cache: "no-store"});
+            if(!res.ok){
+                throw new Error("Error fetching sales data.");
             }
+            const salesData = await res.json();
+            setSalesData(salesData);
+            console.log(salesData);
+        } catch (error) {
+            console.error("Error fetching sales data: ", error);
+        }finally {
+            setIsLoading(false);
         }
-    fetchSalesData();
+    }
+  fetchSalesData();
   }, [loggedInUser.result._id])
   
 
