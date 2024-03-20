@@ -7,7 +7,7 @@ import { BASE_API_URL } from '../../../../utils/constants';
 
 export default function AddUser() {
 
-  const [data, setData] = useState('');
+  const [data, setData] = useState({usrName:'', usrPass:'', usrEmail:'', usrPhone:'', usrRole:''});
   const [errorMessage, setErrorMessage] = useState('');
   const router = useRouter();
 

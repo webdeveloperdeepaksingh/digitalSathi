@@ -44,7 +44,7 @@ export default function ReadChapter({params}) {
                 <Image className='h-[600px]' 
                   alt={chapById.chapName}
                   src={chapById.chapPdf}
-                  width={1200}
+                  width={1220}
                   height={600}
                   title={chapById.chapName}>
                 </Image>

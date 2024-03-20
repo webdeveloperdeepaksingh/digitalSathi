@@ -23,20 +23,20 @@ export default function UpdateBlog({params}) {
     const [data, setData] = useState({blgName:'', blgTags:'', shortIntro:'', blgDesc:'', blgCat:'', blgAuth:'', blgImage:'' })    
     
     useEffect(() => {
-        async function fetchData() {
-          try {
-            const response = await fetch(`${ BASE_API_URL }/api/categories`);
-            if (!response.ok) {
-              throw new Error('Error fetching category data');
-            }
-            const catData = await response.json();
-            setCat(catData.posts);
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          } 
+    async function fetchData() {
+        try {
+        const response = await fetch(`${ BASE_API_URL }/api/categories` , {cache: "no-store"});
+        if (!response.ok) {
+            throw new Error('Error fetching category data');
         }
-        fetchData();
-      }, []);
+        const catData = await response.json();
+        setCat(catData.posts);
+        } catch (error) {
+        console.error('Error fetching data:', error);
+        } 
+    }
+    fetchData();
+    }, []);
 
     useEffect(() =>{
     async function fetchData() {
