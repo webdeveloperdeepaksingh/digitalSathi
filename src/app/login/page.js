@@ -73,6 +73,7 @@ export default function LoginPage() {
         });
         Cookies.set("loggedInUserId", post.result.id);         
         Cookies.set("loggedInUserRole", post.result.role); 
+        Cookies.set("token", post.result.userToken); 
         router.push('/dashboard/home');
       }
   }catch(error){
