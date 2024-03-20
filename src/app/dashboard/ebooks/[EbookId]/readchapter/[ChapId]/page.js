@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from 'react'
+import Image from 'next/image';
 import { BASE_API_URL } from '../../../../../../../utils/constants';
 import Loading from '../../../loading';
 
@@ -40,12 +41,13 @@ export default function ReadChapter({params}) {
             <div className='flex flex-col  rounded-md'>
               <div className='text-xl font-bold p-4 bg-amber-500 text-white uppercase text-center'>{chapById.chapName}</div>
               <div className='border border-solid border-amber-500 p-6'>
-                <embed className='h-[600px]' 
-                  src={`/pdf/${chapById.chapPdf}#toolbar=0`}
+                <Image className='h-[600px]' 
+                  alt={chapById.chapName}
+                  src={chapById.chapPdf}
                   width="100%" 
                   height="600px"
                   title={chapById.chapName}>
-                </embed>
+                </Image>
               </div>
             </div>
         </div>
