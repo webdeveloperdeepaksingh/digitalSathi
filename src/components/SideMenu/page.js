@@ -41,15 +41,8 @@ export default function SideMenu({isShown}) {
 
    if(!isShown) return null;
 
-   const handleLogOut = () =>{
-   const token = Cookies.get('token');
-
-	if (token) {
-		try {
-			Cookies.remove('token');    
-		} catch (_) {}
-	}
-    
+   const handleLogOut = () =>{   
+    Cookies.remove('token');
     Cookies.remove('loggedInUserId'); 
     Cookies.remove('loggedInUserRole'); 
     toast('Logged out successfully!', 

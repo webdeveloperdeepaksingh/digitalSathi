@@ -1,8 +1,9 @@
+import Cookies from "js-cookie";
 import { NextResponse } from "next/server";
 
 export function middleware(request){
 
-    const authToken = request.cookies.get('token').value;
+    const authToken = Cookies.get('token');
     const noAccessPath = request.nextUrl.pathname.startsWith('/dashboard');
 
     if(noAccessPath){

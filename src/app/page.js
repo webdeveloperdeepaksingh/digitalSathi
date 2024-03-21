@@ -8,7 +8,7 @@ export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
       const _id = "65c8e1dad3c601a36e0dd62f";
-      const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`, {cache: "no-store"});
+      const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
       const meta = await res.json();
       // const previousImages = (await parent).openGraph?.images || [];
       return {
