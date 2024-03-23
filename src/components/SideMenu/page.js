@@ -41,17 +41,22 @@ export default function SideMenu({isShown}) {
 
    if(!isShown) return null;
 
-   const handleLogOut = () =>{
-    Cookies.remove('token');
-    Cookies.remove('loggedInUserId'); 
-    Cookies.remove('loggedInUserRole'); 
-    toast('Logged out successfully!', 
+   const handleLogOut = async () =>{
+   try 
     {
-        hideProgressBar: false,
-        autoClose: 1000,
-        type: 'success'
-    });
-    router.push("/login");
+        Cookies.remove('token');
+        Cookies.remove('loggedInUserId'); 
+        Cookies.remove('loggedInUserRole'); 
+        toast('Logged out successfully!', 
+        {
+            hideProgressBar: false,
+            autoClose: 1000,
+            type: 'success'
+        });
+        router.push("/login");
+    } catch (error) {
+        console.error("Error logging out.")
+    } 
 }
 
   return (

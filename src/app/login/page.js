@@ -1,5 +1,4 @@
 'use client';
-import Footer from '@/components/Footer/page';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
@@ -12,7 +11,7 @@ export default function LoginPage() {
 
   const [data, setData] = useState({usrName:'', usrPass:'', usrEmail:''});
   const [errorMessage, setErrorMessage] = useState('');
-  const router = useRouter();
+  const router = useRouter(); 
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -62,18 +61,19 @@ export default function LoginPage() {
         setErrorMessage(post.message.join(' || '));
         }
         else{
-        setErrorMessage(post.message);
+          setErrorMessage(post.message);
         }      
-      }else{        
+      }else
+      {  
+        Cookies.set("loggedInUserId", post.result.id); 
+        Cookies.set("loggedInUserRole", post.result.role);
+        Cookies.set("token", post.result.userToken);
         toast('Logged in successfully...!', 
         {
           hideProgressBar: false,
           autoClose: 1000,
           type: 'success'
-        });
-        Cookies.set("loggedInUserId", post.result.id);         
-        Cookies.set("loggedInUserRole", post.result.role); 
-        Cookies.set("token", post.result.userToken); 
+        });     
         router.push('/dashboard/home');
       }
   }catch(error){

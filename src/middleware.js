@@ -1,13 +1,12 @@
-import Cookies from "js-cookie";
 import { NextResponse } from "next/server";
 
-export function middleware(request){
-
-    const authToken = Cookies.get('token');
+export default function middleware(request){    
+    
     const noAccessPath = request.nextUrl.pathname.startsWith('/dashboard');
-
+    const authToken = request.cookies.get("token");
+ 
     if(noAccessPath){
-        if(!authToken){
+        if(!authToken || authToken.value === "undefined"){
             return new NextResponse("You are not logged in. Please sign in to access the dashboard.", {status: 401});
         }
         // If authToken exists or the path doesn't start with /dashboard, proceed as usual.
@@ -18,5 +17,6 @@ export function middleware(request){
 export const config = {
     matcher:[
         "/dashboard/:path*"
-    ]
-}
+    ],
+};
+    
