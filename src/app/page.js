@@ -10,7 +10,7 @@ try
       const _id = "65c8e1dad3c601a36e0dd62f";
       const res = await fetch(`${BASE_API_URL}/api/settings/${_id}`);
       const meta = await res.json();
-      // const previousImages = (await parent).openGraph?.images || [];
+      const previousImages = (await parent).openGraph?.images || [];
       return {
           title: meta.result.brandTitle,
           description: meta.result.brandIntro,
@@ -18,9 +18,9 @@ try
           icons: {
               icon: meta.result.brandIcon, // Path to your favicon.ico
           },
-          // openGraph: {
-          //     images: [`/${meta.result.prodImage}`, ...previousImages], // Helps sharing of webpages on social media.
-          // },
+          openGraph: {
+              images: [`/${Banner}`, ...previousImages], // Helps sharing of webpages on social media.
+          },
       };
   } catch (error) {
       console.error("Error fetching settData: ", error);
