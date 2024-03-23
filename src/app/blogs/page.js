@@ -56,8 +56,7 @@ export default function OnlineBlogs() {
   
   const handleChange =(event) =>{
     setQuery(event.target.value);
-    console.log(event.target.value);
-  }
+   }
 
   if(isLoading){
     return <div><Loading/></div>
