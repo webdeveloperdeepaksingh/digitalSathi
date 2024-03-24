@@ -20,8 +20,7 @@ export default function SignupsCurrentMonth() {
             }
             const signupCountData = await res.json();
             setSignupCount(signupCountData.userList);
-            console.log(signupCountData.userList);
-        } catch (error) {
+         } catch (error) {
             console.error("Error fetching revenue: ", error);
         } finally{
             setIsLoading(false);

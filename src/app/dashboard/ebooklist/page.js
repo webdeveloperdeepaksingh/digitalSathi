@@ -66,7 +66,6 @@ export default function EbookList() {
   
    const handleSearch = (data) =>{
      setQuery(data);
-     console.log(data);
    }
 
   return (

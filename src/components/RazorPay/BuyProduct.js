@@ -38,7 +38,6 @@ function BuyProduct () {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value);
     setData((prev) =>{
     return {
         ...prev, [name]: value

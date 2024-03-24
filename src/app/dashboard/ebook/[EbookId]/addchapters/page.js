@@ -39,7 +39,6 @@ export default function AddEbookChap({params}) {
 
   const handleFileChange = (e) => {
     setFileData(e.target.files?.[0])
-    console.log(e.target.files?.[0]);
   };
 
   const handleFileUpload = async (e) =>{
@@ -66,7 +65,6 @@ export default function AddEbookChap({params}) {
   const handleChange = (e) => {
       const name = e.target.name;
       const value = e.target.value;
-      console.log(name, value);
       setData((prev) =>{
       return {
           ...prev, [name]: value
@@ -86,8 +84,7 @@ export default function AddEbookChap({params}) {
     });
 
     const post = await result.json();
-    console.log(post);
-
+ 
     data.chapName='';
     data.chapPdf='';
     fetchEbookChap();

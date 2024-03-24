@@ -154,7 +154,6 @@ export default function UpdateEvent({params}) {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(name, value);
         setData((prev) =>{
         return {
             ...prev, [name]: value
@@ -164,7 +163,6 @@ export default function UpdateEvent({params}) {
 
     const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
-        console.log(editorContent);
     }
     
     const handleSubmit = async (e) => {
@@ -197,28 +195,27 @@ export default function UpdateEvent({params}) {
       {
         method:'PUT',
         body:JSON.stringify(
-            {
-                prodName:data.prodName, 
-                prodTags:data.prodTags, 
-                prodMeetLink: data.prodMeetLink, 
-                prodIntro:data.prodIntro,
-                prodTax:data.prodTax,
-                prodAuth: data.prodAuth,
-                prodDisct:data.prodDisct, 
-                prodDesc:editorContent, 
-                prodCat:data.prodCat, 
-                prodCont:data.prodCont, 
-                prodPrice:data.prodPrice, 
-                prodDisc:data.prodDisc, 
-                prodImage: data.prodImage, 
-                prodTime:data.prodTime, 
-                prodDate:data.prodDate, 
-            }),
+        {
+            prodName:data.prodName, 
+            prodTags:data.prodTags, 
+            prodMeetLink: data.prodMeetLink, 
+            prodIntro:data.prodIntro,
+            prodTax:data.prodTax,
+            prodAuth: data.prodAuth,
+            prodDisct:data.prodDisct, 
+            prodDesc:editorContent, 
+            prodCat:data.prodCat, 
+            prodCont:data.prodCont, 
+            prodPrice:data.prodPrice, 
+            prodDisc:data.prodDisc, 
+            prodImage: data.prodImage, 
+            prodTime:data.prodTime, 
+            prodDate:data.prodDate, 
+        }),
       });
 
       const post = await result.json();
-      console.log(post);
-
+ 
     if(post.success==false){    //This line of code needed for server-side validation only as written in USER Route API.
         if (Array.isArray(post.message)) {
             setErrorMessage(post.message.join(' || '));

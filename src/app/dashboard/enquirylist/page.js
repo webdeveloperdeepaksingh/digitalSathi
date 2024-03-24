@@ -59,7 +59,6 @@ export default function EnquiryList() {
 
   const handleSearch = (data) =>{
     setQuery(data);
-    console.log(data);
   }
 
   if(isLoading){

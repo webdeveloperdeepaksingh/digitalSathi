@@ -11,8 +11,7 @@ export default function BuyItem({prodId}) {
   const handleCustomerDetails = (prod) =>{
     setShowCustomerDetailsForm(true);
     setTransDetails(prod);
-    console.log(prod);
-}
+ }
 
   return (
     <div>

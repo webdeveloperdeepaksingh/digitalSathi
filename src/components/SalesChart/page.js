@@ -35,8 +35,7 @@ export default function SalesChart() {
             }
             const salesData = await res.json();
             setSalesData(salesData);
-            console.log(salesData);
-        } catch (error) {
+         } catch (error) {
             console.error("Error fetching sales data: ", error);
         }finally {
             setIsLoading(false);

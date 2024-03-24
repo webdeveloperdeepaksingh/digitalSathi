@@ -35,7 +35,6 @@ export default function AddEvent() {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(name, value);
         setData((prev) =>{
         return {
             ...prev, [name]: value
@@ -45,7 +44,6 @@ export default function AddEvent() {
 
     const handleEditorChange = (newContent) => {
         data.prodDesc= newContent;
-        console.log(data.prodDesc);
     }
     
     const handleSubmit = async (e) => {
@@ -81,29 +79,28 @@ export default function AddEvent() {
       {
         method:'POST',
         body:JSON.stringify(
-            {
-                prodName:data.prodName, 
-                prodTags:data.prodTags, 
-                prodType:"events",
-                prodAuth:data.prodAuth,
-                prodCont:data.prodCont, 
-                prodIntro:data.prodIntro, 
-                prodMeetLink:data.prodMeetLink,
-                prodDesc:data.prodDesc, 
-                prodCat:data.prodCat, 
-                prodPrice:data.prodPrice, 
-                prodDisc:data.prodDisc,
-                prodTax:data.prodTax, 
-                prodDisct:data.prodDisct,
-                prodTime:data.prodTime, 
-                prodDate:data.prodDate,
-                userId: loggedInUser.result._id
-            }),
+        {
+            prodName:data.prodName, 
+            prodTags:data.prodTags, 
+            prodType:"events",
+            prodAuth:data.prodAuth,
+            prodCont:data.prodCont, 
+            prodIntro:data.prodIntro, 
+            prodMeetLink:data.prodMeetLink,
+            prodDesc:data.prodDesc, 
+            prodCat:data.prodCat, 
+            prodPrice:data.prodPrice, 
+            prodDisc:data.prodDisc,
+            prodTax:data.prodTax, 
+            prodDisct:data.prodDisct,
+            prodTime:data.prodTime, 
+            prodDate:data.prodDate,
+            userId: loggedInUser.result._id
+        }),
       });
 
       const post = await result.json();
-      console.log(post);
-
+ 
     if(post.success==false){    //This line of code needed for server-side validation only as written in USER Route API.
         if (Array.isArray(post.message)) {
             setErrorMessage(post.message.join(' || '));

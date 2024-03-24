@@ -91,7 +91,6 @@ export default function AllowCourse({params}) {
         
         const handleSearch = (data) =>{
             setQuery(data);
-            console.log(data);
         }
 
         const handleCheckbox = (userEmail) => {
@@ -119,7 +118,6 @@ export default function AllowCourse({params}) {
         const handleChange = (e) => {
             const name = e.target.name;
             const value = e.target.value;
-            console.log(name, value);
             setData((prev) =>{
             return {
                 ...prev, [name]: value
@@ -152,7 +150,6 @@ export default function AllowCourse({params}) {
             });
     
             const post = await result.json();
-            console.log(post);
             setErrorMessage(''); // Clear the previous error
             if(post.success == false){
                 if (Array.isArray(post.message)) {

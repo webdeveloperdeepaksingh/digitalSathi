@@ -154,7 +154,6 @@ export default function UpdateEbook({params}) {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(name, value);
         setData((prev) =>{
         return {
             ...prev, [name]: value
@@ -164,7 +163,6 @@ export default function UpdateEbook({params}) {
   
       const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
-        console.log(editorContent);
       }
       
     const handleSubmit = async (e) => {

@@ -63,7 +63,6 @@ export default function CategoryList() {
  
    const handleSearch = (data) =>{
      setQuery(data);
-     console.log(data);
    }
 
   return (

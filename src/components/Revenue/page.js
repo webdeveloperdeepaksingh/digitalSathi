@@ -21,8 +21,7 @@ export default function RevenueCurrentMonth() {
             }
             const revenueData = await res.json();
             setRevenue(revenueData.paymentList);
-            console.log(revenueData.paymentList);
-        } catch (error) {
+         } catch (error) {
             console.error("Error fetching revenue: ", error);
         } finally{
             setIsLoading(false);

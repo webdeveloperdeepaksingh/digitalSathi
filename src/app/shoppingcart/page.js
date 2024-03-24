@@ -35,7 +35,6 @@ export default function ShoppingCart() {
   const handleCustomerDetails = (data) =>{
     setShowCustomerDetailsForm(true);
     setTransDetails(data);
-    console.log(data);
   }  
 
   useEffect(() =>{

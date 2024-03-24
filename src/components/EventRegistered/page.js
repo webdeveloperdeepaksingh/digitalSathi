@@ -21,8 +21,7 @@ export default function EventRegisteredCurrentMonth() {
             }
             const eventCountData = await res.json();
             setEventRegCount(eventCountData.eventList);
-            console.log(eventCountData.eventList);
-        } catch (error) {
+         } catch (error) {
             console.error("Error fetching event counts: ", error);
         } finally{
             setIsLoading(false);

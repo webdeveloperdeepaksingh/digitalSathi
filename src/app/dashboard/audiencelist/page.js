@@ -58,7 +58,6 @@ export default function AudienceList() {
 
   const handleSearch = (data) => {
     setQuery(data);
-    console.log(data);
   };
 
   if (isLoading) {

@@ -62,7 +62,6 @@ export default function ListOfChapters({params}) {
  
    const handleSearch = (data) =>{
      setQuery(data);
-     console.log(data);
    }
 
    if(isLoading){

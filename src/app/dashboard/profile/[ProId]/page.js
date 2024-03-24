@@ -132,7 +132,6 @@ const handleRemoveImage = async (imageUrl) => {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value);
     setData((prev) =>{
     return {
         ...prev, [name]: value
@@ -142,7 +141,6 @@ const handleRemoveImage = async (imageUrl) => {
 
   const handleFileChange = (e) => {
     setFileData(e.target.files?.[0])
-    console.log(e.target.files?.[0]);
   };
 
   const handleFileUpload = async (doc) =>{
@@ -182,8 +180,7 @@ const handleRemoveImage = async (imageUrl) => {
 
   const handleEditorChange = (newContent) => {
   setEditorContent(newContent);
-  console.log(editorContent);
-}
+ }
   const handleSubmit = async (e) => {
   e.preventDefault();
   try
@@ -210,7 +207,6 @@ const handleRemoveImage = async (imageUrl) => {
     });
 
     const post = await result.json();
-    console.log(post);   
     {toast('Profile saved successfully!', 
         {
             hideProgressBar: false,

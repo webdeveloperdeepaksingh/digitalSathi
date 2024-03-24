@@ -44,7 +44,6 @@ export default function MyCourses() {
 
   const handleSearch = (data) =>{
     setQuery(data);
-    console.log(data);
   }
 
   if (isLoading) {

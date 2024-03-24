@@ -56,7 +56,6 @@ try
   });
 
   const post = await result.json();
-  console.log(post);
   alert('Enquiry submitted successfully...!')
   router.push('/contactus');
 

@@ -59,7 +59,6 @@ export default function EventList() {
 
   const handleSearch = (data) =>{
     setQuery(data);
-    console.log(data);
   }
 
   if(isLoading){

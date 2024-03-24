@@ -33,7 +33,6 @@ export default function AddEbook() {
       const handleChange = (e) => {
           const name = e.target.name;
           const value = e.target.value;
-          console.log(name, value);
           setData((prev) =>{
           return {
               ...prev, [name]: value
@@ -43,8 +42,7 @@ export default function AddEbook() {
   
       const handleEditorChange = (newContent) => {
           data.prodDesc= newContent;
-          console.log(data.prodDesc);
-      }
+       }
       
     const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +88,6 @@ export default function AddEbook() {
         });
   
         const post = await result.json();
-        console.log(post);
         setErrorMessage(''); //Clear the previous error
         if(post.success==false){
             if (Array.isArray(post.message)) {

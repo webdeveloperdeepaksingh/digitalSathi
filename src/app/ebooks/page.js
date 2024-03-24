@@ -59,8 +59,7 @@ export default function OnlineEbooks() {
   
   const handleChange =(event) =>{
     setQuery(event.target.value);
-    console.log(event.target.value);
-  }
+   }
 
   const dispatch = useDispatch();
   const handleAddToCart = (ebookData) =>{

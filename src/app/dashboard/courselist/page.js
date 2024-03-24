@@ -65,7 +65,6 @@ export default function CourseList() {
 
   const handleSearch = (data) =>{
     setQuery(data);
-    console.log(data);
   }
 
   return (

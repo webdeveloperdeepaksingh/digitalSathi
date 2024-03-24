@@ -58,7 +58,6 @@ export default function OnlineCourses() {
   
   const handleChange =(event) =>{
     setQuery(event.target.value);
-    console.log(event.target.value);
   }
 
   const dispatch = useDispatch();

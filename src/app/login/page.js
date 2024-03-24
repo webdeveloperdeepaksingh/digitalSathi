@@ -16,7 +16,6 @@ export default function LoginPage() {
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    console.log(name, value);
     setData((prev) =>{
     return {
         ...prev, [name]: value
@@ -54,8 +53,7 @@ export default function LoginPage() {
     });
 
       const post = await result.json();
-      console.log(post);
-    
+     
     if(post.success==false){    //This line of code needed for server-side validation only, as written in USER Route API.
       if (Array.isArray(post.message)) {
         setErrorMessage(post.message.join(' || '));

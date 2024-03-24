@@ -7,8 +7,7 @@ export default function Pagination({totalPages, setCurrentPage, currentPage}) {
 
   const handlePageChange = ({selected}) => {
     setCurrentPage(selected);
-    console.log(selected);
-  }
+   }
 
   const showNextButton = currentPage !== totalPages - 1;
   const showPrevButton = currentPage !== 0;

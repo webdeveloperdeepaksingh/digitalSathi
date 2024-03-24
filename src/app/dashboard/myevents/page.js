@@ -46,7 +46,6 @@ export default function MyEvent() {
   
    const handleSearch = (data) =>{
      setQuery(data);
-     console.log(data);
    }
 
   return (

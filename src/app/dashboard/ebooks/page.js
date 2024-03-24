@@ -50,7 +50,6 @@ export default function ListOfEbooks() {
  
    const handleSearch = (data) =>{
      setQuery(data);
-     console.log(data);
    }
 
   return (

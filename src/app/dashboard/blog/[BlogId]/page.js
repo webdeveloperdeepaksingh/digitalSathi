@@ -24,15 +24,16 @@ export default function UpdateBlog({params}) {
     
     useEffect(() => {
     async function fetchData() {
-        try {
-        const response = await fetch(`${ BASE_API_URL }/api/categories` , {cache: "no-store"});
-        if (!response.ok) {
-            throw new Error('Error fetching category data');
-        }
-        const catData = await response.json();
-        setCat(catData);
+    try 
+        {
+            const response = await fetch(`${ BASE_API_URL }/api/categories` , {cache: "no-store"});
+            if (!response.ok) {
+                throw new Error('Error fetching category data');
+            }
+            const catData = await response.json();
+            setCat(catData);
         } catch (error) {
-        console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
         } 
     }
     fetchData();
@@ -155,7 +156,6 @@ export default function UpdateBlog({params}) {
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(name, value);
         setData((prev) =>{
         return {
             ...prev, [name]: value
@@ -165,8 +165,7 @@ export default function UpdateBlog({params}) {
 
     const handleEditorChange = (newContent) => {
         setEditorContent(newContent);
-        console.log(editorContent);
-      }
+    }
     
     const handleSubmit = async (e) => {
     e.preventDefault();
@@ -208,8 +207,7 @@ export default function UpdateBlog({params}) {
       });
 
       const post = await result.json();
-      console.log(post);
-
+ 
     if(post.success==false){    //This line of code needed for server-side validation only as written in USER Route API.
         if (Array.isArray(post.message)) {
             setErrorMessage(post.message.join(' || '));

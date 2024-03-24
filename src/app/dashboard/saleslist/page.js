@@ -59,7 +59,6 @@ export default function SalesList() {
 
   const handleSearch = (data) =>{
     setQuery(data);
-    console.log(data);
   }
 
   const handleToggle = (index) => { 

@@ -20,8 +20,7 @@ export default function EnquiryCurrentMonth() {
             }
             const enquiryCountData = await res.json();
             setEnquiryCount(enquiryCountData.enquiryList);
-            console.log(enquiryCountData.enquiryList);
-        } catch (error) {
+         } catch (error) {
             console.error("Error fetching enquiry counts: ", error);
         } finally{
             setIsLoading(false);
