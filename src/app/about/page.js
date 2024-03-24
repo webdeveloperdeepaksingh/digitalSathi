@@ -8,7 +8,7 @@ import Mission from "../../../public/images/mission.jpg";
 export const metadata = {
   title: 'DigitalSathi | About Us',
   openGraph: {
-    images: ['/images/About us.jpg', ...previousImages] // Helps sharing of webpages on social media.
+    images: ['/images/About us.jpg'] // Helps sharing of webpages on social media.
   }
 }
 
