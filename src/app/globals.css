@@ -25,4 +25,21 @@ body {
   box-sizing: content-box; /* Ensures the width remains 100% + scrollbar width */
 }
 
+.bounce-once {
+  animation: bounce 0.1s ease-in-out;
+  /* animation-fill-mode: forwards; Ensures animation plays only once */
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+
 

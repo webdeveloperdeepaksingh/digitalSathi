@@ -1,9 +1,14 @@
 import Footer from '@/components/Footer/page'
 import { BASE_API_URL } from '../../utils/constants';
 import Banner from '../../public/images/bnr.jpg';
+import webDev from '../../public/images/webDevelopment.jpg';
+import webDes from '../../public/images/webDesign.jpg';
+import webSeo from '../../public/images/seoService.jpg';
+import aboutD from '../../public/images/AboutDigitalSathi.jpeg';
+import devTrain from '../../public/images/trainingNDevelopment.jpg';
 import Image from 'next/image';
 import Link from 'next/link';
-
+ 
 export async function generateMetadata({ params, searchParams }, parent) {
 try 
   {
@@ -55,9 +60,44 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-      
-      <div className='flex flex-col w-full '>
-          
+      <div className='flex flex-col w-full px-12 mt-4'>
+          <div className='flex flex-col'>
+            <hi className='text-center text-3xl font-bold'>ABOUT US</hi>
+            
+              <div className='grid grid-cols-1 md:grid-cols-2' >
+                <div className='w-auto h-auto shadow-xl p-6 '>
+                  <Image alt='web_development' className='h-[400px] w-[680px]' src={aboutD} width={650} height={650} />
+                </div>
+                <div className='p-9 text-center mt-9'>
+                  <p>
+                      At DigitalSathi, we don’t just build websites; we weave digital dreams. Our journey began in a cozy garage, fueled by passion and a shared vision: to create online experiences that resonate with users, businesses, and brands alike. Your success is our compass. We listen, collaborate, and tailor solutions to fit your unique needs. Our clients aren’t just projects; they’re partners on this exhilarating ride. <br/><br/>
+                      At DigitalSathi, we don’t just build websites; we weave digital dreams. Our journey began in a cozy garage, fueled by passion and a shared vision: to create online experiences that resonate with users, businesses, and brands alike. Your success is our compass. We listen, collaborate, and tailor solutions to fit your unique needs. Our clients aren’t just projects; they’re partners on this exhilarating ride.<br/><br/>
+                  </p>
+                </div>
+              </div>
+           
+          </div>
+          <div className='flex flex-col mt-6'>
+              <h1 className='text-center text-3xl font-bold'>SERVICES WE OFFER</h1>
+              <div className='grid grid-cols-1 md:grid-cols-4 gap-4'>
+                  <div className='w-auto h-auto shadow-xl p-6'>
+                    <Image alt='web_development' src={webDev} width={400} height={400} />
+                    <p className='mt-3 text-center text-xl font-bold'>Web Development</p>
+                  </div>
+                  <div className='w-auto h-auto shadow-xl p-6'>
+                    <Image alt='web_design' src={webDes} width={400} height={400} />
+                    <p className='mt-3 text-center text-xl font-bold'>Web Designing</p>
+                  </div>
+                  <div className='w-auto h-auto shadow-xl p-6'>
+                    <Image alt='web_seo' src={webSeo} width={400} height={400} />
+                    <p className='mt-3 text-center text-xl font-bold'>Web SEO</p>
+                  </div>
+                  <div className='w-auto h-auto shadow-xl p-6'>
+                    <Image alt='trainingNdevelopment' src={devTrain} width={400} height={400} />
+                    <p className='mt-3 text-center text-xl font-bold'>Skills Training</p>
+                  </div>
+              </div>
+          </div>
       </div>
       
       <Footer/>
