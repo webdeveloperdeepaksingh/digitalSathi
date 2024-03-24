@@ -27,15 +27,14 @@ try
       throw new Error("Error fetching blog data.");
     }
     const meta = await res.json();
-    // optionally access and extend (rather than replace) parent metadata
-    // const previousImages = (await parent).openGraph?.images || []
+    const previousImages = (await parent).openGraph?.images || []
     return {
     title: meta.result.blgName,
     description: meta.result.blgIntro,
     keywords: [meta.result.blgTags],
-    // openGraph: {
-    //   images: [`/${meta.result.prodImage}`, ...previousImages],
-    // },
+    openGraph: {
+      images: [meta.result.blgImage, ...previousImages],
+    },
   }
   } catch (error) {
     console.error("Error fetching blgData: ", error);

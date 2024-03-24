@@ -30,7 +30,7 @@ export default function UpdateBlog({params}) {
             throw new Error('Error fetching category data');
         }
         const catData = await response.json();
-        setCat(catData.posts);
+        setCat(catData);
         } catch (error) {
         console.error('Error fetching data:', error);
         } 
