@@ -21,12 +21,12 @@ export const GET = async (request, {params}) => {
 export  const  PUT = async (request, {params}) =>{ 
   try  
     {
-      const { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon } = await request.json(); 
+      const { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon, brandBanner } = await request.json(); 
       const settingId = params.SettId;
       const filter = {_id:settingId}
       await connect ();
 
-      const settings = await Settings.findOneAndUpdate(filter, { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon });
+      const settings = await Settings.findOneAndUpdate(filter, { brandTitle, brandTags, brandTax, brandDisc, brandCurr, brandIntro, brandLogo, brandIcon, brandBanner });
       return NextResponse.json({result:settings, success:true}, {status: 200});
 
     }catch(error){

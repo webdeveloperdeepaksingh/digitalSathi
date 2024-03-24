@@ -8,11 +8,12 @@ import Image from 'next/image';
 
 export default function SettingsPage({params}) {
 
-  const [data, setData] = useState({brandTitle:'', brandTags:'', brandTax:'', brandDisc:'', brandCurr:'', brandIntro:'', brandLogo:'', brandIcon:''})
+  const [data, setData] = useState({brandTitle:'', brandTags:'', brandTax:'', brandDisc:'', brandCurr:'', brandIntro:'', brandLogo:'', brandIcon:'', brandBanner:''})
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [fevIcon, setFevIcon] = useState('');
   const [brandLogo, setBrandLogo] = useState('');
+  const [brandBanner, setBrandBanner] = useState('');
   const router = useRouter();
 
   useEffect(() =>{
@@ -141,6 +142,53 @@ export default function SettingsPage({params}) {
         }   
       };
 
+      const handleBrandBannerUpload = async (e) => {
+        e.preventDefault();
+        const formData = new FormData();
+        if (!brandBanner) {
+            alert('No image selected.');
+        }else if (!brandBanner.type.startsWith('image/')) {
+            alert('Only image files (JPEG, JPG, PNG ) are allowed.');
+        }else if(brandBanner.size > 2097152 ){   //in bytes
+            alert('Image size exceeds the maximum allowed limit of 2MB.');
+        }else{
+            formData.append('file', brandBanner );
+            formData.append('upload_preset', 'image_upload');
+            formData.append('cloud_name', 'dlnjktcii');
+            
+            fetch('https://api.cloudinary.com/v1_1/dlnjktcii/image/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then((res) => res.json())
+            .then((formData) => {
+              data.brandBanner = formData.secure_url;      
+              if(formData.secure_url){
+                  toast('Banner uploaded successfully!', {
+                      hideProgressBar: false,
+                      autoClose: 1000,
+                      type: 'success'      
+                  });
+              }
+              else{
+                  toast('Banner upload failed...!', {
+                      hideProgressBar: false,
+                      autoClose: 1000,
+                      type: 'error'      
+                  });
+                }
+            })
+            .catch((err) => {
+                console.error('Error uploading Banner:', err);
+                toast('Image upload failed...!', {
+                    hideProgressBar: false,
+                    autoClose: 1000,
+                    type: 'error'      
+                });
+            });
+          }   
+        };
+
     const handleRemoveImage = async (imageUrl) => {
          
       if(imageUrl){
@@ -214,7 +262,8 @@ export default function SettingsPage({params}) {
             brandCurr:data.brandCurr, 
             brandIntro:data.brandIntro,
             brandLogo: data.brandLogo,
-            brandIcon: data.brandIcon
+            brandIcon: data.brandIcon,
+            brandBanner: data.brandBanner
           }),
       });
       const post = await result.json();
@@ -307,6 +356,13 @@ export default function SettingsPage({params}) {
                 <span className='text-xs opacity-50'>[Size: 250*100]</span>
                 <div className='absolute h-2 right-1 top-1'>
                   <button type='button' onClick={()=>handleRemoveImage(data.brandLogo)} className=' bg-gray-700 hover:bg-gray-600 text-white font-bold px-1 py-1 text-xs '>X</button>
+                </div>
+              </div>
+              <div className='flex flex-col mt-3'>
+                <label className='font-semibold uppercase'>Brand Banner:</label>
+                <div className='flex  gap-1 mb-2'>
+                  <input type='file' className='cursor-pointer py-1 bg-white w-full px-1 rounded-md border' onChange={(e)=>setBrandBanner(e.target.files[0])}></input>
+                  <button type='button' onClick={handleBrandBannerUpload} className='py-2 px-2 rounded-sm bg-amber-500 hover:bg-amber-400 text-white font-bold'>UPLOAD</button>
                 </div>
               </div>
             </div>

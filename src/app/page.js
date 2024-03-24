@@ -19,7 +19,7 @@ try
               icon: meta.result.brandIcon, // Path to your favicon.ico
           },
           openGraph: {
-              images: [`/images/bnr.jpg`, ...previousImages], // Helps sharing of webpages on social media.
+              images: [`/${meta.result.brandBanner}`, ...previousImages], // Helps sharing of webpages on social media.
           },
           // alternates:{
           //   canonical:`https://`
