@@ -1,4 +1,3 @@
-"use client";
 import Footer from "@/components/Footer/page";
 import Image from "next/image";
 import InnerBanner from "../../../public/images/inrbnr.jpg";
@@ -6,18 +5,20 @@ import React from "react";
 import AbtUs from "../../../public/images/About us.jpg";
 import Mission from "../../../public/images/mission.jpg";
 
+export const metadata = {
+  title: 'DigitalSathi | About Us',
+  openGraph: {
+    images: ['/images/About us.jpg', ...previousImages] // Helps sharing of webpages on social media.
+  }
+}
+
 export default function AboutUs() {
+
   return (
     <div>
-      <title>DigitalSathi | About Us</title>
       <div className="h-[88px]"></div>
       <div className="w-auto h-auto">
-        <Image
-          alt="innerBanner"
-          src={InnerBanner}
-          width={1540}
-          height={400}
-        ></Image>
+        <Image alt="innerBanner" src={InnerBanner} width={1540} height={400}></Image>
       </div>
       <div className="flex flex-col px-9">
         <h1 className="text-center font-bold text-3xl my-6">ABOUT US</h1>

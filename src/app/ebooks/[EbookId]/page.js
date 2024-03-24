@@ -29,14 +29,14 @@ try
       throw new Error("Error fetching ebook data");
     }
     const meta = await res.json();
-  // const previousImages = (await parent).openGraph?.images || []
+    const previousImages = (await parent).openGraph?.images || []
     return {
     title: meta.result.prodName,
     description: meta.result.prodIntro,
     keywords: [meta.result.prodTags],
-    // openGraph: {
-    //   images: [`/${meta.result.prodImage}`, ...previousImages],
-    // },
+    openGraph: {
+      images: [meta.result.prodImage, ...previousImages],
+    },
   }
   } catch (error) {
     console.error("Error fetching ebookData: ", error);

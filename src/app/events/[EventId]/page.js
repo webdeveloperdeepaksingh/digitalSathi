@@ -35,7 +35,7 @@ try
       description: meta.result.prodIntro,
       keywords: [meta.result.prodTags],
       openGraph: {
-      images: [`/${meta.result.prodImage}`, ...previousImages],
+      images: [meta.result.prodImage, ...previousImages]
     },
   }
   } catch (error) {
