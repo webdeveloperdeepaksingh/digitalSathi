@@ -19,8 +19,14 @@ try
               icon: meta.result.brandIcon, // Path to your favicon.ico
           },
           openGraph: {
-              images: [`/${Banner}`, ...previousImages], // Helps sharing of webpages on social media.
+              images: [`/images/bnr.jpg`, ...previousImages], // Helps sharing of webpages on social media.
           },
+          // alternates:{
+          //   canonical:`https://`
+          //    languages:{
+          //      "en-US"
+          //    }
+          // }
       };
   } catch (error) {
       console.error("Error fetching settData: ", error);
