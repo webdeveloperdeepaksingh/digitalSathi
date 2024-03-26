@@ -110,7 +110,7 @@ export default async function EventLandingPage({params}) {
           <div className='bg-gray-200 mb-3 rounded-md'>
               <h1 className='p-3 text-3xl font-bold text-center uppercase'>About Event</h1>
           </div>
-          <div className='text-left'>
+          <div className='text-left dv-product-detail'>
             <div dangerouslySetInnerHTML={{__html:evt.result.prodDesc}}></div>   
           </div>
         </div>

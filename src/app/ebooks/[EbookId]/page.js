@@ -96,7 +96,7 @@ export default async function EbooksLandingPage({params}) {
           {/* <div className='bg-gray-200 rounded-md'>
             <h1 className='uppercase p-3 text-2xl font-bold bg-gray-200 rounded-md'>Ebook Description</h1>
           </div>
-          <div className='text-left p-6'>
+          <div className='text-left p-6 dv-product-detail'>
             <div dangerouslySetInnerHTML={{__html:ebk.result.prodDesc}}></div>   
           </div> */}
         </div>

@@ -110,7 +110,7 @@ export default async function CourseLandingPage({params}) {
           <div className='bg-gray-200 rounded-md mb-6'>
               <h1 className='p-3 text-3xl font-bold text-center uppercase'>Course Description</h1>
           </div>
-          <div className='text-left p-6'>
+          <div className='text-left p-6 dv-product-detail'>
             <div dangerouslySetInnerHTML={{__html:crs.result.prodDesc}}></div>   
           </div>
         </div>

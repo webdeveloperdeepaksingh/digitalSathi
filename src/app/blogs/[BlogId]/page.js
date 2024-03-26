@@ -57,7 +57,7 @@ export default async function BlogLandingPage({params}) {
       <div className='flex flex-col w-full p-9'>
         <div className='flex flex-col'>
           <h1 className='text-center font-bold bg-gray-200 py-3 uppercase rounded-md text-3xl mb-6'>{blg.result.blgName}</h1>
-          <div className='text-justify'>         
+          <div className='text-justify dv-product-detail'>         
             <div dangerouslySetInnerHTML={{__html:blg.result.blgDesc}}></div>             
           </div>
         </div>
