@@ -2,6 +2,7 @@
 import { usePathname } from 'next/navigation';
 import { FaCartPlus } from "react-icons/fa6";
 import {AiOutlineClose, AiOutlineMenu} from 'react-icons/ai';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { BASE_API_URL } from '../../../utils/constants';
@@ -14,6 +15,7 @@ export default function NavBar() {
 const [isLoading, setIsLoading] = useState(true);
 const settId = "65c8e1dad3c601a36e0dd62f";
 const [logo, setLogo] = useState('');
+const router = useRouter();
 
 useEffect(()=>{
     async function fetchSettings(){
@@ -80,7 +82,7 @@ fetchSettings();
   return (
     < >
     <nav className='flex w-full shadow-lg bg-white px-4 fixed z-50 mx-auto py-1 justify-between items-center'>
-        <Image alt='digitalsathi' src={logo.brandLogo} height={90} width={200}/>
+        <Image alt='digitalsathi' src={logo.brandLogo} height={90} width={200} onClick={()=> router.push('/')} className='cursor-pointer'/>
         <ul className='hidden md:flex gap-5 '>
             {
                 menues.map((item, i) =>{
